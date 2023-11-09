@@ -1,0 +1,45 @@
+.loteCard{
+    border-radius: 10px;
+    margin: 10px auto;
+    width: 100%;
+    height: 55px;
+    border: 4px solid #716767;
+    background-color: #cdb49f;
+    align-items: center;
+    padding: 2px;
+  }
+
+  .cabeceraLote{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .botonesLoteCard{
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0px 4px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .iconosLoteCard{
+    height: 30px;
+    width: 30px;
+  }
+  .iconosMenuCard{
+    height: 35px;
+    width: 35px;
+  }
+
+  .nombreLote{
+    font-size: 30px;
+    margin-left: 10px;
+    max-width: 300px; /* Establece un ancho máximo para el nombre del lote */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: black;
+  }

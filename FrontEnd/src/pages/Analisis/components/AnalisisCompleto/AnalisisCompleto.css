@@ -1,0 +1,21 @@
+.formularioAnalisisCompleto{
+    width: 100%;
+    /* margin: auto 80px; */
+    padding-left: 30px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-areas:
+    "columnaUno columnaDos columnaTres"; 
+    /* gap: 10px; */
+    background-color: #F2DCC9;
+}
+
+/* Ajustes para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .formularioAnalisisCompleto {
+        padding-left: 10px; 
+        /* grid-template-columns: 1fr;
+        grid-template-areas: "columnaUno" "columnaDos" "columnaTres";  */
+        display: block;
+    }
+}

@@ -1,0 +1,27 @@
+.navbarAplicacion{
+    background-color: #B5BF63;
+    padding: 5px 0px;
+}
+
+.contenedor{
+    margin: 0px 0px;
+    max-width: 2000px;
+}
+
+.marcaApp{
+    height: 30px;
+    max-width: 300px;
+}
+
+.nav-button {
+    background: none;
+    border: none;
+    color: black; /* Button text color */
+    font-size: 17px; /* Adjust font size as needed */
+    cursor: pointer;
+    text-transform: none;
+  }
+  
+  .nav-button:focus {
+    outline: none; /* Remove focus outline if desired */
+  }

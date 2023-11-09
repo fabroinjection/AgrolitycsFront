@@ -1,0 +1,37 @@
+.iconoConfirm{
+    width: 50px;
+    height: 50px;
+}
+
+.modalConfirm{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.modal-content{
+    align-items: center;
+    background-color: #F2DCC9;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    color:#000;
+    font-size: 18px;
+    
+    
+}
+
+.btnConfirmarAceptar{
+    
+    background: #F2DCC9;
+    border: 2px solid #000;
+    margin-right: 15px;
+}
+
+.estiloBotonConfirm{
+    text-transform: none;
+    border-radius: 10px;
+    padding: 4px 30px;
+    font-size: 16px;
+    width: 130px;
+}

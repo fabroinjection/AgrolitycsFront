@@ -1,0 +1,133 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;   
+    
+  }
+  
+  .fields-section {
+    overflow-y: auto;
+    max-height: calc(100vh - 100px);
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+    border-top: 2px solid #636262;
+  }
+
+  .fields-section::-webkit-scrollbar {
+    width: 8px; /* Ancho del scrollbar */
+  }
+
+  .fields-section::-webkit-scrollbar-thumb{
+    background-color: transparent; /* Color de la barra de desplazamiento */
+    border-radius: 3px; /* Borde redondeado de la barra de desplazamiento */
+  }
+
+  .fields-section::-webkit-scrollbar-track {
+    background-color: transparent; /* Color del track */
+  }
+
+
+  .campo-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .boton-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  
+  .close-button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    margin-right: 7px;
+    
+  }
+
+  .menu-button{
+    border: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .iconoCerrar{
+    height: 15px;
+    width: 15px;
+  }
+
+  .iconoMenu{
+    height: 35px;
+    width: 35px;
+  }
+  
+
+  .nombreCampoConsulta{
+    font-size: 30px;
+    color: #000000;
+  }
+
+  .infoCampo{
+    font-size: 15px;
+    color: #000000;
+  }
+  /* .campo-wrapper strong {
+    display: block;
+    margin-bottom: 10px;
+  } */
+
+  .btnNuevoLote{
+    border-radius: 10px;
+    margin: 10px auto;
+    margin-bottom: 0px;
+    width: 100%;
+    height: 55px;
+    border: 4px solid #716767;
+    font-size: 60px;
+    background-color: #cdb49f;
+    align-items: center;
+  }
+
+
+
+  .btnNuevoLote:hover{
+    background-color: #716767bb;
+    border-color: #716767bb;
+  
+  }
+  
+
+  .signoMas{
+    color: #716767;
+  }
+
+.linkBtnLote{
+  display: flex;
+  text-decoration: none;
+}
+
+.custom-dropdown-menu {
+  background-color: #dec6bb; /* Color de fondo personalizado */
+  border: 2px solid #000000;
+  border-radius: 10px;
+}
+
+.custom-toggle {
+  background-image: none;
+  padding: 0px;
+  
+}
+
+.custom-eliminar-item{
+  color: #ea0c0c;
+}
+
+.custom-modificar-item{
+  color: #000000;
+}
+
+.dropdown-toggle::after {
+  content: none;
+}

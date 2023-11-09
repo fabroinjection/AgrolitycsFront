@@ -1,0 +1,38 @@
+.btnNuevo{
+    border-radius: 10px;
+    /* margin-top: 30px;
+    margin-left: 30px; */
+    margin: 10px auto;
+    width: 350px;
+    height: 100px;
+    border: 4px solid #716767;
+    font-size: 85px;
+    background-color: #9A877D;
+    /* text-align: center !important; */
+    /* display: flex; */
+    align-items: center;
+  }
+
+
+
+  .btnNuevo:hover{
+    background-color: #716767bb;
+    border-color: #716767bb;
+  
+  }
+  
+  .container{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    grid-gap: 10px;
+  }
+
+  .signoMas{
+    color: #716767;
+  }
+
+.linkBtn{
+  display: flex;
+  text-decoration: none;
+}
+

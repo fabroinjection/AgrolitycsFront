@@ -1,0 +1,125 @@
+.detalleCampoDet{
+    box-sizing: border-box;
+
+    width: 380px;
+    height: 520px;
+
+    max-width: 600px;
+    max-height: 550px;
+    justify-content:  center;
+    align-items: center;
+    /* margin: 0 auto; */
+
+    background: #F2DCC9;
+    border: 2px solid #000000;
+    border-radius: 15px;
+
+    margin-top: 20px;
+    padding: 10px 10px;
+
+    
+}
+
+/* .form-control{
+    margin-top: 30px;
+    max-width: 300px;
+    box-sizing: border-box;
+
+    justify-content:  center;
+    align-items: center;
+    margin: 0 auto;
+
+    background: #F2DCC9;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+
+} */
+
+.tituloDet{
+    text-align: center;
+    font-size: 29px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+}
+
+/* .espaciado{
+    height: 30px;
+} */
+
+.botonesFormDet{
+    /* margin-bottom: 25px;
+    margin-left: 20px; */
+
+    background-color: #B5BF63;
+    border: 3px solid #859745;
+    border-radius: 10px;
+
+    width: 120px;
+    justify-content:  center;
+    align-items: center;
+    margin: 0 20px;
+
+
+    height: 35px;
+
+    /* margin-top: 70px; */
+
+}
+
+.letraInter{
+    font-family: 'Inter', sans-serif;
+
+}
+
+/* .campo{
+    margin-top: 30px !important;
+    margin-bottom: 30px !important;
+    margin: 40px 0px !important;
+} */
+
+.etiquetaDet{
+    margin-left: 40px;
+}
+
+/* div.mb-3.campoDet{
+    margin: 35px 0px !important;
+} */
+
+.seleccionablesDet{
+
+    /* margin-top: 30px; */
+    max-width: 300px;
+    box-sizing: border-box;
+
+    justify-content:  center;
+    align-items: center;
+    /* margin: 30px auto !important; */
+
+    padding: 3px 10px !important;
+    margin: 0px 36px !important;
+
+    background: #F2DCC9;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+
+}
+
+.contenedorBotonesDet{
+    display: flex;
+    justify-content: center;
+    /* margin-top: 20px !important; */
+
+    /* position:relative;
+    top:35px;
+    left: 0px;     */
+}
+
+.eliminarCentrado{
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.botonEliminar{
+    padding: 0px 0px;
+}

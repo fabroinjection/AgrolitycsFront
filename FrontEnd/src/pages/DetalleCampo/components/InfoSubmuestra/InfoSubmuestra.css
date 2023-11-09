@@ -1,0 +1,70 @@
+.info-submuestra {
+    height: 150px;
+    width: 100%;
+    background-color: #F2DCC9;
+    padding: 20px;
+    display: flex; 
+    align-items: center;
+    justify-content: space-between;
+  }
+
+
+  .datos-submuestra {
+    display: flex;
+    flex-direction: column;
+    color: #000000;
+  }
+
+  .botones-submuestra {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .btn-cancelar-submuestra{    
+    background: #F2DCC9;
+    border: 2px solid #000;
+}
+.btn-imprimir-submuestra{    
+    background: #B5BF63;
+    border: 2px solid #859745;
+}
+
+.estilo-boton-Submuestra{
+  text-transform: none;
+  border-radius: 10px;
+  padding: 4px 30px;
+  font-size: 16px;
+  width: 130px;
+}
+
+.info-lote {
+  font-size: 30px;
+  color: #000;
+}
+
+/* Estilos específicos para pantallas móviles */
+@media (max-width: 767px) {
+  .info-submuestra {
+    flex-direction: column;
+    height: auto; /* Ajusta la altura automáticamente según el contenido */
+  }
+
+  .datos-submuestra {
+    align-items: center; /* Centra el contenido horizontalmente */
+    gap: 10px; /* Agrega espacio entre los elementos */
+  }
+
+  .botones-submuestra {
+    flex-direction: row; /* Coloca los botones en una fila */
+    justify-content: space-between; /* Distribuye los botones alrededor del espacio disponible */
+  }
+
+  .estilo-boton-Submuestra {
+    width: 100%; /* El ancho de los botones ocupa todo el ancho disponible */
+  }
+
+  .info-lote{
+    font-size: 26px;
+  }
+}

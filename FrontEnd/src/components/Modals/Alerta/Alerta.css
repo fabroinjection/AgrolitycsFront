@@ -1,0 +1,43 @@
+.iconoAdvertencia{
+    width: 50px;
+    height: 50px;
+}
+
+.modalAlerta{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.modal-content{
+    align-items: center;
+    background-color: #F2DCC9;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    color:#000;
+    font-size: 18px;
+    
+    
+}
+
+.btnAlertaCancelar{
+    
+    background: #F2DCC9;
+    border: 2px solid #000;
+    margin-right: 15px;
+}
+.btnAlertaCerrarSesion{
+    
+    background: #B5BF63;
+    border: 2px solid #859745;
+    scroll-margin-left: 15px;
+}
+
+.estiloBoton{
+    text-transform: none;
+    border-radius: 10px;
+    padding: 4px 30px;
+    font-size: 16px;
+    width: 130px;
+  }

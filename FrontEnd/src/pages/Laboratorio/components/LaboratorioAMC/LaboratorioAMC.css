@@ -1,0 +1,112 @@
+.formLaboratorio{
+    
+    width: 750px;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    background: #F2DCC9;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    padding: 10px;
+    color: black;
+}
+
+.overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.4);
+z-index: 9999;
+}
+
+
+.formCentrado {
+position: fixed;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+}
+
+.formTituloLaboratorio{
+text-align: center;
+margin-top: 10px;
+margin-bottom: 20px;
+}
+
+.tituloFormLaboratorio{
+font-size: 30px;
+color: black;
+}
+
+.selectLaboratorio{
+width: 100%;
+box-sizing: border-box;
+background: #F2DCC9;
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+border-radius: 10px;
+}
+
+.inputLaboratorios{
+    width: 100%;
+    box-sizing: border-box;
+    background: #F2DCC9;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    margin-left: 0px !important;
+}
+
+.seccionProvLaboratorio,
+.seccionNombreLab,
+.seccionCalle,
+.seccionAltura,
+.seccionLocLaboratorio,
+.seccionEmail,
+.seccionTelefono {
+/* align-items: center; */
+margin-bottom: 20px !important;
+width: 300px;
+}
+
+.form-label{
+margin-bottom: 0px;
+}
+
+.estiloBotonesLaboratorio{
+text-transform: none;
+border-radius: 10px;
+padding: 4px 0px;
+font-size: 16px;
+width: 120px;
+}
+
+.botonCancelarLaboratorio{    
+background: #F2DCC9;
+border: 2px solid #000;
+}
+.botonConfirmarLaboratorio{    
+background: #B5BF63;
+border: 2px solid #859745;
+}
+
+.seccionBotones {
+margin-top: 20px;
+display: flex;
+gap: 45px;
+align-items: center;
+}
+
+.columnasLaboratorios {
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+}
+
+.labelErrorCampo{
+    padding-top: 5px;
+    color: red; 
+}

@@ -1,0 +1,54 @@
+.diagnosticoCard{
+    border-radius: 10px;
+    /* margin: 10px auto; */
+    margin-top: 10px;
+    width: 100%;
+    height: 45px;
+    border: 4px solid #716767;
+    background-color: #cdb49f;
+    align-items: center;
+    /* padding: 2px; */
+  }
+
+  .cabeceraDiagnostico{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .botonesDiagnosticoCard{
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0px 4px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .iconosDiagnosticoCard{
+    height: 30px;
+    width: 30px;
+  }
+  .iconosMenuCard{
+    height: 35px;
+    width: 35px;
+  }
+
+  .nombreDiagno{
+    font-size: 20px;
+    margin-left: 10px;
+    max-width: 400px; /* Establece un ancho máximo para el nombre del lote */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: black;
+  }
+
+  @media (max-width: 768px) {
+
+    .nombreDiagno{
+      font-size: 15px;
+    }
+
+  }

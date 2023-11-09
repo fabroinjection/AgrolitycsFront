@@ -1,0 +1,107 @@
+.formTomaMuestra{
+        max-width: 450px;
+        width: 400px;
+        box-sizing: border-box;
+    
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    
+        background: #F2DCC9;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+        padding: 10px;
+        color: black;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+  }
+  
+
+  .formCentrado {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+.formTitulo{
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.tituloFormTomaMuestra{
+    font-size: 30px;
+    color: black;
+}
+
+.selectTomaDeMuestra{
+    width: 100%;
+    box-sizing: border-box;
+    background: #F2DCC9;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+}
+
+.react-datepicker-ignore-onclickoutside{
+    box-sizing: border-box;
+    background: #F2DCC9;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+}
+
+.fechaTomaMuestra{
+    max-width: 300px;
+    width: 120px;
+    box-sizing: border-box;
+    background: #F2DCC9;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;  
+    padding: 4px 6px;
+}
+
+.seccionFecha,
+.seccionTipoMuestreo,
+.seccionProfundidad,
+.seccionTipoAnalisis {
+  align-items: center;
+  margin-bottom: 20px !important;
+  width: 300px;
+}
+
+.form-label{
+    margin-bottom: 0px;
+}
+
+.estiloBotonesTomaMuestra{
+    text-transform: none;
+    border-radius: 10px;
+    padding: 4px 0px;
+    font-size: 16px;
+    width: 120px;
+  }
+
+.botonCancelarTomaMuestra{    
+    background: #F2DCC9;
+    border: 2px solid #000;
+}
+.botonConfirmarTomaMuestra{    
+    background: #B5BF63;
+    border: 2px solid #859745;
+}
+
+.seccionBotones {
+    margin-top: 20px;
+    display: flex;
+    gap: 45px;
+    align-items: center;
+}
+

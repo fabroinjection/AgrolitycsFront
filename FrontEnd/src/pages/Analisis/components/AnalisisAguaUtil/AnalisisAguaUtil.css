@@ -1,0 +1,26 @@
+.formularioAnalisisAguaUtil{
+    width: 100%;
+    /* margin: auto 80px; */
+    padding-left: 30px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* gap: 10px; */
+    /* margin-bottom: 30px; */
+    margin-top: 5px;
+    background-color: #F2DCC9;
+}
+
+/* Ajustes para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .formularioAnalisisAguaUtil {
+        padding-left: 10px; 
+        /* grid-template-columns: 1fr;
+        grid-template-areas: "columnaUno" "columnaDos" "columnaTres";  */
+        display: block;
+        margin-top: 10px;
+    }
+}
+
+.botonesFormAnalisisAguaUtil{
+    padding-bottom: 0px;
+}

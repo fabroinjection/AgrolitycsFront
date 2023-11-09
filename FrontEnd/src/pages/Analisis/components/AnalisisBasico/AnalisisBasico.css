@@ -1,0 +1,27 @@
+.formularioAnalisisBasico{
+    width: 100%;
+    /* margin: auto 80px; */
+    padding-left: 80px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+    "columnaUno columnaDos"; /* Definición de áreas */
+    padding-top: 30px;
+    /* gap: 10px; */
+    background-color: #F2DCC9;
+}
+
+/* Ajustes para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .formularioAnalisisBasico {
+        padding-left: 10px; 
+        /* grid-template-columns: 1fr;
+        grid-template-areas: "columnaUno" "columnaDos";  */
+        display: block;
+    }
+}
+
+
+.botonesFormAnalisisBasico{
+    /* padding-bottom: 50px; */
+}

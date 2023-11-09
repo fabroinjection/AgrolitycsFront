@@ -1,0 +1,206 @@
+/* body {
+    overflow: hidden;
+  } */
+
+body{
+    /* overflow-x: hidden; */
+}
+
+.contenedorAnalisisCompleto{
+    background-color: #F2DCC9;
+    height: 100vh;
+    /* width: 100%; */
+} 
+
+.contenedorTituloAnalisisCompleto{
+    text-align: center;
+    padding: 15px 0px;
+}
+
+.tituloAnalisisCompleto{
+    font-size: 30px;
+    color: black;
+}
+
+
+
+.grupoForm{
+    display: flex; /* Hace que los elementos dentro se alineen en una sola línea */
+    /*justify-content: space-between;  Alinea los elementos con espacio entre ellos */
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan si no caben en una sola línea */
+    align-items: flex-start; /* Alinea los elementos a la izquierda verticalmente */
+    margin-top: 15px;
+}
+
+.labelFormIzquierdo{
+    display: inline-block;
+    width: 195px;
+    padding-top: 8px;
+    color: black;
+}
+
+.labelFormEncabezado{
+    display: inline-block;
+    width: 100px;
+    padding-top: 8px;
+    color: black;
+}
+
+.labelFormIzquierdoError{
+    display: inline-block;
+    width: 195px;
+    padding-top: 8px;
+    color: red;
+}
+
+.labelForm{
+    padding-top: 8px;
+    color: black;
+}
+
+.labelFormError{
+    padding-top: 8px;
+    color: red; 
+}
+
+.inputForm{
+    width: 70px;
+    margin: 0px 10px !important;
+    color: black;
+}
+
+.selectForm{
+    /* width: 100%; */
+    box-sizing: border-box;
+    background: #F2DCC9;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    color: black;
+}
+
+.selectLaboratorio{
+    width: 300px;
+    box-sizing: border-box;
+    background: #F2DCC9;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    color: black;
+}
+
+.react-datepicker-ignore-onclickoutside{
+    box-sizing: border-box;
+    background: #F2DCC9;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    color: black;
+}
+
+/* .contenedorCationesIntercambio{
+    text-align: center;
+} */
+
+.tituloCationesIntercambio{
+    font-size: 20px;
+    color: black;
+}
+
+.botonesFormAnalisis{
+    grid-column: span 3; /* Ocupa las tres columnas disponibles */
+    padding-bottom: 10px;
+    padding-top: 60px;
+    display: flex;
+
+    justify-content: center; /* Centra los botones horizontalmente */
+    gap: 45px;
+}
+
+
+.estiloBotonesFormAnalisis{
+    text-transform: none;
+    border-radius: 10px;
+    padding: 4px 0px;
+    font-size: 16px;
+    width: 120px;
+  }
+
+.btnCancelarAnalisis{    
+    background: #F2DCC9;
+    border: 2px solid #000;
+}
+.btnConfirmarAnalisis{    
+    background: #B5BF63;
+    border: 2px solid #859745;
+}
+
+.columnaTres{
+    padding-left: 20px;
+}
+
+.fechaAnalisis{
+    max-width: 300px;
+    width: 120px;
+    box-sizing: border-box;
+    background: #F2DCC9;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;  
+    padding: 4px 6px;
+}
+
+
+.encabezado{
+    grid-column: span 3; /* Ocupa las tres columnas disponibles */
+    padding-bottom: 30px;
+    padding-top: 10px;
+    display: flex;
+
+    justify-content: center; /* Centra los botones horizontalmente */
+    gap: 150px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+
+    .contenedorAnalisisCompleto{
+        height: 100%;
+    }
+
+    .labelFormIzquierdo,
+    .labelFormIzquierdoError,
+    .labelFormError {
+        width: 100%; /* Ancho completo en una columna */
+        text-align: left;
+        padding-left: 10px;
+    }
+
+    .inputForm,
+    .selectForm,
+    .selectLaboratorio,
+    .fechaAnalisis,
+    .react-datepicker-ignore-onclickoutside {
+        margin-left: 0px;
+    }
+
+    .grupoForm{
+        flex-direction: row; /* Cambia la dirección a fila */
+        /* justify-content: space-between; */
+        align-items: center; /* Alinea verticalmente al centro */
+    }
+
+    .columnaUno,
+    .columnaDos,
+    .columnaTres{
+        padding-left: 20px;
+    }
+
+
+    .contenedorCationesIntercambio{
+        margin-top: 20px;
+    }
+
+    .encabezado{
+        flex-direction: column;
+        gap: 10px;
+        padding-left: 25px;
+    }
+
+}
