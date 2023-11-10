@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 
 
 //Componentes
@@ -22,7 +22,7 @@ import { IdDiagnosticoProvider } from '../context/IdDiagnosticoContext';
 function App() {
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <ModoPDFProvider>
         <HayAnalisisProvider>
             <IdDiagnosticoProvider>
@@ -41,7 +41,7 @@ function App() {
             </IdDiagnosticoProvider>
         </HayAnalisisProvider>
       </ModoPDFProvider>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
 
