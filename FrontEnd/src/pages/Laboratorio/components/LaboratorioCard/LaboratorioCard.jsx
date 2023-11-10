@@ -15,7 +15,7 @@ import Alerta from '../../../../components/Modals/Alerta/Alerta';
 import Error from '../../../../components/Modals/Error/Error';
 
 // import services
-import { eliminarLaboratorioService } from '../services/laboratorio.service';
+import { eliminarLaboratorioService } from '../../services/laboratorio.service';
 import { renewToken } from '../../../../services/token.service';
 import Confirm from '../../../../components/Modals/Confirm/Confirm';
 

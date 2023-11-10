@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { provinciasService } from '../../../../services/provincias.service';
 import { localidadesService } from '../../../../services/localidades.service';
 import { renewToken } from '../../../../services/token.service';
-import { registrarLaboratorioService, consultarLaboratorioService, modificarLaboratorioService } from '../services/laboratorio.service';
+import { registrarLaboratorioService, consultarLaboratorioService, modificarLaboratorioService } from '../../services/laboratorio.service';
 
 function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = undefined }){
 

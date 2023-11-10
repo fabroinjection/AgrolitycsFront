@@ -1,5 +1,5 @@
 //import assets y css
-import './InfoLotes.css';
+import './infoLotes.css';
 import iconoCerrar from '../../../../assets/iconoCerrar.png'
 import iconoMenu from '../../../../assets/iconoMenu.png'
 
