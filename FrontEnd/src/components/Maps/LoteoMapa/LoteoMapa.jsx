@@ -46,8 +46,8 @@ function Mapa({ habilitado = false, registro = false, campo, lotes }){
 
   const customIcon = L.icon({
     iconUrl: iconoHoja,
-    iconSize: [25, 41], // Tamaño del ícono [ancho, alto]
-    iconAnchor: [12, 41], // Punto donde el ícono se conecta al marcador [mitad del ancho, parte inferior]
+    iconSize: [200, 200], // Tamaño del ícono [ancho, alto]
+    iconAnchor: [40, 90], // Punto donde el ícono se conecta al marcador [mitad del ancho, parte inferior]
     popupAnchor: [1, -34] // Punto donde se abrirá el popup relativo al ícono
   });
 
