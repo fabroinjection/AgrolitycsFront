@@ -6,6 +6,7 @@ import 'leaflet-draw/dist/leaflet.draw.css'
 import { EditControl } from 'react-leaflet-draw';
 import './LoteoMapa.css'
 import Cookies from 'js-cookie';
+import iconoHoja from '../../../assets/iconoHoja.png';
 
 //import Context
 import { useContext } from 'react';
@@ -42,6 +43,13 @@ function Mapa({ habilitado = false, registro = false, campo, lotes }){
     }
     
   }, [mapLayers]);
+
+  const customIcon = L.icon({
+    iconUrl: iconoHoja,
+    iconSize: [25, 41], // Tamaño del ícono [ancho, alto]
+    iconAnchor: [12, 41], // Punto donde el ícono se conecta al marcador [mitad del ancho, parte inferior]
+    popupAnchor: [1, -34] // Punto donde se abrirá el popup relativo al ícono
+  });
 
   const handleMapClick = (e) => {
     const { latlng } = e;
@@ -123,7 +131,7 @@ function Mapa({ habilitado = false, registro = false, campo, lotes }){
         /> 
       ))}
 
-      <Marker position={[campo.localidad_centroide_lat, campo.localidad_centroide_lon]}>
+      <Marker position={[campo.localidad_centroide_lat, campo.localidad_centroide_lon]} icon={customIcon}>
         <Tooltip direction="top" offset={[-14, -5]} opacity={1} permanent>
           {campo.localidad_nombre + "," + campo.provincia_nombre}
         </Tooltip>
