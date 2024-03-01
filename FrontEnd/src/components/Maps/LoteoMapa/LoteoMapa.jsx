@@ -41,17 +41,16 @@ function Mapa({ habilitado = false, registro = false, campo, lotes }){
   const [mapIcon, setMapIcon] = useState(null);
 
   useEffect(() => {
-    import('leaflet/dist/images/marker-icon.png').then((icon) => {
       setMapIcon(
         new Icon({
-          iconUrl: icon.default,
+          iconUrl: markerIconUrl,
           iconSize: [25, 41],
           iconAnchor: [12, 41],
           popupAnchor: [1, -34],
           shadowSize: [41, 41],
         })
       );
-    });
+    }, []);
 
     return () => {
       setMapIcon(null);
