@@ -121,112 +121,115 @@ function Mapa({ habilitado = false, registro = false, campo, lotes }){
     });
   };
 
-  return (
-    <>
-    {console.log(mapIcon)}
-    <MapContainer
-        className='contenedorMapa'
-        center={lotes.length !== 0 
-          ? [lotes[0].coordenadas[0][0], lotes[0].coordenadas[0][1]]
-          : [campo.localidad_centroide_lat, campo.localidad_centroide_lon]
-        }
-        zoom={(lotes.length !== 0 ? loteSeleccionadoAConsultar || idLoteSeleccionadoAModificar ? 16 : 14 : 12)}
-        style={{ height: '100%', width: '100%' }}
-        onClick={handleMapClick}
-        ref={mapRef}
-        >
-
-      <TileLayer
-        url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-        attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'       
-      />
-      {lotes.map((poligono) => (
-        idLoteSeleccionadoAModificar === undefined 
-        ? <Polygon key={poligono.id} positions={poligono.coordenadas} 
-            color={loteSeleccionadoAConsultar && poligono.id == loteSeleccionadoAConsultar ? "#94e7ff": "#86dd72" }
-         />
-        : idLoteSeleccionadoAModificar != poligono.id && <Polygon key={poligono.id} positions={poligono.coordenadas}
-            color= "#86dd72"
-        /> 
-      ))}
-
-      <Marker position={[campo.localidad_centroide_lat, campo.localidad_centroide_lon]} icon={mapIcon}>
-        <Tooltip direction="top" offset={[-14, -5]} opacity={1} permanent>
-          {campo.localidad_nombre + "," + campo.provincia_nombre}
-        </Tooltip>
-      </Marker>
-
-      <FeatureGroup>
-      {lotes.map((poligono) => (
-        idLoteSeleccionadoAModificar && idLoteSeleccionadoAModificar == poligono.id && 
-        <Polygon key={poligono.id} positions={poligono.coordenadas} 
-        color= "#94e7ff"
-         />
-      ))}
-      
-      {idLoteSeleccionadoAModificar === undefined ?
-        loteSeleccionadoAConsultar ? null
-          : habilitado ? 
-            <EditControl
-            className='controlesMapa' 
-            position='topright'
-            onCreated={_onCreate}
-            onEdited={_onEdited}
-            onDeleted={_onDeleted}
-            draw={{
-                rectangle: false,
-                polyline:false,
-                circle: false,
-                circlemarker: false,
-                marker:false,
-                polygon: habilitado,
-            }}     
-            edit={{
-              poly: {
-                allowIntersection: false,
-              },
-            }} 
-            /> 
-            : null
-        :
-        <EditControl
-        className='controlesMapa' 
-        position='topright'
-        onEdited={edicionModificacion}
-        draw={{
-            rectangle: false,
-            polyline:false,
-            circle: false,
-            circlemarker: false,
-            marker:false,
-            polygon: false,
-        }}
-        edit={{
-          remove: false,
-          poly: {
-            allowIntersection: false,
-          },
-        }}      
+  if (mapIcon != undefined) {
+    return (
+      <>
+      {console.log(mapIcon)}
+      <MapContainer
+          className='contenedorMapa'
+          center={lotes.length !== 0 
+            ? [lotes[0].coordenadas[0][0], lotes[0].coordenadas[0][1]]
+            : [campo.localidad_centroide_lat, campo.localidad_centroide_lon]
+          }
+          zoom={(lotes.length !== 0 ? loteSeleccionadoAConsultar || idLoteSeleccionadoAModificar ? 16 : 14 : 12)}
+          style={{ height: '100%', width: '100%' }}
+          onClick={handleMapClick}
+          ref={mapRef}
+          >
+  
+        <TileLayer
+          url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+          attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'       
         />
+        {lotes.map((poligono) => (
+          idLoteSeleccionadoAModificar === undefined 
+          ? <Polygon key={poligono.id} positions={poligono.coordenadas} 
+              color={loteSeleccionadoAConsultar && poligono.id == loteSeleccionadoAConsultar ? "#94e7ff": "#86dd72" }
+           />
+          : idLoteSeleccionadoAModificar != poligono.id && <Polygon key={poligono.id} positions={poligono.coordenadas}
+              color= "#86dd72"
+          /> 
+        ))}
+  
+        <Marker position={[campo.localidad_centroide_lat, campo.localidad_centroide_lon]} icon={mapIcon}>
+          <Tooltip direction="top" offset={[-14, -5]} opacity={1} permanent>
+            {campo.localidad_nombre + "," + campo.provincia_nombre}
+          </Tooltip>
+        </Marker>
+  
+        <FeatureGroup>
+        {lotes.map((poligono) => (
+          idLoteSeleccionadoAModificar && idLoteSeleccionadoAModificar == poligono.id && 
+          <Polygon key={poligono.id} positions={poligono.coordenadas} 
+          color= "#94e7ff"
+           />
+        ))}
+        
+        {idLoteSeleccionadoAModificar === undefined ?
+          loteSeleccionadoAConsultar ? null
+            : habilitado ? 
+              <EditControl
+              className='controlesMapa' 
+              position='topright'
+              onCreated={_onCreate}
+              onEdited={_onEdited}
+              onDeleted={_onDeleted}
+              draw={{
+                  rectangle: false,
+                  polyline:false,
+                  circle: false,
+                  circlemarker: false,
+                  marker:false,
+                  polygon: habilitado,
+              }}     
+              edit={{
+                poly: {
+                  allowIntersection: false,
+                },
+              }} 
+              /> 
+              : null
+          :
+          <EditControl
+          className='controlesMapa' 
+          position='topright'
+          onEdited={edicionModificacion}
+          draw={{
+              rectangle: false,
+              polyline:false,
+              circle: false,
+              circlemarker: false,
+              marker:false,
+              polygon: false,
+          }}
+          edit={{
+            remove: false,
+            poly: {
+              allowIntersection: false,
+            },
+          }}      
+          />
+        }
+  
+        
+  
+        </FeatureGroup>
+        
+      </MapContainer>
+  
+      {
+        (!loteSeleccionadoAConsultar && !idLoteSeleccionadoAModificar && !habilitado) &&
+        <div style={{ position: 'absolute', zIndex: 20000 }}>
+          <Pronostico lat={campo.localidad_centroide_lat} lon={campo.localidad_centroide_lon}/>
+        </div> 
       }
-
+         
+  
+      </>
       
-
-      </FeatureGroup>
-      
-    </MapContainer>
-
-    {
-      (!loteSeleccionadoAConsultar && !idLoteSeleccionadoAModificar && !habilitado) &&
-      <div style={{ position: 'absolute', zIndex: 20000 }}>
-        <Pronostico lat={campo.localidad_centroide_lat} lon={campo.localidad_centroide_lon}/>
-      </div> 
-    }
-       
-
-    </>
-    
-  );
+    );
+  }
+  
 }
 
 export default Mapa;
