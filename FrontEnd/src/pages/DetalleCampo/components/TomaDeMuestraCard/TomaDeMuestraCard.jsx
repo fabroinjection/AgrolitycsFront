@@ -3,7 +3,7 @@
 import './TomaDeMuestraCard.css';
 import '../../../../components/Estilos/estilosDropdown.css';
 import iconoDropdown from '../../../../assets/iconoDropdown.png';
-import iconoRegistrarTomada from '../../../../assets/iconoRegistrarTomada.png';
+import iconoRegistrarTomada from '../../../../assets/IconoRegistrarTomada.png';
 import iconoFertilizante from '../../../../assets/iconoFertilizante.png';
 import iconoAnalisisSuelo from '../../../../assets/iconoAnalisisSuelo.png';
 
