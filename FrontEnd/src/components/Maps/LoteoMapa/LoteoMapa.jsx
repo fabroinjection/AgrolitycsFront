@@ -27,6 +27,7 @@ import { HectareasContext } from '../../../context/HectareasContext';
 import Pronostico from '../../Pronostico/Pronostico';
 
 function Mapa({ habilitado = false, registro = false, campo, lotes }){
+  
   const [ polygonCoords, setPolygonCoords ] = useContext(PolygonCoordsContext);
   const [ mapLayers, setMapLayers ] = useContext(MapLayersContext);
   const [ , setHectareas ] = useContext(HectareasContext)
