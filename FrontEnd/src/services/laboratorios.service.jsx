@@ -16,7 +16,7 @@ export const laboratoriosService = async () => {
 export const consultarLaboratorio = async (idLabo) => {
     const tokenJSON = window.localStorage.getItem('loggedAgroUser');
     const token = JSON.parse(tokenJSON);
-    const _urlApi = `${URLAPI}laboratorio?lab_id=${idLabo}`;
+    const _urlApi = `${URLAPI}laboratorio/?lab_id=${idLabo}`;
     const laboratorio = await axios.get(_urlApi, {
         headers: {
             Authorization: `Bearer ${token.access_token}`
