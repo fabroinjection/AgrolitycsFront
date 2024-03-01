@@ -24,7 +24,7 @@ import ActivarUsuario from '../pages/ActivarUsuario/components/ActivarUsuario.js
 import TratamientoRealizado from '../pages/TratamientoRealizado/components/TratamientoRealizado/TratamientoRealizado.jsx';
 import NutrientesPorLote from '../pages/Estadisticas/components/NutrientesPorLote.jsx';
 import PorcentajeFertilizantesLote from '../pages/Estadisticas/components/PorcentajeFertilizantesLote.jsx';
-import ListadoEstadisticas from '../pages/Estadisticas/components/listadoEstadisticas.jsx';
+import ListadoEstadisticas from '../pages/Estadisticas/components/ListadoEstadisticas.jsx';
 import ListadoTratamientos from '../pages/Tratamientos/components/ListadoTratamiento/ListadoTratamientos.jsx';
 import Help from '../pages/Help/Help.jsx';
 import { ToastContainer } from 'react-toastify';
