@@ -3,7 +3,6 @@ import "leaflet/dist/leaflet.css"
 import 'leaflet-draw/dist/leaflet.draw.css'
 import './LoteoMapa.css'
 import markerIconUrl from 'leaflet/dist/images/marker-icon.png';
-import markerShadowUrl from 'leaflet/dist/images/marker-shadow.png';
 
 //import hooks
 import { useEffect, useRef, useState } from 'react';
@@ -50,10 +49,6 @@ function Mapa({ habilitado = false, registro = false, campo, lotes }){
         shadowSize: [41, 41],
       })
     );
-
-    return () => {
-      setMapIcon(null);
-    };
   }, []);
   
   useEffect(() => {
