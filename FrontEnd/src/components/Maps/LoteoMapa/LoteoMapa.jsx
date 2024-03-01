@@ -41,21 +41,20 @@ function Mapa({ habilitado = false, registro = false, campo, lotes }){
   const [mapIcon, setMapIcon] = useState(null);
 
   useEffect(() => {
-      setMapIcon(
-        new Icon({
-          iconUrl: markerIconUrl,
-          iconSize: [25, 41],
-          iconAnchor: [12, 41],
-          popupAnchor: [1, -34],
-          shadowSize: [41, 41],
-        })
-      );
-    }, []);
+    setMapIcon(
+      new Icon({
+        iconUrl: markerIconUrl,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41],
+      })
+    );
 
     return () => {
       setMapIcon(null);
     };
-  }, []); 
+  }, []);
   
   useEffect(() => {
     if(idLoteSeleccionadoAModificar){
