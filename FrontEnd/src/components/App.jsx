@@ -22,7 +22,7 @@ import VerificacionEmail from '../pages/VerificacionEmail/components/Verificacio
 import Educacion from './Educacion/Educacion.jsx';
 import ActivarUsuario from '../pages/ActivarUsuario/components/ActivarUsuario.jsx';
 import TratamientoRealizado from '../pages/TratamientoRealizado/components/TratamientoRealizado/TratamientoRealizado.jsx';
-import ListadoEstadisticas from '../pages/Estadisticas/components/listadoEstadisticas.jsx';
+import ListadoEstadisticas from '../pages/Estadisticas/components/ListadoEstadisticas.jsx';
 import NutrientesPorLote from '../pages/Estadisticas/components/NutrientesPorLote.jsx';
 import PorcentajeFertilizantesLote from '../pages/Estadisticas/components/PorcentajeFertilizantesLote.jsx';
 import ListadoTratamientos from '../pages/Tratamientos/components/ListadoTratamiento/ListadoTratamientos.jsx';
