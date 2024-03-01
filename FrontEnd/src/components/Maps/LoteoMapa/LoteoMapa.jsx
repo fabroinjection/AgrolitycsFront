@@ -44,7 +44,7 @@ function Mapa({ habilitado = false, registro = false, campo, lotes }){
       new Icon({
         iconUrl: markerIconUrl,
         iconSize: [25, 41],
-        iconAnchor: [12, 41],
+        iconAnchor: [25, 22],
         popupAnchor: [1, -34],
         shadowSize: [41, 41],
       })
@@ -124,7 +124,6 @@ function Mapa({ habilitado = false, registro = false, campo, lotes }){
   if (mapIcon != undefined) {
     return (
       <>
-      {console.log(mapIcon)}
       <MapContainer
           className='contenedorMapa'
           center={lotes.length !== 0 
