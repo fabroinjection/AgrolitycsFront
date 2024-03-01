@@ -1,5 +1,5 @@
 //import assets y css
-import './InfoLotes.css';
+import './infoLotes.css';
 import '../../../../components/Estilos/estilosDropdown.css';
 
 import iconoDropdown from '../../../../assets/iconoDropdown.png'
