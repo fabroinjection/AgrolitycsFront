@@ -1,1 +1,1 @@
-export const URLAPI = `http://backend-gcpb.onrender.com`;
+export const URLAPI = `http://backend-gcpb.onrender.com/`;
