@@ -1,13 +1,7 @@
 .productorCard{
-    border-radius: 10px;
-    /* margin: 10px auto; */
-    margin-top: 10px;
-    width: 100%;
-    height: 45px;
-    border: 4px solid #716767;
-    background-color: #cdb49f;
-    align-items: center;
-    /* padding: 2px; */
+  width: 100%;
+  border-top: solid grey 2px;
+  text-align: center;  
   }
 
   .cabeceraProductor{
@@ -28,24 +22,46 @@
   }
 
   .iconosProductorCard{
-    height: 28px;
-    width: 28px;
+    width: 20px;
+  }
+
+  .pantalla-chica-productores {
+    display: none;
   }
 
   .nombreProductor{
     font-size: 20px;
     margin-left: 10px;
-    max-width: 400px; /* Establece un ancho máximo para el nombre del lote */
+
+    max-width: 400px; 
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
     color: black;
   }
+
+
+  
 
   @media (max-width: 768px) {
 
     .nombreProductor{
       font-size: 15px;
+      margin-left: 0px;
+      max-width: 100px !important;
+    }
+
+    .iconosProductorCard{
+      width: 10px;
+    }
+
+    .pantalla-chica-productores {
+      display: flex;
+    }
+
+    .pantalla-grande-productores {
+      display: none;
     }
 
   }

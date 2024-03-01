@@ -16,6 +16,7 @@ import NoLogueado from "../../../../components/Modals/NoLogueado/NoLogueado";
 import AnalisisCompleto from "../AnalisisCompleto/AnalisisCompleto";
 import AnalisisBasico from "../AnalisisBasico/AnalisisBasico";
 import AnalisisAguaUtil from "../AnalisisAguaUtil/AnalisisAguaUtil";
+import SpinnerAgrolitycs from "../../../../components/Spinner/SpinnerAgrolitycs";
 
 //import contexts
 import { HayAnalisisContext } from "../../../../context/HayAnalisisContext";
@@ -164,7 +165,7 @@ function Analisis() {
               <>
                 {/* Consultar y Modificar Análisis Básico */}
                 <NavbarBootstrap/>
-                <AnalisisBasico tomaDeMuestra={tomaDeMuestra} analisisBasico={analisis[0]}/>
+                <AnalisisBasico tomaDeMuestra={tomaDeMuestra} analisisBasico={analisis[0]} fechaTomaMuestra={tomaDeMuestra.fecha}/>
                 {mostrarErrorVencimientoToken && 
                       <Error 
                       texto={"Su sesión ha expirado"} 
@@ -178,7 +179,7 @@ function Analisis() {
               <>
                 {/* Consultar y Modificar Análisis Completo */}
                 <NavbarBootstrap/>
-                <AnalisisCompleto tomaDeMuestra={tomaDeMuestra} analisisCompleto={analisis[0]}/>
+                <AnalisisCompleto tomaDeMuestra={tomaDeMuestra} analisisCompleto={analisis[0]} fechaTomaMuestra={tomaDeMuestra.fecha}/>
                 {mostrarErrorVencimientoToken && 
                       <Error 
                       texto={"Su sesión ha expirado"} 
@@ -192,7 +193,7 @@ function Analisis() {
               <>
                 {/* Consultar y Modificar Análisis Agua Útil */}
                 <NavbarBootstrap/>
-                <AnalisisAguaUtil tomaDeMuestra={tomaDeMuestra} analisisAguaUtil={analisis[0]}/>
+                <AnalisisAguaUtil tomaDeMuestra={tomaDeMuestra} analisisAguaUtil={analisis[0]} fechaTomaMuestra={tomaDeMuestra.fecha}/>
                 {mostrarErrorVencimientoToken && 
                       <Error 
                       texto={"Su sesión ha expirado"} 
@@ -208,7 +209,7 @@ function Analisis() {
       else{
         <>
           <NavbarBootstrap/>
-          <div>Cargando...</div>
+          <SpinnerAgrolitycs/>
         </>
       }
         

@@ -1,0 +1,22 @@
+.help-content {
+    margin-top: 10px;
+}
+
+.help-content + .help-content {
+    margin-top: 50px;
+}
+
+.titulo-help-content {
+    text-transform: none;
+}
+
+.contendor-video {
+    width: 660;
+    height: auto;
+}
+
+@media screen and (max-width: 500px) { 
+    .contendor-video {
+        width: 95%;
+    }
+}

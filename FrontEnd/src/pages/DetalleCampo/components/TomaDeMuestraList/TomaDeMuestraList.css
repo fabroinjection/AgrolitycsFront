@@ -24,7 +24,7 @@
   .info-sectionDetalleCampo {
     display: flex;
     flex-direction: column;
-    background-color: #F2DCC9;
+    background-color: #DAC5B3;
     /* border: 2px solid #000000; */
     /* border-radius: 10px; */
     padding: 10px;
@@ -34,7 +34,7 @@
   .info-sectionTomasMuestra {
     display: flex;
     flex-direction: column;
-    background-color: #F2DCC9;   
+    background-color: #DAC5B3;   
     overflow: hidden; 
     padding: 10px;
   }
@@ -54,16 +54,22 @@
     margin-bottom: 0px;
     width: 100%;
     height: 55px;
-    border: 4px solid #716767;
     font-size: 60px;
     background-color: #cdb49f;
     align-items: center;
   }
 
+  .boton-agregar-toma-muestra {
+    width: 100%;
+    text-transform: none;
+    font-size: 20px;
+    font-weight: 400;
+    color: #030303;
+  }
 
-  .btnNuevaToma:hover{
-    background-color: #716767bb;
-    border-color: #716767bb;
+
+  .boton-agregar-toma-muestra:hover{
+    background-color:#c2b09f;
   
   }
   

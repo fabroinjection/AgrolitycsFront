@@ -4,14 +4,16 @@ import Cookies from "js-cookie";
 import Alerta from '../../../../components/Modals/Alerta/Alerta';
 import Confirm from '../../../../components/Modals/Confirm/Confirm';
 import Error from '../../../../components/Modals/Error/Error';
+import Stack from 'react-bootstrap/Stack';
 
 //Estilos
 import './LoteCard.css'
+import '../../../../components/Estilos/estilosDropdown.css';
 
 //Assets
-import iconoMapa from "../../../../assets/iconoMapa.png"
-import iconoPala from "../../../../assets/iconoPala.png"
-import iconoMenu from "../../../../assets/iconoMenu.png"
+import iconoPunteroMapa from "../../../../assets/iconoPunteroMapa.png"
+import iconoPala from "../../../../assets/iconoTomaMuestra.png"
+import iconoDropdown from "../../../../assets/iconoDropdown.png"
 
 //Servicios
 import { eliminarLoteService } from '../../services/lotesService';
@@ -141,36 +143,36 @@ function LoteCard(lote){
 
     return(
         <>
-            <article className="loteCard">
-                <header className="cabeceraLote">                    
+            <Stack direction="horizontal" gap={3} className="loteCard">
+                <div className="p-2">
                     <strong className="nombreLote">{lote.lote.nombre}</strong>
-                    <aside>
-                        <button className="botonesLoteCard" onClick={handleConsultarLote}>
-                            <img className="iconosLoteCard" src={iconoMapa} alt="" />
-                        </button>
-                        <button className="botonesLoteCard" onClick={handleTomaMuestras}>
-                            <img className="iconosLoteCard" src={iconoPala} alt="" />
-                        </button>
-                        <Dropdown className="botonesLoteCard">
-                            <Dropdown.Toggle variant="transparent" id="dropdown-menu" className='custom-toggle'>
-                                <img className="iconosMenuCard" src={iconoMenu} alt="" />
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu className="custom-dropdown-menu">
-                                <Dropdown.Item className="custom-modificar-item" onClick={handleModificarLote}>
-                                    Modificar
-                                </Dropdown.Item>
-                                <Dropdown.Item className="custom-eliminar-item" onClick={handleEliminarLote}>
-                                    Eliminar
-                                </Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </aside>
-                </header>
-            </article>
+                </div>
+                <div className="p-2 ms-auto">
+                    <button className="botonesLoteCard" onClick={handleConsultarLote}>
+                        <img className="iconosLoteCard" src={iconoPunteroMapa} alt="" title='Ver en mapa'/>
+                    </button>
+                    <button className="botonesLoteCard" onClick={handleTomaMuestras}>
+                        <img className="iconosLoteCard" src={iconoPala} alt="" title='Toma de muestra'/>
+                    </button>
+                    <Dropdown className="botonesLoteCard">
+                        <Dropdown.Toggle variant="transparent" id="dropdown-menu" className='custom-toggle'>
+                            <img className="icono-dropdown" src={iconoDropdown} alt="" title='ver'/>
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu className="custom-dropdown-menu">
+                            <Dropdown.Item className="custom-modificar-item" onClick={handleModificarLote}>
+                                Editar lote
+                            </Dropdown.Item>
+                            <Dropdown.Item className="custom-eliminar-item" onClick={handleEliminarLote}>
+                                Eliminar
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>     
+                </div>
+            </Stack>
 
             {mostrarDarDeBaja && (
                 <Alerta
-                texto="Si elimina el lote, se eliminarán todas sus tomas de muestras asociadas."
+                texto="Si elimina el lote, se eliminará toda su información asociada y no podrá recuperarla."
                 nombreBoton="Eliminar"
                 onConfirm={handleConfirmarDarDeBajaLote}
                 />
@@ -178,13 +180,13 @@ function LoteCard(lote){
 
             {mostrarConfirmacionBaja && (
                 <Confirm
-                texto="El lote ha sido eliminado correctamente"
+                texto="El lote ha sido eliminado correctamente."
                 onConfirm={handleBajaLote}
                 />
             )}
 
             {mostrarErrorVencimientoToken &&
-                <Error texto={"Su sesión ha expirado"} 
+                <Error texto={"Su sesión ha expirado."} 
                 onConfirm={handleSesionExpirada}/>
             }  
         </>

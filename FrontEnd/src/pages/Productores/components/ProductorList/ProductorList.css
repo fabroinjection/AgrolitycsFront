@@ -2,11 +2,10 @@
     position: fixed;
     width: 100%;
     height: 100%;
-    background-color: #F2DCC9; /* Reemplaza 'tuColorDeFondo' con el color que desees */
-    z-index: 1; /* Asegúrate de que el fondo esté en el fondo de todos los elementos */
-    padding-left: 25%;
-    padding-right: 25%;
- 
+    background-color: #DAC5B3; 
+    z-index: 1; 
+    padding-left: 20%;
+    padding-right: 20% 
 }
 
 .tituloProductorLista{
@@ -26,6 +25,7 @@
     max-height: calc(100% - 175px); /* Altura máxima para las tarjetas, ajusta según sea necesario */
     scrollbar-width: thin; /* Agrega el ancho del scrollbar (puede ser 'auto' o 'thin') */
     scrollbar-color: transparent transparent;
+    height: calc(100% - 175px);
 }
 
 .tarjetasScroll {
@@ -44,7 +44,6 @@
     margin-top: 15px; /* Espacio entre las tarjetas y el botón */
 }
 
-
 /* Oculta la barra de desplazamiento en navegadores WebKit (como Chrome y Safari) */
 .tarjetasContenedor::-webkit-scrollbar {
     /* display: none; */
@@ -56,78 +55,42 @@
     border-radius: 3px;
 }
 
-
 .tarjetasContenedor::-webkit-scrollbar-track {
     background-color: transparent; /* Color transparente para el pulgar de la barra de desplazamiento */
     
 }
 
-.btnNuevoProductor{
-    border-radius: 10px;
-    margin: 10px auto;
-    margin-bottom: 0px;
+.boton-agregar-productor {
     width: 100%;
-    /* height: 45px; */
-    border: 4px solid #716767;
-    font-size: 40px;
-    background-color: #cdb49f;
-    align-items: center;
-  }
-
-.btnNuevoProductor:hover{
-    background-color: #716767bb;
-    border-color: #716767bb;
-  
-  }
-  
-  .signoMas{
-    color: #716767;
-  }
-
-  .estiloBotonesListaProductor{
+    max-height: 48px;
     text-transform: none;
-    border-radius: 10px;
-    padding: 4px 0px;
-    font-size: 16px;
-    width: 120px;
+    font-size: 20px;
+    font-weight: 400;
+    background-color: transparent;
+    color: #000000;
   }
 
-.botonVolverProductor{    
-    background: #F2DCC9;
-    border: 2px solid #000;
-}
+  .boton-agregar-productor:hover{
+    background-color:#c2b09f;
+    
+  }
 
+  .contenedor-cards {
+    min-height: 300px;
+    width: 100%;
+  }
 
 /* Estilos para pantallas pequeñas */
 @media (max-width: 768px) {
 
-    .contenedorProductor{
+    .contenedorProductores{
         padding-left: 5%;
         padding-right: 5%;
-    }
-
-    .tituloProductorLista {
-      font-size: 24px;
     }
     
     .tarjetasScroll {
       display: flex;
       flex-direction: column; /* Cambia la disposición de las tarjetas en pantallas pequeñas */
-    }
-  
-    .btnNuevoProductor {
-      font-size: 30px; /* Ajusta el tamaño del botón en pantallas pequeñas */
-    }
-  
-  
-    .estiloBotonesListaProductor {
-      font-size: 18px; /* Ajusta el tamaño de los botones en pantallas pequeñas */
-      width: auto;
-      padding: 10px 20px; /* Aumenta el espacio alrededor de los botones en pantallas pequeñas */
-    }
-  
-    .botonNuevaTomaContenedor {
-      margin-top: 10px; /* Reduce el espacio entre las tarjetas y el botón en pantallas pequeñas */
     }
 
     .tarjetasContenedor{

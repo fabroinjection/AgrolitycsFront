@@ -1,5 +1,6 @@
 //Estilos
 import './LaboratorioList.css';
+import '../../../../components/Estilos/estilosFormulario.css';
 
 // import components
 import LaboratorioCard from '../LaboratorioCard/LaboratorioCard';
@@ -8,6 +9,7 @@ import NavbarBootstrap from '../../../../components/Navbar/Navbar.components';
 import { Button } from "react-bootstrap";
 import NoLogueado from '../../../../components/Modals/NoLogueado/NoLogueado';
 import Error from '../../../../components/Modals/Error/Error';
+import HelpButton from '../../../../components/Ayuda/HelpButton';
 
 // import utilities
 import Cookies from 'js-cookie';
@@ -135,25 +137,32 @@ function LaboratorioList(){
                     </div>
                     <div className='tarjetasContenedor'>
                         <div className='tarjetasScroll'>
-                            <button name="botonNuevoLaboratorio" className='btn btn-outline-primary btnNuevoLaboratorio' title="Nuevo Diagnóstico"
+                            <Button name="botonNuevoLaboratorio"
+                            className='boton-agregar-laboratorio'
+                            title='Nuevo Laboratorio'
+                            variant='secondary'
                             onClick={() => setMostrarFormLaboratorios(true)}>
-                                <span className="signoMas">+</span>
-                            </button>
-    
-                            {laboratorios.map((laboratorio)=>(
-                                <LaboratorioCard key={laboratorio.id} laboratorio={laboratorio} accionActualizarLista={actualizacionListaLaboratorios}/>
-                            ))}
+                              <span>+ Agregar laboratorio</span>
+                            </Button>
+
+                            <div className='contenedor-cards-labs'>                            
+                              {laboratorios.map((laboratorio)=>(
+                                  <LaboratorioCard key={laboratorio.id} laboratorio={laboratorio} accionActualizarLista={actualizacionListaLaboratorios}/>
+                              ))}
+                            </div>
                             
     
                         </div>
                     </div>
                     <div className='botonNuevaTomaContenedor'>
-                        <Button className="estiloBotonesListaLaboratorio botonVolverLaboratorio" variant="secondary"
+                        <Button className="botonCancelarFormulario" variant="secondary"
                         onClick={handleNavigationHome}>
                             Volver
                         </Button>
                     </div>
                 </div>
+
+                <HelpButton/>
     
                 {
                     mostrarFormLaboratorios && <LaboratorioAMC accionCancelar={handleCancelarForm} accionConfirmar={registrarNuevoLaboratorio} modo={"Registrar"}/>

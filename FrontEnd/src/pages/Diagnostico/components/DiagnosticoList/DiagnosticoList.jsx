@@ -1,12 +1,18 @@
+// import Estilos
+import './DiagnosticoList.css';
+import '../../../../components/Estilos/estilosFormulario.css';
+import '../../../../components/Estilos/estilosListados.css';
+
 // import components
 import DiagnosticoCard from '../DiagnosticoCard/DiagnosticoCard'
 import NavbarBootstrap from '../../../../components/Navbar/Navbar.components';
 import { Button } from "react-bootstrap";
 import Diagnostico from '../Diagnostico/Diagnostico';
 import Error from '../../../../components/Modals/Error/Error';
+import SpinnerAgrolitycs from '../../../../components/Spinner/SpinnerAgrolitycs';
 
 // import hooks
-import { useState, useContext, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 // import services
@@ -18,7 +24,7 @@ import { listadoDiagnosticosService } from '../../services/diagnostico.service';
 // import utilities
 import Cookies from 'js-cookie';
 
-import './DiagnosticoList.css';
+
 import NoLogueado from '../../../../components/Modals/NoLogueado/NoLogueado';
 
 function DiagnosticoList(){
@@ -37,6 +43,8 @@ function DiagnosticoList(){
 
     //variable para guardar los diagnósticos
     const [ diagnosticos, setDiagnosticos ] = useState();
+
+    const [ actualizar, setActualizar ] = useState(false);
 
     const { idTomaMuestra } = useParams();
     let navigate = useNavigate();
@@ -114,7 +122,7 @@ function DiagnosticoList(){
           fetchDiagnostico();
         }
     
-      }, [tomaDeMuestra, analisis])
+      }, [tomaDeMuestra, analisis, actualizar])
 
     const handleCancelar = () => {
         setFormDiagnostico(false);
@@ -130,30 +138,45 @@ function DiagnosticoList(){
         navigate("/");
     }
 
+    const actualizarListado = () => {
+      setActualizar(!actualizar);
+    }
+
     if(window.localStorage.getItem('loggedAgroUser') && Cookies.get()){
       if(tomaDeMuestra && analisis && diagnosticos){
         return(
             <>
                 <NavbarBootstrap/>
     
-                <div className='contenedorDiagnosticos'>
-                    <div className='tituloCentradoListaDiagnostico'>
-                        <strong className='tituloDiagnosticoLista'>Diagnósticos - {tomaDeMuestra.codigo}</strong>
+                <div className='contenedor-listado'>
+                    <div className='sector-titulo-listado'>
+                        <strong className='titulo-listado'>Diagnósticos - {tomaDeMuestra.codigo}</strong>
                     </div>
-                    <div className='tarjetasContenedor'>
-                        <div className='tarjetasScroll'>
-                            <button name="botonNuevoDiagnostico" className='btn btn-outline-primary btnNuevoDiagnostico' title="Nuevo Diagnóstico" onClick={() => setFormDiagnostico(true)}>
-                                <span className="signoMas">+</span>
-                            </button>
+                    <div className='listado-contenedor'>
+                        <div className='listado-scroll'>
+                            <Button
+                              className='boton-agregar'
+                              variant='secondary'
+                              title='Nuevo Dignóstico'
+                              onClick={() => setFormDiagnostico(true)}
+                            >
+                                + Agregar Diagnóstico
+                            </Button>
 
-                            {diagnosticos.map((diagnostico)=>(
-                                <DiagnosticoCard key={diagnostico.id} diagnostico={diagnostico} idTomaMuestra={tomaDeMuestra.id}/>
-                            ))}
+                            <div className='contenedor-tarjetas'>
+                              {diagnosticos.map((diagnostico)=>(
+                                  <DiagnosticoCard key={diagnostico.id} diagnostico={diagnostico} idTomaMuestra={tomaDeMuestra.id} onEliminar={actualizarListado}/>
+                              ))}
+                            </div>
+
 
                         </div>
                     </div>
-                    <div className='botonNuevaTomaContenedor'>
-                        <Button className="estiloBotonesListaDiagno botonVolverDiagnostico" variant="secondary" onClick={handleVolver}>
+                    <div className='seccion-boton-volver'>
+                        <Button 
+                        className="botonCancelarFormulario" 
+                        variant="secondary" 
+                        onClick={handleVolver}>
                             Volver
                         </Button>
                     </div>
@@ -168,10 +191,12 @@ function DiagnosticoList(){
                 }
             </>
         );    
-    }
-    else{
-        return(<div>Cargando...</div>)
       }
+      else{
+          return(
+          <SpinnerAgrolitycs/>
+          )
+        }
     }
     else{
       return(<NoLogueado/>)

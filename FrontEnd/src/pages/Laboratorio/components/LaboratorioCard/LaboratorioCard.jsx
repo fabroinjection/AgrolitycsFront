@@ -2,8 +2,8 @@
 import './LaboratorioCard.css'
 
 //Imagenes iconos
-import iconoVer from '../../../../assets/iconoVer.png';
-import iconoEliminar from '../../../../assets/iconoEliminar.png';
+import iconoBorrar from '../../../../assets/iconoBorrar.png';
+import iconoTuboEnsayo from '../../../../assets/iconoTuboEnsayo.png';
 
 //import hooks
 import { useState } from 'react';
@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import LaboratorioAMC from '../LaboratorioAMC/LaboratorioAMC';
 import Alerta from '../../../../components/Modals/Alerta/Alerta';
 import Error from '../../../../components/Modals/Error/Error';
+import Stack from 'react-bootstrap/Stack';
 
 // import services
 import { eliminarLaboratorioService } from '../../services/laboratorio.service';
@@ -111,19 +112,19 @@ function LaboratorioCard({ laboratorio, accionActualizarLista }){
 
         return(
             <>
-                <article className="laboratorioCard">
-                    <header className="cabeceraLaboratorio">                    
+                <Stack direction="horizontal" gap={3} className='laboratorio-card'>
+                    <div className="p-2">
                         <strong className="nombreLaboratorio">{laboratorio.nombre}</strong>
-                        <aside>
-                            <button className="botonesLaboratorioCard" onClick={() => {setMostrarFormLaboratorio(true)}}>
-                                <img className="iconosLaboratorioCard" src={iconoVer} alt=""/>
-                            </button>
-                            <button className="botonesLaboratorioCard" >
-                                <img className="iconosLaboratorioCard" src={iconoEliminar} onClick={() => {setMostrarAlertaConfirmacionEliminacion(true)}} alt=""/>
-                            </button>
-                        </aside>
-                    </header>
-                </article>
+                    </div>
+                    <div className="p-2 ms-auto">
+                        <button className="botonesLaboratorioCard" onClick={() => {setMostrarFormLaboratorio(true)}}>
+                            <img className="iconosLaboratorioCard" src={iconoTuboEnsayo} alt=""/>
+                        </button>
+                        <button className="botonesLaboratorioCard" >
+                            <img className="iconosLaboratorioCard" src={iconoBorrar} onClick={() => {setMostrarAlertaConfirmacionEliminacion(true)}} alt=""/>
+                        </button>
+                    </div>
+                </Stack>
 
                 {
                     mostrarFormLaboratorio && <LaboratorioAMC accionCancelar={() => {setMostrarFormLaboratorio(false)}}

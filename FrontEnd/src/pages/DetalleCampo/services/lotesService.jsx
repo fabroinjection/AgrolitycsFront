@@ -1,9 +1,10 @@
 import axios from "axios";
+import { URLAPI } from "../../../config";
 
 export const nuevoLoteService = async (lote) => {
     const tokenJSON = window.localStorage.getItem('loggedAgroUser');
     const token = JSON.parse(tokenJSON);
-    const _urlApi = `http://127.0.0.1:8000/loteAlta/`;
+    const _urlApi = `${URLAPI}loteAlta/`;
     const response = await axios.post(_urlApi, lote, {
       headers: {
         Authorization: `Bearer ${token.access_token}`
@@ -16,7 +17,7 @@ export const nuevoLoteService = async (lote) => {
 export const listaLotesService = async (idCampoLote) => {
   const tokenJSON = window.localStorage.getItem('loggedAgroUser');
   const token = JSON.parse(tokenJSON);
-  const _urlApi = `http://127.0.0.1:8000/lotesConsulta/${idCampoLote}`;
+  const _urlApi = `${URLAPI}lotesConsulta/${idCampoLote}`;
   const response = await axios.get(_urlApi, {
     headers: {
       Authorization: `Bearer ${token.access_token}`
@@ -29,7 +30,7 @@ export const listaLotesService = async (idCampoLote) => {
 export const modificarLoteService = async(idCampoLote, idLote, lote) => {
   const tokenJSON = window.localStorage.getItem('loggedAgroUser');
   const token = JSON.parse(tokenJSON);
-  const _urlApi = `http://127.0.0.1:8000/loteModificar/${idCampoLote}/${idLote}`;
+  const _urlApi = `${URLAPI}loteModificar/${idCampoLote}/${idLote}`;
   const response = await axios.put(_urlApi, lote, {
     headers: {
       Authorization: `Bearer ${token.access_token}`
@@ -42,7 +43,7 @@ export const modificarLoteService = async(idCampoLote, idLote, lote) => {
 export const eliminarLoteService = async(idLote) => {
   const tokenJSON = window.localStorage.getItem('loggedAgroUser');
   const token = JSON.parse(tokenJSON);
-  const _urlApi = `http://127.0.0.1:8000/loteBaja/${idLote}`;
+  const _urlApi = `${URLAPI}loteBaja/${idLote}`;
   const response = await axios.delete(_urlApi, {
     headers: {
       Authorization: `Bearer ${token.access_token}`
@@ -55,7 +56,7 @@ export const eliminarLoteService = async(idLote) => {
 export const consultarLoteService = async (idLote) => {
   const tokenJSON = window.localStorage.getItem('loggedAgroUser');
   const token = JSON.parse(tokenJSON);
-  const _urlApi = `http://127.0.0.1:8000/loteConsultaId/${idLote}`;
+  const _urlApi = `${URLAPI}loteConsultaId/${idLote}`;
   const response = await axios.get(_urlApi, {
     headers: {
       Authorization: `Bearer ${token.access_token}`

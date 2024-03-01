@@ -1,3 +1,8 @@
+
+//import hooks
+import React, { Suspense, useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
 import PDFRotulo from "../../../../components/PDF/PDFRotulo";
 import { PDFViewer } from "@react-pdf/renderer";
 import PDFSubmuestras from "../../../../components/PDF/PDFSubmuestras";
@@ -6,17 +11,15 @@ import PDFDiagnosticoAgua from "../../../../components/PDF/PDFDiagnosticoAgua";
 import Error from "../../../../components/Modals/Error/Error";
 import NoLogueado from "../../../../components/Modals/NoLogueado/NoLogueado";
 import Cookies from "js-cookie";
-
-//import hooks
-import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import SpinnerAgrolitycs from "../../../../components/Spinner/SpinnerAgrolitycs";
 
 //import context
 import { ModoPDFContext } from "../../../../context/ModoPDFContext";
 import { IdDiagnosticoContext } from "../../../../context/IdDiagnosticoContext";
 
 //import services
-import { datosRotuloService, datosCampoPDFService } from "../../services/pdf.service";
+import { datosRotuloService } from "../../services/pdf.service";
+import { datosCampoPDFService } from "../../../../services/toma_muestra.service";
 import { renewToken } from "../../../../services/token.service";
 import { getAnalisisService } from "../../../../services/getanalisis.service";
 import { diagnosticoService, interpretacionBasicoYCompletoService, interpretacionAguaUtilService } from "../../services/diagnostico.service";
@@ -29,7 +32,7 @@ function VisorPDF({ imagen = null }) {
     //estados para las alertas
     const [alertaNoLogueado, setAlertaNoLogueado] = useState(false);
     const [alertaPdfNoSeleccionado, setAlertaPdfNoSeleccionado] = useState(false);
-    const [mostrarErrorVencimientoToken, setMostrarErrorVencimientoToken] = useState(false);
+    
 
     let navigate = useNavigate();
     const { idTomaMuestra } = useParams();
@@ -46,6 +49,22 @@ function VisorPDF({ imagen = null }) {
     const [ datosCampoPDF, setDatosCampoPDF ] = useState();
     const [ cultivoASembrar, setCultivoASembrar ] = useState();
 
+    // estados para mostrar errores
+    const [mostrarErrorVencimientoToken, setMostrarErrorVencimientoToken] = useState(false);
+    const [ usuarioNoEncontrado, setUsuarioNoEncontrado ] = useState(false);
+    const [ tomaMuestraNoEncontrada, setTomaMuestraNoEncontrada ] = useState(false);
+    const [ loteNoEncontrado, setLoteNoEncontrado ] = useState(false);
+    const [ campoNoEncontrado, setCampoNoEncontrado ] = useState(false);
+    const [ productorNoEncontrado, setProductorNoEncontrado ] = useState(false);
+    const [ localidadNoEncontrada, setLocalidadNoEncontrada ] = useState(false);
+    const [ provinciaNoEncontrada, setProvinciaNoEncontrada ] = useState(false);
+    const [ tipoAnalisisNoEncontrado, setTipoAnalisisNoEncontrado ] = useState(false);
+    const [ profundidadNoEncontrada, setProfundidadNoEncontrada ] = useState(false);
+    const [ perfilNoEncontrado, setPerfilNoEncontrado ] = useState(false);
+    const [ tipoMuestreoNoEncontrado, setTipoMuestreoNoEncontrado ] = useState(false);
+    const [ errorInesperado, setErrorInesperado ] = useState(false);
+
+
     useEffect( () => {
         const usuario = Cookies.get('username')
         if(usuario && modoPDF === undefined){
@@ -58,7 +77,7 @@ function VisorPDF({ imagen = null }) {
 
 
     useEffect(()=>{
-        if(idTomaMuestra & modoPDF === 'rotulo'){
+        if(idTomaMuestra && modoPDF === 'rotulo'){
             const fetchRotulo = async () => {
                 try {
                     const { data } = await datosRotuloService(idTomaMuestra);
@@ -73,7 +92,79 @@ function VisorPDF({ imagen = null }) {
                           if(error.response && error.response.status === 401){
                             setMostrarErrorVencimientoToken(true);
                           }
+                          else if (error.response && error.response.status === 404) {
+                            setUsuarioNoEncontrado(true);
+                          }
+                          else if (error.response && error.response.status === 405) {
+                            setTomaMuestraNoEncontrada(true);
+                          }
+                          else if (error.response && error.response.status === 406) {
+                            setLoteNoEncontrado(true);
+                          }
+                          else if (error.response && error.response.status === 407) {
+                            setCampoNoEncontrado(true);
+                          }
+                          else if (error.response && error.response.status === 408) {
+                            setProductorNoEncontrado(true);
+                          }
+                          else if (error.response && error.response.status === 409) {
+                            setLocalidadNoEncontrada(true);
+                          }
+                          else if (error.response && error.response.status === 410) {
+                            setProvinciaNoEncontrada(true);
+                          }
+                          else if (error.response && error.response.status === 411) {
+                            setTipoAnalisisNoEncontrado(true);
+                          }
+                          else if (error.response && error.response.status === 412) {
+                            setProfundidadNoEncontrada(true);
+                          }
+                          else if (error.response && error.response.status === 413) {
+                            setPerfilNoEncontrado(true);
+                          }
+                          else if (error.response && error.response.status === 414) {
+                            setTipoMuestreoNoEncontrado(true);
+                          }
+                          else {
+                            setErrorInesperado(true);
+                          }
                         }
+                      }
+                      else if (error.response && error.response.status === 404) {
+                        setUsuarioNoEncontrado(true);
+                      }
+                      else if (error.response && error.response.status === 405) {
+                        setTomaMuestraNoEncontrada(true);
+                      }
+                      else if (error.response && error.response.status === 406) {
+                        setLoteNoEncontrado(true);
+                      }
+                      else if (error.response && error.response.status === 407) {
+                        setCampoNoEncontrado(true);
+                      }
+                      else if (error.response && error.response.status === 408) {
+                        setProductorNoEncontrado(true);
+                      }
+                      else if (error.response && error.response.status === 409) {
+                        setLocalidadNoEncontrada(true);
+                      }
+                      else if (error.response && error.response.status === 410) {
+                        setProvinciaNoEncontrada(true);
+                      }
+                      else if (error.response && error.response.status === 411) {
+                        setTipoAnalisisNoEncontrado(true);
+                      }
+                      else if (error.response && error.response.status === 412) {
+                        setProfundidadNoEncontrada(true);
+                      }
+                      else if (error.response && error.response.status === 413) {
+                        setPerfilNoEncontrado(true);
+                      }
+                      else if (error.response && error.response.status === 414) {
+                        setTipoMuestreoNoEncontrado(true);
+                      }
+                      else {
+                        setErrorInesperado(true);
                       }   
                 }
                 
@@ -98,8 +189,12 @@ function VisorPDF({ imagen = null }) {
                         } catch (error) {
                             if(error.response && error.response.status === 401){
                                 setMostrarErrorVencimientoToken(true);
+                              } else {
+                                setErrorInesperado(true);
                               }
                         }
+                    } else {
+                        setErrorInesperado(true);
                     }
 
                 }
@@ -154,8 +249,12 @@ function VisorPDF({ imagen = null }) {
                             } catch (error) {
                                 if(error.response && error.response.status === 401){
                                     setMostrarErrorVencimientoToken(true);
+                                  } else {
+                                    setErrorInesperado(true);
                                   }
                             }
+                        } else {
+                            setErrorInesperado(true);
                         }
 
                     }
@@ -198,8 +297,12 @@ function VisorPDF({ imagen = null }) {
                             } catch (error) {
                                 if(error.response && error.response.status === 401){
                                     setMostrarErrorVencimientoToken(true);
+                                  } else {
+                                    setErrorInesperado(true);
                                   }
                             }
+                        } else {
+                            setErrorInesperado(true);
                         }
 
                     }
@@ -254,9 +357,11 @@ function VisorPDF({ imagen = null }) {
                                 setMostrarErrorVencimientoToken(true);
                             }
                             else{
-                                console.log("ERROR: ", error);
+                                setErrorInesperado(true);
                             }
                         }
+                    } else {
+                        setErrorInesperado(true);
                     }
                 }
             }
@@ -275,37 +380,154 @@ function VisorPDF({ imagen = null }) {
         window.localStorage.removeItem('loggedAgroUser');
       }
 
+    const handleErrorUsuarioNoEncontrado = () => {
+        setUsuarioNoEncontrado(false);
+        navigate("/home");
+    }
+    
+    const handleErrorTomaMuestraNoEncontrada = () => {
+        setTomaMuestraNoEncontrada(false);
+        navigate("home");
+    }
+
+    const handleErrorLoteNoEncontrado = () => {
+        setLoteNoEncontrado(false);
+        navigate("/home");
+    }
+
+    const handleErrorCampoNoEncontrado = () => {
+        setCampoNoEncontrado(false);
+        navigate("/home");
+    }
+
+    const handleErrorProductorNoEncontrado = () => {
+        setProductorNoEncontrado(false);
+        navigate("/home");
+    }
+
+    const handleErrorLocalidadNoEncontrada = () => {
+        setLocalidadNoEncontrada(false);
+        navigate("/home");
+    }
+
+    const handleErrorProvinciaNoEncontrada = () => {
+        setProvinciaNoEncontrada(false);
+        navigate("/home");
+    }
+
+    const handleErrorProfundidadNoEncontrada = () => {
+        setProfundidadNoEncontrada(false);
+        navigate("/home");
+    }
+
+    const handleErrorPerfilNoEncontrado = () => {
+        setPerfilNoEncontrado(false);
+        navigate("/home");
+    }
+
+    const handleErrorTipoMuestreoNoEncontrado = () => {
+        setTipoMuestreoNoEncontrado(false);
+        navigate("/home");
+    }
+
+    const handleErrorInesperado = () => {
+        setErrorInesperado(false);
+        navigate("/home");
+    }
+
     if (modoPDF === 'rotulo') {
         return(
             <>
-            {datosPDF === undefined ? <div>Cargando...</div> : 
-                <PDFViewer style={{width:"100%", height:"100vh"}}>
-                    <PDFRotulo datos={datosPDF}>
-        
-                    </PDFRotulo>
+            {datosPDF === undefined ? (
+            <SpinnerAgrolitycs />
+            ) : (
+            <Suspense fallback={<SpinnerAgrolitycs />}>
+                <PDFViewer style={{ width: "100%", height: "100vh" }}>
+                <PDFRotulo datos={datosPDF}></PDFRotulo>
                 </PDFViewer>
-            }
+            </Suspense>
+            )}
 
             {
                 mostrarErrorVencimientoToken &&
                 <Error texto={"Su sesión ha expirado"} 
                 onConfirm={handleSesionExpirada}/>
             } 
+            {
+                usuarioNoEncontrado &&
+                <Error texto={"El usuario asociado a la toma de muestra no se ha encontrado"} 
+                onConfirm={handleErrorUsuarioNoEncontrado}/>
+            }
+            {
+                tomaMuestraNoEncontrada &&
+                <Error texto={"La toma de muestra no se ha encontrado"} 
+                onConfirm={handleErrorTomaMuestraNoEncontrada}/>
+            }
+            {
+                loteNoEncontrado &&
+                <Error texto={"El lote asociado a la toma de muestra no se ha encontrado"} 
+                onConfirm={handleErrorLoteNoEncontrado}/>
+            }
+            {
+                campoNoEncontrado &&
+                <Error texto={"El campo asociado a la toma de muestra no se ha encontrado"} 
+                onConfirm={handleErrorCampoNoEncontrado}/>
+            }
+            {
+                productorNoEncontrado &&
+                <Error texto={"El productor asociado a la toma de muestra no se ha encontrado"} 
+                onConfirm={handleErrorProductorNoEncontrado}/>
+            }
+            {
+                localidadNoEncontrada &&
+                <Error texto={"La localidad asociada a la toma de muestra no se ha encontrado"} 
+                onConfirm={handleErrorLocalidadNoEncontrada}/>
+            }
+            {
+                provinciaNoEncontrada &&
+                <Error texto={"La provincia asociada a la toma de muestra no se ha encontrado"} 
+                onConfirm={handleErrorProvinciaNoEncontrada}/>
+            }
+            {
+                profundidadNoEncontrada &&
+                <Error texto={"La profundidad asociado a la toma de muestra no se ha encontrado"} 
+                onConfirm={handleErrorProfundidadNoEncontrada}/>
+            }
+            {
+                perfilNoEncontrado &&
+                <Error texto={"El perfil asociado a la toma de muestra no se ha encontrado"} 
+                onConfirm={handleErrorPerfilNoEncontrado}/>
+            }
+            {
+                tipoMuestreoNoEncontrado &&
+                <Error texto={"El tipo muestreo asociado a la toma de muestra no se ha encontrado"} 
+                onConfirm={handleErrorTipoMuestreoNoEncontrado}/>
+            }
+            {
+                errorInesperado &&
+                <Error texto={"Ocurrió un error inesperado"} 
+                onConfirm={handleErrorInesperado}/>
+            }
             </>
         )
     }
     else if (modoPDF === 'submuestra') {
         return(
             <>
-            <PDFViewer style={{width:"100%", height:"100vh"}}>
-                <PDFSubmuestras imagen={imagen}>
-    
-                </PDFSubmuestras>
+            <Suspense fallback={<SpinnerAgrolitycs />}>
+            <PDFViewer style={{ width: "100%", height: "100vh" }}>
+                <PDFSubmuestras imagen={imagen}></PDFSubmuestras>
             </PDFViewer>
+            </Suspense>
             {
                 mostrarErrorVencimientoToken &&
                 <Error texto={"Su sesión ha expirado"} 
                 onConfirm={handleSesionExpirada}/>
+            }
+            {
+                errorInesperado &&
+                <Error texto={"Ocurrió un error inesperado"} 
+                onConfirm={handleErrorInesperado}/>
             } 
             </>
         );
@@ -315,23 +537,35 @@ function VisorPDF({ imagen = null }) {
     else if (modoPDF === 'diagnostico'){
         return(
             <>
-                {analisis === undefined ? <div>Cargando...</div> 
-                 :
-                    interpretacion === undefined ? <div>Cargando...</div>
-                    : 
-                        diagnostico !== undefined ?
-                            <PDFViewer style={{width:"100%", height:"100vh"}}>
-                                <PDFDiagnosticoSuelo interpretacion={interpretacion} diagnostico={diagnostico} 
-                                datosLote={datosCampoPDF} cultivo={cultivoASembrar}>
-    
-                                </PDFDiagnosticoSuelo>
-                            </PDFViewer>
-                        :
-                            <PDFViewer style={{width:"100%", height:"100vh"}}>
-                                <PDFDiagnosticoAgua interpretacion={interpretacion} datosLote={datosCampoPDF}>
-    
-                                </PDFDiagnosticoAgua>
-                            </PDFViewer>
+                {analisis === undefined ? (
+                <SpinnerAgrolitycs />
+                ) : interpretacion === undefined ? (
+                <SpinnerAgrolitycs />
+                ) : diagnostico !== undefined ? (
+                <Suspense fallback={<SpinnerAgrolitycs />}>
+                    <PDFViewer style={{ width: "100%", height: "100vh" }}>
+                    <PDFDiagnosticoSuelo
+                        interpretacion={interpretacion}
+                        diagnostico={diagnostico}
+                        datosLote={datosCampoPDF}
+                        cultivo={cultivoASembrar}
+                    ></PDFDiagnosticoSuelo>
+                    </PDFViewer>
+                </Suspense>
+                ) : (
+                <Suspense fallback={<SpinnerAgrolitycs />}>
+                    <PDFViewer style={{ width: "100%", height: "100vh" }}>
+                    <PDFDiagnosticoAgua
+                        interpretacion={interpretacion}
+                        datosLote={datosCampoPDF}
+                    ></PDFDiagnosticoAgua>
+                    </PDFViewer>
+                </Suspense>
+                )}
+                {
+                    errorInesperado &&
+                    <Error texto={"Ocurrió un error inesperado"} 
+                    onConfirm={handleErrorInesperado}/>
                 }
             </>
         )
@@ -340,25 +574,28 @@ function VisorPDF({ imagen = null }) {
     else if (modoPDF === 'consulta diagnostico'){
         return(
             <>
-                {analisis === undefined ? <div>Cargando...</div> 
-                    :
-                        interpretacion === undefined ? <div>Cargando...</div>
-                        : 
-                            diagnostico === undefined ? <div>Cargando...</div>
-                            :
-                                <>
-                                    {console.log("Análisis: ", analisis[0])}
-                                    {console.log("Interpretación: ", interpretacion)}
-                                    {console.log("Diagnóstico: ", diagnostico)}
-                                    {console.log(cultivoASembrar)}
-                                    {console.log(datosCampoPDF)}
-                                    <PDFViewer style={{width:"100%", height:"100vh"}}>
-                                        <PDFDiagnosticoSuelo interpretacion={interpretacion} diagnostico={diagnostico} 
-                                        datosLote={datosCampoPDF} cultivo={cultivoASembrar}>
-            
-                                        </PDFDiagnosticoSuelo>
-                                    </PDFViewer>
-                                </>
+                {analisis === undefined ? (
+                <SpinnerAgrolitycs />
+                ) : interpretacion === undefined ? (
+                <SpinnerAgrolitycs />
+                ) : diagnostico === undefined ? (
+                <SpinnerAgrolitycs />
+                ) : (
+                <Suspense fallback={<SpinnerAgrolitycs />}>
+                    <PDFViewer style={{ width: "100%", height: "100vh" }}>
+                    <PDFDiagnosticoSuelo
+                        interpretacion={interpretacion}
+                        diagnostico={diagnostico}
+                        datosLote={datosCampoPDF}
+                        cultivo={cultivoASembrar}
+                    ></PDFDiagnosticoSuelo>
+                    </PDFViewer>
+                </Suspense>
+                )}
+                {
+                    errorInesperado &&
+                    <Error texto={"Ocurrió un error inesperado"} 
+                    onConfirm={handleErrorInesperado}/>
                 }
             </>
         )

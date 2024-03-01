@@ -1,0 +1,12 @@
+.mensajeCentro,
+.botonCentro{
+    text-align: center;    
+}
+
+.botonCentro{
+    margin-top: 20px;    
+}
+
+.tituloMensaje{
+    font-size: 20pt;
+}

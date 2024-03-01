@@ -1,6 +1,6 @@
 // Importar estilos
 import '../../components/Analisis.css';
-import './AnalisisBasico.css';
+import '../../../../components/Estilos/estilosFormulario.css';
 
 // Importar componentes
 import { Form } from 'react-bootstrap';
@@ -8,10 +8,13 @@ import Select from 'react-select';
 import { Button } from "react-bootstrap";
 import Error from '../../../../components/Modals/Error/Error';
 import Confirm from '../../../../components/Modals/Confirm/Confirm';
+import Alerta from '../../../../components/Modals/Alerta/Alerta';
 import DatePicker from 'react-datepicker';
+import SpinnerAgrolitycs from '../../../../components/Spinner/SpinnerAgrolitycs';
 
 // Importar utilities
 import moment from 'moment';
+import { toast } from 'react-toastify';
 
 // Importar hooks
 import { useState, useEffect } from 'react';
@@ -21,7 +24,7 @@ import { registerLocale, setDefaultLocale } from "react-datepicker";
 import es from "date-fns/locale/es";
 
 // Importar services
-import { registrarNuevoAnalisisBasico, modificarAnalisisBasicoService } from '../../services/analisis.service';
+import { registrarNuevoAnalisisBasico, modificarAnalisisBasicoService, darDeBajaAnalisisService } from '../../services/analisis.service';
 import { renewToken } from '../../../../services/token.service';
 import { laboratoriosService } from '../../../../services/laboratorios.service';
 import { consultarLaboratorio } from '../../../../services/laboratorios.service';
@@ -116,6 +119,128 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
     const [ azufreModificacion, setAzufreModificacion ] = useState("");
     const [ densidadModificacion, setDensidadModificacion ] = useState("");
 
+    const [ errorLaboratoriosNoRegistrados, setErrorLaboratoriosNoRegistrados ] = useState(false);
+
+    const mostrarErrorFechaVacia = () => {
+        toast.error('Se debe ingresar una fecha', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    const mostrarErrorLaboratorioVacio = () => {
+        toast.error('Se debe ingresar un laboratorio', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    const mostrarErrorMateriaOrganicaVacio = () => {
+        toast.error('Se debe ingresar el nutriente materia orgánica', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    const mostrarErrorCarbonoVacio = () => {
+        toast.error('Se debe ingresar el nutriente carbono', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    const mostrarErrorNitrogenoVacio = () => {
+        toast.error('Se debe ingresar el nutriente nitrógeno', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    const mostrarErrorPhVacio = () => {
+        toast.error('Se debe ingresar el nutriente pH', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    const mostrarErrorCalcioVacio = () => {
+        toast.error('Se debe ingresar el nutriente calcio', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    const mostrarErrorFosforoVacio = () => {
+        toast.error('Se debe ingresar el nutriente fosforo', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    const mostrarErrorMagnesioVacio = () => {
+        toast.error('Se debe ingresar el nutriente magnesio', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    const mostrarErrorSodioVacio = () => {
+        toast.error('Se debe ingresar el nutriente sodio', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    const mostrarErrorPotasioVacio = () => {
+        toast.error('Se debe ingresar el nutriente potasio', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    const mostrarErrorCicVacio = () => {
+        toast.error('Se debe ingresar el nutriente CIC', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    const mostrarErrorDensidadVacio = () => {
+        toast.error('Se debe ingresar el nutriente densidad', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    const mostrarErrorUnidadVacio = () => {
+        toast.error('Se debe ingresar una unidad para el calcio, sodio, magnesio y potasio', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    const mostrarErrorUnidadCicVacio = () => {
+        toast.error('Se debe ingresar una unidad para el CIC', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    const mostrarErrorUnidadDensidadVacio = () => {
+        toast.error('Se debe ingresar una unidad para la densidad', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    const mostrarErrorUnidadAluminioVacio = () => {
+        toast.error('Se debe ingresar una unidad para el aluminio', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+
     const handleChangeLaboratorio = (laboratorio) => {
         setLaboratorioSeleccionado({label: laboratorio.label, value: laboratorio.value});
     }
@@ -130,6 +255,24 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
     // variable para mostrar que se creo correctamente el análisis
     const [ mostrarAnalisisRegistrado, setMostrarAnalisisRegistrado ] = useState(false);
     const [ mostrarAnalisisModificado, setMostrarAnalisisModificado ] = useState(false);
+    const [ mostrarAnalisisEliminado, setMostrarAnalisisEliminado ] = useState(false);
+
+    // variables para solicitar confirmacion usuario en la eliminacion
+    const [ mostrarConfirmEliminacion, setMostrarConfirmEliminacion ] = useState(false);
+    
+    // variable para manejar la muestra de errores en la eliminacion
+    const [ mostrarErrorEstadoAnterior, setMostrarErrorEstadoAnterior ] = useState(false);
+    const [ mostrarErrorUsuarioNoEncontrado, setMostrarErrorUsuarioNoEncontrado ] = useState(false);
+    const [ mostrarErrorTMNoEncontrada, setMostrarErrorTMNoEncontrada ] = useState(false);
+    const [ mostrarErrorLoteNoEncontrado, setMostrarErrorLoteNoEncontrado ] = useState(false);
+    const [ mostrarErrorCampoNoEncontrado, setMostrarErrorCampoNoEncontrado ] = useState(false);
+    const [ mostrarErrorProductorNoEncontrado, setMostrarErrorProductorNoEncontrado ] = useState(false);
+    const [ mostrarErrorPermisos, setMostrarErrorPermisos ] = useState(false);
+    const [ mostrarErrorDiagnosticoAsociado, setMostrarErrorDiagnosticoAsociado ] = useState(false);
+    const [ mostrarErrorAnalisisNoEncontrado, setMostrarErrorAnalisisNoEncontrado ] = useState(false);
+    const [ mostrarErrorEstadoNoEncontrado, setMostrarErrorEstadoNoEncontrado ] = useState(false);
+    const [ mostrarErrorEliminacion, setMostrarErrorEliminacion ] = useState(false);
+
 
     const handleChangeMateriaOrganica = (e) => {
         const { value } = e.target;
@@ -150,7 +293,12 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
       if(carbono !== "" && nitrogeno !== ""){
         let carb = parseFloat(carbono.replace(",","."));
         let nit = parseFloat(nitrogeno.replace(",","."));
-        setRelacionCN((carb / nit).toString());
+        if (nit != 0) {
+            let relacionCNValue = (carb / nit).toFixed(2);
+            setRelacionCN((relacionCNValue).toString());
+        } else {
+            setRelacionCN("");
+        }
       }
       else{
         setRelacionCN("");
@@ -164,12 +312,12 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
 
     const handleChangeFosforo = (e) => {
         const { value } = e.target;
-        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0)){setFosforo(value);}
+        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0 && parseFloat(value.replace(",", ".")) <= 99999)){setFosforo(value);}
     }
 
     const handleChangeAluminio = (e) => {
         const { value } = e.target;
-        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0)){setAluminio(value);}
+        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0 && parseFloat(value.replace(",", ".")) <= 99999)){setAluminio(value);}
     }
 
     const handleChangeUnidadAluminio = (unidad) => {
@@ -182,45 +330,46 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
 
     const handleChangeMagnesio = (e) => {
         const { value } = e.target;
-        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0)){setMagnesio(value);}
+        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0 && parseFloat(value.replace(",", ".")) <= 99999)){setMagnesio(value);}
     }
 
     const handleChangeCalcio = (e) => {
         const { value } = e.target;
-        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0)){setCalcio(value);}
+        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0 && parseFloat(value.replace(",", ".")) <= 99999)){setCalcio(value);}
     }
 
     const handleChangeSodio = (e) => {
         const { value } = e.target;
-        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0)){setSodio(value);}
+        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0 && parseFloat(value.replace(",", ".")) <= 99999)){setSodio(value);}
     }
 
     const handleChangePotasio = (e) => {
         const { value } = e.target;
-        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0)){setPotasio(value);}
+        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0 && parseFloat(value.replace(",", ".")) <= 99999)){setPotasio(value);}
     }
 
     useEffect(() => {
-        if(calcio !== "" && magnesio !== "" && sodio !== "" && potasio !== "" && unidadSeleccionada){
-            let calc = parseFloat(calcio.replace(",","."));
-            let magn = parseFloat(magnesio.replace(",","."));
-            let sod = parseFloat(sodio.replace(",","."));
-            let pot = parseFloat(potasio.replace(",","."));
-            setSaturacion((calc + magn + sod + pot).toString());
-        }
-        else{
+        if(calcio !== "" && magnesio !== "" && sodio !== "" && potasio !== ""){
+            const calc = parseFloat(calcio.replace(",","."));
+            const magn = parseFloat(magnesio.replace(",","."));
+            const sod = parseFloat(sodio.replace(",","."));
+            const pot = parseFloat(potasio.replace(",","."));
+            const sat = (calc + magn + sod + pot).toFixed(2)
+            setSaturacion(sat.toString());
+        } else {
             setSaturacion("");
         }
-    }, [calcio, magnesio, sodio, potasio, unidadSeleccionada, saturacion])
+    }, [calcio, magnesio, sodio, potasio]);
+    
 
     const handleChangeAzufre = (e) => {
         const { value } = e.target;
-        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0)){setAzufre(value);}
+        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0 && parseFloat(value.replace(",", ".")) <= 99999)){setAzufre(value);}
     }
 
     const handleChangeDensidadAparente = (e) => {
         const { value } = e.target;
-        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0)){setDensidadAparente(value);}
+        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0 && parseFloat(value.replace(",", ".")) <= 99999)){setDensidadAparente(value);}
     }
 
     const handleChangeUnidadDensidad = (opcion) => {
@@ -229,7 +378,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
 
     const handleChangeCic = (e) => {
         const { value } = e.target;
-        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0)){setCIC(value);}
+        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0 && parseFloat(value.replace(",", ".")) <= 99999)){setCIC(value);}
     }
 
     const handleChangeUnidadCic = (opcion) => {
@@ -244,6 +393,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(startDate == undefined){
             setFechaVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorFechaVacia();
             return false;
         }
         else{
@@ -253,6 +403,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if (laboratorioSeleccionado.value === 0) {
             setLaboratorioVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorLaboratorioVacio();
             return false;
         } else {
             setLaboratorioVacio(false);
@@ -261,6 +412,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(materiaOrganica === ""){
             setMateriaOrganicaVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorMateriaOrganicaVacio();
             return false;
         }
         else{
@@ -270,6 +422,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if (carbono === "") {
             setCarbonoVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorCarbonoVacio();
             return false;
         }
         else{
@@ -279,6 +432,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(nitrogeno === ""){
             setNitrogenoVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorNitrogenoVacio();
             return false;
         }
         else{
@@ -288,6 +442,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(pH === "") {
             setPHVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorPhVacio();
             return false;
         }
         else{
@@ -297,6 +452,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(fosforo === "") {
             setFosforoVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorFosforoVacio();
             return false;
         } else {
             setFosforoVacio(false);
@@ -305,6 +461,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(calcio === "") {
             setCalcioVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorCalcioVacio();
             return false;
         } else {
             setCalcioVacio(false);
@@ -313,6 +470,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if (magnesio === "") {
             setMagnesioVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorMagnesioVacio();
             return false;
         } else {
             setMagnesioVacio(false);
@@ -321,6 +479,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(sodio === "") {
             setSodioVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorSodioVacio();
             return false;
         } else {
             setSodioVacio(false);
@@ -329,6 +488,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(potasio === "") {
             setPotasioVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorPotasioVacio();
             return false;
         } else {
             setPotasioVacio(false);
@@ -337,6 +497,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if (cic === "") {
             setCicVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorCicVacio();
             return false;
         } else {
             setCicVacio(false);
@@ -345,6 +506,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(densidadAparente === ""){
             setDensidadVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorDensidadVacio();
             return false;
         }
         else{
@@ -354,6 +516,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(unidadSeleccionada === undefined){
             setUnidadVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorUnidadVacio();
             return false;
         }
         else{
@@ -363,15 +526,17 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(unidadCicSeleccionada === undefined){
             setUnidadCicVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorUnidadCicVacio();
             return false;
         }
         else{
-            setUnidadVacio(false);
+            setUnidadCicVacio(false);
         }
 
         if(unidadDensidad === undefined){
             setUnidadDensidadVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorUnidadDensidadVacio();
             return false;
         }
         else{
@@ -382,6 +547,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
             if(unidadAluminio === undefined){
                 setUnidadAluminioVacio(true);
                 setEstaEnPeticion(false);
+                mostrarErrorUnidadAluminioVacio();
                 return false;
             }
             else{
@@ -475,13 +641,21 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         const fetchLaboratorios = async () => {
             try {
                 const { data } = await laboratoriosService();
-                setLaboratorios(data);
+                if (data.length === 0) {
+                    setErrorLaboratoriosNoRegistrados(true);
+                } else {
+                    setLaboratorios(data);
+                }
             } catch (error) {
                 if (error.response && error.response.status === 401) {
                     try {
                         await renewToken();
                         const { data } = await laboratoriosService();
-                        setLaboratorios(data);
+                        if (data.length === 0) {
+                            setErrorLaboratoriosNoRegistrados(true);
+                        } else {
+                            setLaboratorios(data);
+                        }
                     } catch (error) {
                         if (error.response && error.response.status === 401) {
                             setMostrarErrorVencimientoToken(true);
@@ -522,14 +696,14 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(modo === "modificar"){
             const fetchLaboratorioAnalisis = async () => {
                 try {
-                    const { data } = await consultarLaboratorio(tomaDeMuestra.id);
-                    setLaboratorioAnalisisModificado({label: data[0].nombre, value: data[0].id});
+                    const { data } = await consultarLaboratorio(analisisBasico.laboratorio_id);
+                    setLaboratorioAnalisisModificado({label: data.nombre, value: data.id});
                 } catch (error) {
                     if(error.response && error.response.status === 401){
                         try {
                             await renewToken();
-                            const { data } = await consultarLaboratorio(tomaDeMuestra.id);
-                            setLaboratorioAnalisisModificado({label: data[0].nombre, value: data[0].id});
+                            const { data } = await consultarLaboratorio(analisisBasico.laboratorio_id);
+                            setLaboratorioAnalisisModificado({label: data.nombre, value: data.id});
                         } catch (error) {
                           if(error.response && error.response.status === 401){
                             setMostrarErrorVencimientoToken(true);
@@ -640,6 +814,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                 setAzufreModificacion(String(analisisBasico.azufre).replace(".", ","));
             }
             setDensidadModificacion(String(analisisBasico.densidad_aparente).replace(".", ","));
+            setLaboratorioSeleccionado({label: laboratorioAnalisis})
 
         }
     }, [modo])
@@ -667,7 +842,12 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(carbonoModificacion !== "" && nitrogenoModificacion !== ""){
           let carb = parseFloat(carbonoModificacion.replace(",","."));
           let nit = parseFloat(nitrogenoModificacion.replace(",","."));
-          setRelacionCN((carb / nit).toString());
+          if (nit != 0) {
+            let relacionCNValue = (carb / nit).toFixed(2);
+            setRelacionCN((relacionCNValue).toString());
+        } else {
+            setRelacionCN("");
+        }
         }
         else{
           setRelacionCN("");
@@ -681,67 +861,69 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
 
     const handleChangeFosforoModificacion = (e) => {
         const { value } = e.target;
-        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0)){setFosforoModificacion(value);}
+        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0 && parseFloat(value.replace(",", ".")) <= 99999)){setFosforoModificacion(value);}
     }
 
     const handleChangeAluminioModificacion = (e) => {
         const { value } = e.target;
-        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0)){setAluminioModificacion(value);}
+        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0 && parseFloat(value.replace(",", ".")) <= 99999)){setAluminioModificacion(value);}
     }
 
     const handleChangeCalcioModificacion = (e) => {
         const { value } = e.target;
-        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0)){setCalcioModificacion(value);}
+        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0 && parseFloat(value.replace(",", ".")) <= 99999)){setCalcioModificacion(value);}
     }
 
     const handleChangeMagnesioModificacion = (e) => {
         const { value } = e.target;
-        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0)){setMagnesioModificacion(value);}
+        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0 && parseFloat(value.replace(",", ".")) <= 99999)){setMagnesioModificacion(value);}
     }
 
     const handleChangeSodioModificacion = (e) => {
         const { value } = e.target;
-        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0)){setSodioModificacion(value);}
+        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0 && parseFloat(value.replace(",", ".")) <= 99999)){setSodioModificacion(value);}
     }
 
     const handleChangePotasioModificacion = (e) => {
         const { value } = e.target;
-        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0)){setPotasioModificacion(value);}
+        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0 && parseFloat(value.replace(",", ".")) <= 99999)){setPotasioModificacion(value);}
     }
 
     useEffect(() => {
         if(calcioModificacion !== "" && magnesioModificacion !== "" && sodioModificacion !== "" 
-        && potasioModificacion !== "" && unidadSeleccionada){
+        && potasioModificacion !== ""){
             let calc = parseFloat(calcioModificacion.replace(",","."));
             let magn = parseFloat(magnesioModificacion.replace(",","."));
             let sod = parseFloat(sodioModificacion.replace(",","."));
             let pot = parseFloat(potasioModificacion.replace(",","."));
-            setSaturacion((calc + magn + sod + pot).toString());
+            const sat = (calc + magn + sod + pot).toFixed(2)
+            setSaturacion(sat.toString());
         }
         else{
             setSaturacion("");
         }
-    }, [calcioModificacion, magnesioModificacion, sodioModificacion, potasioModificacion, unidadSeleccionada]);
+    }, [calcioModificacion, magnesioModificacion, sodioModificacion, potasioModificacion]);
 
     const handleChangeCicModificacion = (e) => {
         const { value } = e.target;
-        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0)){setCicModificacion(value);}
+        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0 && parseFloat(value.replace(",", ".")) <= 99999)){setCicModificacion(value);}
     }
 
     const handleChangeAzufreModificacion = (e) => {
         const { value } = e.target;
-        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0)){setAzufreModificacion(value);}
+        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0 && parseFloat(value.replace(",", ".")) <= 99999)){setAzufreModificacion(value);}
     }
 
     const handleChangeDensidadAparenteModificacion = (e) => {
         const { value } = e.target;
-        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0)){setDensidadModificacion(value);}
+        if(value === "" || (numeroRealRegExpr.test(value) && parseFloat(value.replace(",", ".")) >= 0 && parseFloat(value.replace(",", ".")) <= 99999)){setDensidadModificacion(value);}
     }
 
     const validarCamposModificacion = () => {
         if(startDateModoModificar == undefined){
             setFechaVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorFechaVacia();
             return false;
         }
         else{
@@ -751,6 +933,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if (laboratorioAnalisisModificado.value === 0) {
             setLaboratorioVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorLaboratorioVacio();
             return false;
         } else {
             setLaboratorioVacio(false);
@@ -759,6 +942,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(materiaOrganicaModificacion === ""){
             setMateriaOrganicaVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorMateriaOrganicaVacio();
             return false;
         }
         else{
@@ -768,6 +952,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if (carbonoModificacion === "") {
             setCarbonoVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorCarbonoVacio();
             return false;
         }
         else{
@@ -777,6 +962,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(nitrogenoModificacion === ""){
             setNitrogenoVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorNitrogenoVacio();
             return false;
         }
         else{
@@ -786,6 +972,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(pHModificacion === "") {
             setPHVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorPhVacio();
             return false;
         }
         else{
@@ -795,6 +982,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(fosforoModificacion === "") {
             setFosforoVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorFosforoVacio();
             return false;
         } else {
             setFosforoVacio(false);
@@ -803,6 +991,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(calcioModificacion === "") {
             setCalcioVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorCalcioVacio();
             return false;
         } else {
             setCalcioVacio(false);
@@ -811,6 +1000,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if (magnesioModificacion === "") {
             setMagnesioVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorMagnesioVacio();
             return false;
         } else {
             setMagnesioVacio(false);
@@ -819,6 +1009,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(sodioModificacion === "") {
             setSodioVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorSodioVacio();
             return false;
         } else {
             setSodioVacio(false);
@@ -827,6 +1018,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(potasioModificacion === "") {
             setPotasioVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorPotasioVacio();
             return false;
         } else {
             setPotasioVacio(false);
@@ -835,6 +1027,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if (cicModificacion === "") {
             setCicVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorCicVacio();
             return false;
         } else {
             setCicVacio(false);
@@ -843,6 +1036,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(densidadModificacion === ""){
             setDensidadVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorDensidadVacio();
             return false;
         }
         else{
@@ -852,6 +1046,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(unidadSeleccionada === undefined){
             setUnidadVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorUnidadVacio();
             return false;
         }
         else{
@@ -861,15 +1056,17 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
         if(unidadCicSeleccionada === undefined){
             setUnidadCicVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorUnidadCicVacio();
             return false;
         }
         else{
-            setUnidadVacio(false);
+            setUnidadCicVacio(false);
         }
 
         if(unidadDensidad === undefined){
             setUnidadDensidadVacio(true);
             setEstaEnPeticion(false);
+            mostrarErrorUnidadDensidadVacio();
             return false;
         }
         else{
@@ -880,6 +1077,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
             if(unidadAluminio === undefined){
                 setUnidadAluminioVacio(true);
                 setEstaEnPeticion(false);
+                mostrarErrorUnidadAluminioVacio();
                 return false;
             }
             else{
@@ -894,31 +1092,130 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
 
     }
 
+    const solicitarConfirmacionEliminacion = () => {
+        setMostrarConfirmEliminacion(true);
+    }
+
+    const eliminarAnalisis = async (e) => {
+        //Si el usuario confirma (e), se procede a eliminar el analisis
+        setMostrarConfirmEliminacion(false);
+        if (e) {
+            try {
+                await darDeBajaAnalisisService(analisisBasico.id);
+                setMostrarAnalisisEliminado(true);
+            } catch (error) {
+                if (error.response) {
+                    if (error.response.status === 401) {
+                        try {
+                            await renewToken();
+                            await darDeBajaAnalisisService(analisisBasico.id);
+                            setMostrarAnalisisEliminado(true);
+                        } catch (error) {
+                            if (error.response.status === 400) {
+                                setMostrarErrorEstadoAnterior(true);
+                            }
+                            else if (error.response.status === 404) {
+                                setMostrarErrorUsuarioNoEncontrado(true);
+                            }
+                            else if (error.response.status === 405) {
+                                setMostrarErrorTMNoEncontrada(true);
+                            }
+                            else if (error.response.status === 406) {
+                                setMostrarErrorLoteNoEncontrado(true);
+                            }
+                            else if (error.response.status === 407) {
+                                setMostrarErrorCampoNoEncontrado(true);
+                            }
+                            else if (error.response.status === 408) {
+                                setMostrarErrorProductorNoEncontrado(true);
+                            }
+                            else if (error.response.status === 409) {
+                                setMostrarErrorPermisos(true);
+                            }
+                            else if (error.response.status === 410) {
+                                setMostrarErrorDiagnosticoAsociado(true);
+                            }
+                            else if (error.response.status === 411) {
+                                setMostrarErrorEstadoNoEncontrado(true);
+                            }
+                            else if (error.response.status === 412) {
+                                setMostrarErrorAnalisisNoEncontrado(true);
+                            }
+                            else {
+                                setMostrarErrorEliminacion(true);
+                            }
+                        }
+                    }
+                    else if (error.response.status === 400) {
+                        setMostrarErrorEstadoAnterior(true);
+                    }
+                    else if (error.response.status === 404) {
+                        setMostrarErrorUsuarioNoEncontrado(true);
+                    }
+                    else if (error.response.status === 405) {
+                        setMostrarErrorTMNoEncontrada(true);
+                    }
+                    else if (error.response.status === 406) {
+                        setMostrarErrorLoteNoEncontrado(true);
+                    }
+                    else if (error.response.status === 407) {
+                        setMostrarErrorCampoNoEncontrado(true);
+                    }
+                    else if (error.response.status === 408) {
+                        setMostrarErrorProductorNoEncontrado(true);
+                    }
+                    else if (error.response.status === 409) {
+                        setMostrarErrorPermisos(true);
+                    }
+                    else if (error.response.status === 410) {
+                        setMostrarErrorDiagnosticoAsociado(true);
+                    }
+                    else if (error.response.status === 411) {
+                        setMostrarErrorEstadoNoEncontrado(true);
+                    }
+                    else if (error.response.status === 412) {
+                        setMostrarErrorAnalisisNoEncontrado(true);
+                    }
+                    else {
+                        setMostrarErrorEliminacion(true);
+                    }
+                }
+            }
+        }
+    }
+
+    const handleConfirmarEliminacion = (e) => {
+        if(e){
+            setMostrarAnalisisEliminado(false);
+            navigate(-1);
+        }
+    }
+
     if (analisisBasico) {
         if(laboratorioAnalisis){
             if (modo === "modificar" && laboratorioAnalisisModificado){
                 return(
-                    <>                        
+                    <>       
                         {/* MODIFICAR ANALISIS BÁSICO */}
                         {/* contenedor */}
-                        <div className="contenedorAnalisisCompleto">
+                        <div className="contenedor-analisis">
             
                             {/* título contenedor */}
-                            <div className='contenedorTituloAnalisisCompleto'>
-                                <span className='tituloAnalisisCompleto'>Análisis Químico del Suelo - Básico</span> 
+                            <div className='seccion-titulo-analisis'>
+                                <span className='tituloForm'>Análisis Químico del Suelo - Básico</span> 
                             </div>
             
                             {/* formulario análisis */}
-                            <Form className='formularioAnalisisBasico' onSubmit={handleSubmit(modificarAnalisisBasico)}>
-            
-                                {/* Encabezado análisis */}
-                                <div className='encabezado'>
+                            <Form className='formulario-analisis' onSubmit={handleSubmit(modificarAnalisisBasico)}>
         
+                                {/* columna 1 */}
+                                <div className="columna-uno">
+
                                     {/* Fecha de análisis */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={fechaVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Fecha</Form.Label>
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={fechaVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Fecha</Form.Label>
                                         <DatePicker 
-                                        className='fechaAnalisis'
+                                        className='estilos-datepikcer'
                                         dateFormat="dd/MM/yyyy"
                                         selected={startDateModoModificar}
                                         onChange={(date) => setStartDateModoModificar(date)}
@@ -926,11 +1223,11 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                                         maxDate={new Date()}
                                         />
                                     </Form.Group>
-        
+
                                     {/* Select Laboratorio */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={laboratorioVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Laboratorio</Form.Label>
-                                        <Select className='selectLaboratorio'
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={laboratorioVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Laboratorio</Form.Label>
+                                        <Select
                                         value={laboratorioAnalisisModificado}
                                         onChange={handleChangeLaboratorioModificado}
                                         options={
@@ -938,74 +1235,69 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                                         }>
                                         </Select>
                                     </Form.Group>
-                                </div>
-        
-                                {/* columna 1 */}
-                                <div className="columnaUno">
             
                                     {/* campo materia organica */}
-                                       <Form.Group className='grupoForm'>
-                                        <Form.Label className={materiaOrganicaVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Materia Orgánica</Form.Label>
-                                        <Form.Control className='inputForm' type='text'
+                                       <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={materiaOrganicaVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Materia Orgánica*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text'
                                         value={materiaOrganicaModificacion} onChange={handleChangeMateriaOrganicaModificacion}/>
-                                        <Form.Label className='labelForm'>%</Form.Label>
+                                        <Form.Label className='label-derecho'>%</Form.Label>
                                     </Form.Group>
             
                                      {/* campo carbono orgánico */}
-                                     <Form.Group className='grupoForm'>
-                                        <Form.Label className={carbonoVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Carbono Orgánico</Form.Label>
-                                        <Form.Control className='inputForm' type='text'
+                                     <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={carbonoVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Carbono Orgánico*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text'
                                         value={carbonoModificacion} onChange={handleChangeCarbonoModificacion}/>
-                                        <Form.Label className='labelForm'>%</Form.Label>
+                                        <Form.Label className='label-derecho'>%</Form.Label>
                                     </Form.Group>     
             
                                      {/* campo nitrógeno total */}
-                                     <Form.Group className='grupoForm'>
-                                        <Form.Label className={nitrogenoVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Nitrógeno Total</Form.Label>
-                                        <Form.Control className='inputForm' type='text'
+                                     <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={nitrogenoVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Nitrógeno Total*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text'
                                         value={nitrogenoModificacion} onChange={handleChangeNitrogenoModificacion}/>
-                                        <Form.Label className='labelForm'>%</Form.Label>
+                                        <Form.Label className='label-derecho'>%</Form.Label>
                                     </Form.Group>          
             
                                      {/* campo relación C/N */}
-                                     <Form.Group className='grupoForm'>
-                                        <Form.Label className='labelFormIzquierdo'>Relación C/N</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={relacionCN} disabled={true}/>
+                                     <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className='label-izquierdo'>Relación C/N</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={relacionCN} disabled={true}/>
                                     </Form.Group>           
              
             
                                     {/* Campo pH */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={pHVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>pH</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={pHModificacion}
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={pHVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>pH*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={pHModificacion}
                                         onChange={handleChangePHModificacion}/>
                                     </Form.Group>
             
                                     {/* Campo fósforo */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={fosforoVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Fósforo Extraíble</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={fosforoModificacion}
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={fosforoVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Fósforo Extraíble*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={fosforoModificacion}
                                         onChange={handleChangeFosforoModificacion}/>
-                                        <Form.Label className='labelForm'>ppm</Form.Label>
+                                        <Form.Label className='label-derecho'>ppm</Form.Label>
                                     </Form.Group>
                                         
                                     {/* Campo aluminio */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={'labelFormIzquierdo'}>Aluminio</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={aluminioModificacion} 
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={unidadAluminioVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Aluminio</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={aluminioModificacion} 
                                         onChange={handleChangeAluminioModificacion}/>
-                                        <Select className='selectForm'
+                                        <Select
                                         options={unidades}
                                         value={unidadAluminio}
-                                        onChange={handleChangeUnidadAluminio}>
-            
+                                        onChange={handleChangeUnidadAluminio}>            
                                         </Select>
                                     </Form.Group> 
             
                                 </div>
                                 
                                 {/* columna 2 */}
-                                <div className="columnaDos">
+                                <div className="columna-dos">
             
                                     {/* Titulo Cationes de Intercambio */}
                                     <div className='contenedorCationesIntercambio'>
@@ -1013,11 +1305,11 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                                     </div>
             
                                     {/* Campo calcio */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={calcioVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Calcio</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={calcioModificacion} 
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={(calcioVacio || unidadVacio) ? 'label-izquierdo-error' : 'label-izquierdo'}>Calcio*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={calcioModificacion} 
                                         onChange={handleChangeCalcioModificacion}/>
-                                        <Select className='selectForm'
+                                        <Select
                                         options={unidades}
                                         value={unidadSeleccionada}
                                         onChange={handleChangeUnidad}>
@@ -1026,11 +1318,11 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                                     </Form.Group> 
             
                                     {/* Campo Magnesio */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={magnesioVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Magnesio</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={magnesioModificacion} 
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={(magnesioVacio || unidadVacio) ? 'label-izquierdo-error' : 'label-izquierdo'}>Magnesio*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={magnesioModificacion} 
                                         onChange={handleChangeMagnesioModificacion}/>
-                                        <Select className='selectForm'
+                                        <Select
                                         options={unidades}
                                         value={unidadSeleccionada}
                                         onChange={handleChangeUnidad}>
@@ -1039,11 +1331,11 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                                     </Form.Group> 
             
                                     {/* Campo Sodio */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={sodioVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Sodio</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={sodioModificacion} 
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={(sodioVacio || unidadVacio) ? 'label-izquierdo-error' : 'label-izquierdo'}>Sodio*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={sodioModificacion} 
                                         onChange={handleChangeSodioModificacion}/>
-                                        <Select className='selectForm'
+                                        <Select
                                         options={unidades}
                                         value={unidadSeleccionada}
                                         onChange={handleChangeUnidad}>
@@ -1052,11 +1344,11 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                                     </Form.Group> 
             
                                     {/* Campo Potasio */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={potasioVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Potasio</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={potasioModificacion} 
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={(potasioVacio || unidadVacio) ? 'label-izquierdo-error' : 'label-izquierdo'}>Potasio*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={potasioModificacion} 
                                         onChange={handleChangePotasioModificacion}/>
-                                        <Select className='selectForm'
+                                        <Select
                                         options={unidades}
                                         value={unidadSeleccionada}
                                         onChange={handleChangeUnidad}>
@@ -1065,20 +1357,20 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                                     </Form.Group> 
             
                                     {/* Campo Saturación Bases S */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className='labelFormIzquierdo'>Saturación Bases S</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={saturacion} disabled={true}/>
-                                        <Form.Label className='labelForm'>
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className='label-izquierdo'>Saturación Bases S</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={saturacion} disabled={true}/>
+                                        <Form.Label className='label-derecho'>
                                             {unidadSeleccionada === undefined ? unidadSeleccionada : unidadSeleccionada.label}
                                         </Form.Label>
                                     </Form.Group> 
         
                                     {/* Campo CIC */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={cicVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>CIC</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={cicModificacion}
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={(cicVacio || unidadCicVacio) ? 'label-izquierdo-error' : 'label-izquierdo'}>CIC*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={cicModificacion}
                                         onChange={handleChangeCicModificacion}/>
-                                        <Select className='selectForm'
+                                        <Select
                                         options={unidadesCIC}
                                         value={unidadCicSeleccionada}
                                         onChange={handleChangeUnidadCic}>
@@ -1087,52 +1379,37 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                                     </Form.Group> 
         
                                     {/* Campo Azufre */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={'labelFormIzquierdo'}>Azufre</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={azufreModificacion} 
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className='label-izquierdo'>Azufre</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={azufreModificacion} 
                                         onChange={handleChangeAzufreModificacion}/>
-                                        <Form.Label className='labelForm'>ppm</Form.Label>
+                                        <Form.Label className='label-derecho'>ppm</Form.Label>
                                     </Form.Group> 
         
                                     {/* Campo Densidad Aparente */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={densidadVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Densidad Aparente</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={densidadModificacion} 
-                                                    onChange={handleChangeDensidadAparenteModificacion}/>
-                                        <Select className='selectForm'
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={densidadVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Densidad Aparente*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={densidadModificacion} 
+                                            onChange={handleChangeDensidadAparenteModificacion}/>
+                                        <Select
                                         options={unidadesDensidad}
                                         value={unidadDensidad}
                                         onChange={handleChangeUnidadDensidad}>
             
                                         </Select>
-                                    </Form.Group> 
-            
-            
-                                    {/* Mensaje de Faltan Campos */}
-                                    <Form.Group className='grupoForm'>
-                                        {fechaVacio && <Form.Label className='labelFormError'>*Debe seleccionar una fecha</Form.Label>}
-                                        {laboratorioVacio && <Form.Label className='labelFormError'>*Debe seleccionar un laboratorio</Form.Label>}
-                                        {(materiaOrganicaVacio || carbonoVacio || nitrogenoVacio || pHVacio || fosforoVacio || calcioVacio
-                                        || magnesioVacio || sodioVacio || potasioVacio || cicVacio || densidadVacio) && <Form.Label className='labelFormError'>*Los campos en rojo no están completos</Form.Label>}
-                                        {unidadVacio && <Form.Label className='labelFormError'>*Debe seleccionar una unidad</Form.Label>}
-                                        {unidadCicVacio && <Form.Label className='labelFormError'>*Debe seleccionar una unidad para el CIC</Form.Label>}
-                                        {unidadDensidadVacio && <Form.Label className='labelFormError'>*Debe seleccionar una unidad para la densidad</Form.Label>}
-                                        {unidadAluminioVacio && <Form.Label className='labelFormError'>*Debe seleccionar una unidad para el aluminio</Form.Label>}
-                                    </Form.Group> 
-            
+                                    </Form.Group>            
                                 </div>
             
-                                {/* Botones formulario */}
-                                <div className="botonesFormAnalisis botonesFormAnalisisBasico">
-                                    <Button className="estiloBotonesFormAnalisis btnCancelarAnalisis" variant="secondary" onClick={handleCancelarEdicion}>
+                                {/* Botones Formulario */}
+                                <Form.Group className='seccionBotonesFormulario margenTop20 seccion-botones-analisis'>
+                                    <Button className="botonCancelarFormulario" variant="secondary" onClick={handleCancelarEdicion}>
                                         Cancelar
                                     </Button>
             
-                                    <Button className="estiloBotonesFormAnalisis btnConfirmarAnalisis" variant="secondary" type="submit" disabled={estaEnPeticion}>
+                                    <Button className="botonConfirmacionFormulario" variant="secondary" type="submit" disabled={estaEnPeticion}>
                                         Aceptar
-                                    </Button>                    
-                                </div>
-            
+                                    </Button>    
+                                </Form.Group>            
                             </Form>
                         </div>
             
@@ -1146,7 +1423,13 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                             mostrarErrorVencimientoToken &&
                             <Error texto={"Su sesión ha expirado"} 
                             onConfirm={handleSesionExpirada}/>
-                        }  
+                        } 
+
+                        {
+                            errorLaboratoriosNoRegistrados &&
+                            <Error texto={"Para continuar con el proceso, es necesario registrar al menos un laboratorio antes de cargar un análisis."} 
+                            onConfirm={() => {navigate('/laboratorios')}}/>
+                        } 
                     </>
                 );
             }
@@ -1154,96 +1437,93 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                 return(
                     <>
                         {/* CONSULTAR ANALISIS BÁSICO */}
+                        {console.log()}
                         {/* contenedor */}
-                        <div className="contenedorAnalisisCompleto">
+                        <div className="contenedor-analisis">
         
                             {/* título contenedor */}
-                            <div className='contenedorTituloAnalisisCompleto'>
-                                <span className='tituloAnalisisCompleto'>Análisis Químico del Suelo - Básico</span> 
+                            <div className='seccion-titulo-analisis'>
+                                <span className='tituloForm'>Análisis Químico del Suelo - Básico</span> 
                             </div>
         
                             {/* formulario análisis */}
-                            <Form className='formularioAnalisisBasico'>
+                            <Form className='formulario-analisis'>
         
-                                {/* Encabezado análisis */}
-                                <div className='encabezado'>
-        
+                                {/* columna 1 */}
+                                <div className="columna-uno">
+
                                     {/* Fecha de análisis */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className='labelFormEncabezado'>Fecha</Form.Label>
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className='label-izquierdo'>Fecha</Form.Label>
                                         <DatePicker 
-                                        className='fechaAnalisis'
+                                        className='estilos-datepikcer'
                                         value={moment(analisisBasico.fecha_analisis).format('DD/MM/YYYY')}
                                         disabled={true}
                                         />
                                     </Form.Group>
         
                                     {/* Select Laboratorio */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className='labelFormEncabezado'>Laboratorio</Form.Label>
-                                        <Select className='selectLaboratorio'
-                                        value={{label: laboratorioAnalisis[0].nombre, value: laboratorioAnalisis[0].id}}
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className='label-izquierdo'>Laboratorio</Form.Label>
+                                        <Select
+                                        value={{label: laboratorioAnalisis.nombre, value: laboratorioAnalisis.id}}
                                         isDisabled={true}>    
                                         </Select>
                                     </Form.Group>
-                                </div>
-        
-                                {/* columna 1 */}
-                                <div className="columnaUno">
         
                                     {/* campo materia organica */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={materiaOrganicaVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Materia Orgánica</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={analisisBasico.materia_organica} disabled={true}/>
-                                        <Form.Label className='labelForm'>%</Form.Label>
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={materiaOrganicaVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Materia Orgánica*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={analisisBasico.materia_organica} disabled={true}/>
+                                        <Form.Label className='label-derecho'>%</Form.Label>
                                     </Form.Group>
         
                                     {/* campo carbono orgánico */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={carbonoVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Carbono Orgánico</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={analisisBasico.carbono_organico} disabled={true}/>
-                                        <Form.Label className='labelForm'>%</Form.Label>
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={carbonoVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Carbono Orgánico*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={analisisBasico.carbono_organico} disabled={true}/>
+                                        <Form.Label className='label-derecho'>%</Form.Label>
                                     </Form.Group>     
         
                                     {/* campo nitrógeno total */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={nitrogenoVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Nitrógeno Total</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={analisisBasico.nitrogeno_total} disabled={true}/>
-                                        <Form.Label className='labelForm'>%</Form.Label>
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={nitrogenoVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Nitrógeno Total*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={analisisBasico.nitrogeno_total} disabled={true}/>
+                                        <Form.Label className='label-derecho'>%</Form.Label>
                                     </Form.Group>          
         
                                     {/* campo relación C/N */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className='labelFormIzquierdo'>Relación C/N</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={analisisBasico.carbono_organico / analisisBasico.nitrogeno_total} disabled={true}/>
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className='label-izquierdo'>Relación C/N</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={analisisBasico.carbono_organico / analisisBasico.nitrogeno_total} disabled={true}/>
                                     </Form.Group>           
             
         
                                     {/* Campo pH */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={pHVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>pH</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={analisisBasico.ph} disabled={true}/>
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={pHVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>pH*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={analisisBasico.ph} disabled={true}/>
                                     </Form.Group>
         
                                     {/* Campo fósforo */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={fosforoVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Fósforo Extraíble</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={analisisBasico.fosforo_extraible} disabled={true}/>
-                                        <Form.Label className='labelForm'>ppm</Form.Label>
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={fosforoVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Fósforo Extraíble*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={analisisBasico.fosforo_extraible} disabled={true}/>
+                                        <Form.Label className='label-derecho'>ppm</Form.Label>
                                     </Form.Group>
         
                                     {/* Campo Aluminio */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={fosforoVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Aluminio</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={analisisBasico.aluminio === null ? "" : analisisBasico.aluminio} 
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={unidadAluminioVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Aluminio</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={analisisBasico.aluminio === null ? "" : analisisBasico.aluminio} 
                                         disabled={true}/>
-                                        <Form.Label className='labelForm'>ppm</Form.Label>
+                                        <Form.Label className='label-derecho'>ppm</Form.Label>
                                     </Form.Group>
         
                                 </div>
                                 
                                 {/* columna 2 */}
-                                <div className="columnaDos">
+                                <div className="columna-dos">
         
                                     {/* Titulo Cationes de Intercambio */}
                                     <div className='contenedorCationesIntercambio'>
@@ -1251,78 +1531,81 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                                     </div>
         
                                     {/* Campo calcio */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={calcioVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Calcio</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={analisisBasico.calcio} disabled={true}/>
-                                        <Form.Label className='labelForm'>ppm</Form.Label>
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={calcioVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Calcio*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={analisisBasico.calcio} disabled={true}/>
+                                        <Form.Label className='label-derecho'>ppm</Form.Label>
                                     </Form.Group> 
         
                                     {/* Campo Magnesio */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={magnesioVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Magnesio</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={analisisBasico.magnesio} disabled={true}/>
-                                        <Form.Label className='labelForm'>ppm</Form.Label>
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={magnesioVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Magnesio*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={analisisBasico.magnesio} disabled={true}/>
+                                        <Form.Label className='label-derecho'>ppm</Form.Label>
                                     </Form.Group> 
         
                                     {/* Campo Sodio */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={sodioVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Sodio</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={analisisBasico.sodio} disabled={true}/>
-                                        <Form.Label className='labelForm'>ppm</Form.Label>
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={sodioVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Sodio*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={analisisBasico.sodio} disabled={true}/>
+                                        <Form.Label className='label-derecho'>ppm</Form.Label>
                                     </Form.Group> 
         
                                     {/* Campo Potasio */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={potasioVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Potasio</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={analisisBasico.potasio} disabled={true}/>
-                                        <Form.Label className='labelForm'>ppm</Form.Label>
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={potasioVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Potasio*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={analisisBasico.potasio} disabled={true}/>
+                                        <Form.Label className='label-derecho'>ppm</Form.Label>
                                     </Form.Group> 
         
                                     {/* Campo Saturación Bases S */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className='labelFormIzquierdo'>Saturación Bases S</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={analisisBasico.calcio + analisisBasico.magnesio + analisisBasico.sodio + analisisBasico.potasio} 
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className='label-izquierdo'>Saturación Bases S</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={analisisBasico.calcio + analisisBasico.magnesio + analisisBasico.sodio + analisisBasico.potasio} 
                                         disabled={true}/>
-                                        <Form.Label className='labelForm'>ppm</Form.Label>
+                                        <Form.Label className='label-derecho'>ppm</Form.Label>
                                     </Form.Group> 
         
                                     {/* Campo CIC */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className={cicVacio ? 'labelFormIzquierdoError' :'labelFormIzquierdo'}>CIC</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={analisisBasico.capacidad_intercambio_cationica === null ? "" : analisisBasico.capacidad_intercambio_cationica}
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className={(cicVacio || unidadCicVacio) ? 'label-izquierdo-error' :'label-izquierdo'}>CIC*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={analisisBasico.capacidad_intercambio_cationica === null ? "" : analisisBasico.capacidad_intercambio_cationica}
                                         disabled={true}/>
-                                        <Form.Label className='labelForm'>meq/100g</Form.Label>
+                                        <Form.Label className='label-derecho'>meq/100g</Form.Label>
                                     </Form.Group> 
-                                    
+
                                     {/* Campo Azufre */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className='labelFormIzquierdo'>Azufre</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={analisisBasico.azufre === null ? "" : analisisBasico.azufre}
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className='label-izquierdo'>Azufre</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={analisisBasico.azufre === null ? "" : analisisBasico.azufre}
                                         disabled={true}/>
-                                        <Form.Label className='labelForm'>ppm</Form.Label>
-                                    </Form.Group> 
+                                        <Form.Label className='label-derecho'>ppm</Form.Label>
+                                    </Form.Group>  
         
                                     {/* Campo Densidad Aparente */}
-                                    <Form.Group className='grupoForm'>
-                                        <Form.Label className='labelFormIzquierdo'>Densidad Aparente</Form.Label>
-                                        <Form.Control className='inputForm' type='text' value={analisisBasico.densidad_aparente} 
+                                    <Form.Group className='mb-3 seccion-form-analisis'>
+                                        <Form.Label className='label-izquierdo'>Densidad Aparente*</Form.Label>
+                                        <Form.Control className='input-analisis' type='text' value={analisisBasico.densidad_aparente} 
                                         disabled={true}/>
-                                        <Form.Label className='labelForm'>ppm</Form.Label>
+                                        <Form.Label className='label-derecho'>ppm</Form.Label>
                                     </Form.Group>
         
                                 </div>
-        
-                                {/* Botones formulario */}
-                                <div className="botonesFormAnalisis botonesFormAnalisisBasico">
-                                    <Button className="estiloBotonesFormAnalisis btnCancelarAnalisis" variant="secondary" onClick={handleCancelar}>
-                                        Cancelar
+
+                                 {/* Botones formulario */}
+                                <Form.Group className='seccionBotonesFormulario margenTop20 seccion-botones-analisis'>
+                                    <Button className="botonCancelarFormulario" variant="secondary" onClick={handleCancelar}>
+                                        Cerrar
                                     </Button>
         
-                                    <Button className="estiloBotonesFormAnalisis btnConfirmarAnalisis" variant="secondary" onClick={handleHabilitarEdicion}>
+                                    <Button className="botonConfirmacionFormulario" variant="secondary" onClick={handleHabilitarEdicion}>
                                         Editar
-                                    </Button>                    
-                                </div>
-        
+                                    </Button>     
+
+                                    <Button className="botonCancelarFormulario" variant="secondary" onClick={solicitarConfirmacionEliminacion}>
+                                        Eliminar
+                                    </Button>   
+                                </Form.Group>        
                             </Form>
                         </div>
         
@@ -1337,12 +1620,101 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                             <Error texto={"No puede modificar un análisis que ya tiene un Diagnóstico efectuado."}
                             onConfirm={() => {setMostrarAlertaAnalisisDiagnosticado(false)}}/>
                         }  
+
+                        {
+                            mostrarConfirmEliminacion && 
+                            <Alerta 
+                                texto="¿Está seguro de Eliminar el Resultado de Laboratorio?" 
+                                nombreBoton="Eliminar" 
+                                onConfirm={eliminarAnalisis}
+                            />
+                        }
+
+                        {
+                            mostrarAnalisisEliminado &&
+                            <Confirm texto={"Su Análisis ha sido eliminado correctamente"}
+                            onConfirm={handleConfirmarEliminacion}/>
+                        }
+
+                        {
+                            mostrarErrorVencimientoToken &&
+                            <Error texto={"Su sesión ha expirado"} 
+                            onConfirm={handleSesionExpirada}/>
+                        }
+
+                        {
+                            mostrarErrorEstadoAnterior &&
+                            <Error texto={"No se ha encontrado el estado anterior del análisis"} 
+                            onConfirm={() => setMostrarErrorEstadoAnterior(false)}/>
+                        }
+
+                        {
+                            mostrarErrorUsuarioNoEncontrado &&
+                            <Error texto={"No se ha encontrado el usuario asociado"} 
+                            onConfirm={() => setMostrarErrorUsuarioNoEncontrado(false)}/>
+                        }
+
+                        {
+                            mostrarErrorTMNoEncontrada &&
+                            <Error texto={"No se ha encontrado la TM asociada"} 
+                            onConfirm={() => setMostrarErrorTMNoEncontrada(false)}/>
+                        }
+
+                        {
+                            mostrarErrorLoteNoEncontrado &&
+                            <Error texto={"No se ha encontrado el lote asociado"} 
+                            onConfirm={() => setMostrarErrorLoteNoEncontrado(false)}/>
+                        }
+
+                        {
+                            mostrarErrorCampoNoEncontrado &&
+                            <Error texto={"No se ha encontrado el campo asociado"} 
+                            onConfirm={() => setMostrarErrorCampoNoEncontrado(false)}/>
+                        }
+
+                        {
+                            mostrarErrorProductorNoEncontrado &&
+                            <Error texto={"No se ha encontrado el productor asociado"} 
+                            onConfirm={() => setMostrarErrorProductorNoEncontrado(false)}/>
+                        }
+
+                        {
+                            mostrarErrorPermisos &&
+                            <Error texto={"No tiene permisos para eliminar este análisis"} 
+                            onConfirm={() => setMostrarErrorPermisos(false)}/>
+                        }
+
+                        {
+                            mostrarErrorDiagnosticoAsociado &&
+                            <Error texto={"No se puede eliminar el análisis porque tiene diagnósticos asociados"} 
+                            onConfirm={() => setMostrarErrorDiagnosticoAsociado(false)}/>
+                        }
+
+                        {
+                            mostrarErrorAnalisisNoEncontrado &&
+                            <Error texto={"No se ha encontrado el análisis"} 
+                            onConfirm={() => setMostrarErrorAnalisisNoEncontrado(false)}/>
+                        }
+
+                        {
+                            mostrarErrorEstadoNoEncontrado &&
+                            <Error texto={"No se ha encontrado el estado de la toma de muestra asociada"} 
+                            onConfirm={() => setMostrarErrorEstadoNoEncontrado(false)}/>
+                        }
+
+                        {
+                            mostrarErrorEliminacion &&
+                            <Error texto={"Ocurrió un error inesperado al eliminar el usuario"} 
+                            onConfirm={() => setMostrarErrorEliminacion(false)}/>
+                        }
                 </>
                 )
             }
         }
         else{
-            return(<div>Cargando...</div>)
+            return(
+                <SpinnerAgrolitycs/>
+            )
         }
     }
     else if (laboratorios !== undefined){
@@ -1350,24 +1722,25 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
             <>
                 {/* REGISTRAR ANALISIS BÁSICO */}
                 {/* contenedor */}
-                <div className="contenedorAnalisisCompleto">
+                <div className="contenedor-analisis">
     
                     {/* título contenedor */}
-                    <div className='contenedorTituloAnalisisCompleto'>
-                        <span className='tituloAnalisisCompleto'>Análisis Químico del Suelo - Básico</span> 
+                    <div className='seccion-titulo-analisis'>
+                        <span className='tituloForm'>Análisis Químico del Suelo - Básico</span> 
                     </div>
     
                     {/* formulario análisis */}
-                    <Form className='formularioAnalisisBasico' onSubmit={handleSubmit(registrarAnalisisBasico)}>
-    
-                        {/* Encabezado análisis */}
-                        <div className='encabezado'>
+                    <Form className='formulario-analisis' onSubmit={handleSubmit(registrarAnalisisBasico)}>
+
+                        {/* columna 1 */}
+                        <div className="columna-uno">
 
                             {/* Fecha de análisis */}
-                            <Form.Group className='grupoForm'>
-                                <Form.Label className={fechaVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Fecha</Form.Label>
+                            <Form.Group className='mb-3 seccion-form-analisis'>
+                                <Form.Label className={fechaVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Fecha</Form.Label>
                                 <DatePicker 
-                                className='fechaAnalisis'
+                                placeholderText='dd/mm/aaaa'
+                                className='estilos-datepikcer'
                                 dateFormat="dd/MM/yyyy"
                                 selected={startDate}
                                 onChange={(date) => setStartDate(date)}
@@ -1377,9 +1750,9 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                             </Form.Group>
 
                             {/* Select Laboratorio */}
-                            <Form.Group className='grupoForm'>
-                                <Form.Label className={laboratorioVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Laboratorio</Form.Label>
-                                <Select className='selectLaboratorio'
+                            <Form.Group className='mb-3 seccion-form-analisis'>
+                                <Form.Label className={laboratorioVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Laboratorio</Form.Label>
+                                <Select
                                 value={laboratorioSeleccionado}
                                 defaultValue={{label: 'Seleccione un Laboratorio', value: 0}}
                                 onChange={handleChangeLaboratorio}
@@ -1388,62 +1761,58 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                                 }>
                                 </Select>
                             </Form.Group>
-                        </div>
-
-                        {/* columna 1 */}
-                        <div className="columnaUno">
     
                             {/* campo materia organica */}
-                               <Form.Group className='grupoForm'>
-                                <Form.Label className={materiaOrganicaVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Materia Orgánica</Form.Label>
-                                <Form.Control className='inputForm' type='text' value={materiaOrganica} 
+                               <Form.Group className='mb-3 seccion-form-analisis'>
+                                <Form.Label className={materiaOrganicaVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Materia Orgánica*</Form.Label>
+                                <Form.Control className='input-analisis' type='text' value={materiaOrganica} 
                                 onChange={handleChangeMateriaOrganica}/>
-                                <Form.Label className='labelForm'>%</Form.Label>
+                                <Form.Label className='label-derecho'>%</Form.Label>
                             </Form.Group>
     
                              {/* campo carbono orgánico */}
-                             <Form.Group className='grupoForm'>
-                                <Form.Label className={carbonoVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Carbono Orgánico</Form.Label>
-                                <Form.Control className='inputForm' type='text' value={carbono}
+                             <Form.Group className='mb-3 seccion-form-analisis'>
+                                <Form.Label className={carbonoVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Carbono Orgánico*</Form.Label>
+                                <Form.Control className='input-analisis' type='text' value={carbono}
                                 onChange={handleChangeCarbono}/>
-                                <Form.Label className='labelForm'>%</Form.Label>
+                                <Form.Label className='label-derecho'>%</Form.Label>
                             </Form.Group>     
     
                              {/* campo nitrógeno total */}
-                             <Form.Group className='grupoForm'>
-                                <Form.Label className={nitrogenoVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Nitrógeno Total</Form.Label>
-                                <Form.Control className='inputForm' type='text' value={nitrogeno}
+                             <Form.Group className='mb-3 seccion-form-analisis'>
+                                <Form.Label className={nitrogenoVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Nitrógeno Total*</Form.Label>
+                                <Form.Control className='input-analisis' type='text' value={nitrogeno}
                                 onChange={handleChangeNitrogeno}/>
-                                <Form.Label className='labelForm'>%</Form.Label>
+                                <Form.Label className='label-derecho'>%</Form.Label>
                             </Form.Group>          
     
                              {/* campo relación C/N */}
-                             <Form.Group className='grupoForm'>
-                                <Form.Label className='labelFormIzquierdo'>Relación C/N</Form.Label>
-                                <Form.Control className='inputForm' type='text' value={relacionCN} disabled={true}/>
+                             <Form.Group className='mb-3 seccion-form-analisis'>
+                                <Form.Label className='label-izquierdo'>Relación C/N</Form.Label>
+                                <Form.Control className='input-analisis' type='text' value={relacionCN} disabled={true}/>
                             </Form.Group>           
      
     
                             {/* Campo pH */}
-                            <Form.Group className='grupoForm'>
-                                <Form.Label className={pHVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>pH</Form.Label>
-                                <Form.Control className='inputForm' type='text' value={pH}
+                            <Form.Group className='mb-3 seccion-form-analisis'>
+                                <Form.Label className={pHVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>pH*</Form.Label>
+                                <Form.Control className='input-analisis' type='text' value={pH}
                                 onChange={handleChangePH}/>
                             </Form.Group>
     
                             {/* Campo fósforo */}
-                            <Form.Group className='grupoForm'>
-                                <Form.Label className={fosforoVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Fósforo Extraíble</Form.Label>
-                                <Form.Control className='inputForm' type='text' value={fosforo}
+                            <Form.Group className='mb-3 seccion-form-analisis'>
+                                <Form.Label className={fosforoVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Fósforo Extraíble*</Form.Label>
+                                <Form.Control className='input-analisis' type='text' value={fosforo}
                                 onChange={handleChangeFosforo}/>
-                                <Form.Label className='labelForm'>ppm</Form.Label>
+                                <Form.Label className='label-derecho'>ppm</Form.Label>
                             </Form.Group>
                                 
                             {/* Campo aluminio */}
-                            <Form.Group className='grupoForm'>
-                                <Form.Label className={'labelFormIzquierdo'}>Aluminio</Form.Label>
-                                <Form.Control className='inputForm' type='text' value={aluminio} onChange={handleChangeAluminio}/>
-                                <Select className='selectForm'
+                            <Form.Group className='mb-3 seccion-form-analisis'>
+                                <Form.Label className={unidadAluminioVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Aluminio</Form.Label>
+                                <Form.Control className='input-analisis' type='text' value={aluminio} onChange={handleChangeAluminio}/>
+                                <Select
                                 options={unidades}
                                 value={unidadAluminio}
                                 onChange={handleChangeUnidadAluminio}>
@@ -1454,7 +1823,7 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                         </div>
                         
                         {/* columna 2 */}
-                        <div className="columnaDos">
+                        <div className="columna-dos">
     
                             {/* Titulo Cationes de Intercambio */}
                             <div className='contenedorCationesIntercambio'>
@@ -1462,10 +1831,10 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                             </div>
     
                             {/* Campo calcio */}
-                            <Form.Group className='grupoForm'>
-                                <Form.Label className={calcioVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Calcio</Form.Label>
-                                <Form.Control className='inputForm' type='text' value={calcio} onChange={handleChangeCalcio}/>
-                                <Select className='selectForm'
+                            <Form.Group className='mb-3 seccion-form-analisis'>
+                                <Form.Label className={(calcioVacio || unidadVacio) ? 'label-izquierdo-error' : 'label-izquierdo'}>Calcio*</Form.Label>
+                                <Form.Control className='input-analisis' type='text' value={calcio} onChange={handleChangeCalcio}/>
+                                <Select
                                 options={unidades}
                                 value={unidadSeleccionada}
                                 onChange={handleChangeUnidad}>
@@ -1474,10 +1843,10 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                             </Form.Group> 
     
                             {/* Campo Magnesio */}
-                            <Form.Group className='grupoForm'>
-                                <Form.Label className={magnesioVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Magnesio</Form.Label>
-                                <Form.Control className='inputForm' type='text' value={magnesio} onChange={handleChangeMagnesio}/>
-                                <Select className='selectForm'
+                            <Form.Group className='mb-3 seccion-form-analisis'>
+                                <Form.Label className={(magnesioVacio || unidadVacio) ? 'label-izquierdo-error' : 'label-izquierdo'}>Magnesio*</Form.Label>
+                                <Form.Control className='input-analisis' type='text' value={magnesio} onChange={handleChangeMagnesio}/>
+                                <Select
                                 options={unidades}
                                 value={unidadSeleccionada}
                                 onChange={handleChangeUnidad}>
@@ -1486,10 +1855,10 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                             </Form.Group> 
     
                             {/* Campo Sodio */}
-                            <Form.Group className='grupoForm'>
-                                <Form.Label className={sodioVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Sodio</Form.Label>
-                                <Form.Control className='inputForm' type='text' value={sodio} onChange={handleChangeSodio}/>
-                                <Select className='selectForm'
+                            <Form.Group className='mb-3 seccion-form-analisis'>
+                                <Form.Label className={(sodioVacio || unidadVacio) ? 'label-izquierdo-error' : 'label-izquierdo'}>Sodio*</Form.Label>
+                                <Form.Control className='input-analisis' type='text' value={sodio} onChange={handleChangeSodio}/>
+                                <Select
                                 options={unidades}
                                 value={unidadSeleccionada}
                                 onChange={handleChangeUnidad}>
@@ -1498,10 +1867,10 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                             </Form.Group> 
     
                             {/* Campo Potasio */}
-                            <Form.Group className='grupoForm'>
-                                <Form.Label className={potasioVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Potasio</Form.Label>
-                                <Form.Control className='inputForm' type='text' value={potasio} onChange={handleChangePotasio}/>
-                                <Select className='selectForm'
+                            <Form.Group className='mb-3 seccion-form-analisis'>
+                                <Form.Label className={(potasioVacio || unidadVacio) ? 'label-izquierdo-error' : 'label-izquierdo'}>Potasio*</Form.Label>
+                                <Form.Control className='input-analisis' type='text' value={potasio} onChange={handleChangePotasio}/>
+                                <Select
                                 options={unidades}
                                 value={unidadSeleccionada}
                                 onChange={handleChangeUnidad}>
@@ -1510,20 +1879,20 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                             </Form.Group> 
     
                             {/* Campo Saturación Bases S */}
-                            <Form.Group className='grupoForm'>
-                                <Form.Label className='labelFormIzquierdo'>Saturación Bases S</Form.Label>
-                                <Form.Control className='inputForm' type='text' value={saturacion} disabled={true}/>
-                                <Form.Label className='labelForm'>
+                            <Form.Group className='mb-3 seccion-form-analisis'>
+                                <Form.Label className='label-izquierdo'>Saturación Bases S</Form.Label>
+                                <Form.Control className='input-analisis' type='text' value={saturacion} disabled={true}/>
+                                <Form.Label className='label-derecho'>
                                     {unidadSeleccionada === undefined ? unidadSeleccionada : unidadSeleccionada.label}
                                 </Form.Label>
                             </Form.Group> 
 
                             {/* Campo CIC */}
-                            <Form.Group className='grupoForm'>
-                                <Form.Label className={cicVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>CIC</Form.Label>
-                                <Form.Control className='inputForm' type='text' value={cic}
+                            <Form.Group className='mb-3 seccion-form-analisis'>
+                                <Form.Label className={(cicVacio || unidadCicVacio) ? 'label-izquierdo-error' : 'label-izquierdo'}>CIC*</Form.Label>
+                                <Form.Control className='input-analisis' type='text' value={cic}
                                 onChange={handleChangeCic}/>
-                                <Select className='selectForm'
+                                <Select
                                 options={unidadesCIC}
                                 value={unidadCicSeleccionada}
                                 onChange={handleChangeUnidadCic}>
@@ -1532,51 +1901,36 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                             </Form.Group> 
 
                             {/* Campo Azufre */}
-                            <Form.Group className='grupoForm'>
-                                <Form.Label className={'labelFormIzquierdo'}>Azufre</Form.Label>
-                                <Form.Control className='inputForm' type='text' value={azufre} onChange={handleChangeAzufre}/>
-                                <Form.Label className='labelForm'>ppm</Form.Label>
+                            <Form.Group className='mb-3 seccion-form-analisis'>
+                                <Form.Label className={'label-izquierdo'}>Azufre</Form.Label>
+                                <Form.Control className='input-analisis' type='text' value={azufre} onChange={handleChangeAzufre}/>
+                                <Form.Label className='label-derecho'>ppm</Form.Label>
                             </Form.Group> 
 
                             {/* Campo Densidad Aparente */}
-                            <Form.Group className='grupoForm'>
-                                <Form.Label className={densidadVacio ? 'labelFormIzquierdoError' : 'labelFormIzquierdo'}>Densidad Aparente</Form.Label>
-                                <Form.Control className='inputForm' type='text' value={densidadAparente} 
+                            <Form.Group className='mb-3 seccion-form-analisis'>
+                                <Form.Label className={densidadVacio ? 'label-izquierdo-error' : 'label-izquierdo'}>Densidad Aparente*</Form.Label>
+                                <Form.Control className='input-analisis' type='text' value={densidadAparente} 
                                             onChange={handleChangeDensidadAparente}/>
-                                <Select className='selectForm'
+                                <Select
                                 options={unidadesDensidad}
                                 value={unidadDensidad}
                                 onChange={handleChangeUnidadDensidad}>
     
                                 </Select>
                             </Form.Group> 
-    
-    
-                            {/* Mensaje de Faltan Campos */}
-                            <Form.Group className='grupoForm'>
-                                {fechaVacio && <Form.Label className='labelFormError'>*Debe seleccionar una fecha</Form.Label>}
-                                {laboratorioVacio && <Form.Label className='labelFormError'>*Debe seleccionar un laboratorio</Form.Label>}
-                                {(materiaOrganicaVacio || carbonoVacio || nitrogenoVacio || pHVacio || fosforoVacio || calcioVacio
-                                || magnesioVacio || sodioVacio || potasioVacio || cicVacio || densidadVacio) && <Form.Label className='labelFormError'>*Los campos en rojo no están completos</Form.Label>}
-                                {unidadVacio && <Form.Label className='labelFormError'>*Debe seleccionar una unidad</Form.Label>}
-                                {unidadCicVacio && <Form.Label className='labelFormError'>*Debe seleccionar una unidad para el CIC</Form.Label>}
-                                {unidadDensidadVacio && <Form.Label className='labelFormError'>*Debe seleccionar una unidad para la densidad</Form.Label>}
-                                {unidadAluminioVacio && <Form.Label className='labelFormError'>*Debe seleccionar una unidad para el aluminio</Form.Label>}
-                            </Form.Group> 
-    
                         </div>
-    
-                        {/* Botones formulario */}
-                        <div className="botonesFormAnalisis botonesFormAnalisisBasico">
-                            <Button className="estiloBotonesFormAnalisis btnCancelarAnalisis" variant="secondary" onClick={handleCancelar}>
-                                Cancelar
+            
+                        {/* Botones Formulario */}
+                        <Form.Group className='seccionBotonesFormulario margenTop20 seccion-botones-analisis'>
+                            <Button className="botonCancelarFormulario" variant="secondary" onClick={handleCancelar}>
+                                Cerrar
                             </Button>
     
-                            <Button className="estiloBotonesFormAnalisis btnConfirmarAnalisis" variant="secondary" type="submit" disabled={estaEnPeticion}>
+                            <Button className="botonConfirmacionFormulario" variant="secondary" type="submit" disabled={estaEnPeticion}>
                                 Registrar
-                            </Button>                    
-                        </div>
-    
+                            </Button>     
+                        </Form.Group>    
                     </Form>
                 </div>
     
@@ -1591,13 +1945,19 @@ function AnalisisBasico({ tomaDeMuestra, analisisBasico = undefined, fechaTomaMu
                     <Error texto={"Su sesión ha expirado"} 
                     onConfirm={handleSesionExpirada}/>
                 }
+
+
             </>
         );
     }
     else{
         return(
             <>
-                <div>Cargando...</div>
+                {
+                    errorLaboratoriosNoRegistrados &&
+                    <Error texto={"Para continuar con el proceso, es necesario registrar al menos un laboratorio antes de cargar un análisis."} 
+                    onConfirm={() => {navigate('/laboratorios')}}/>
+                } 
             </>
             
         )

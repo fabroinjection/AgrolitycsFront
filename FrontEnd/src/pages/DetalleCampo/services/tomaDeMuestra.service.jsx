@@ -1,9 +1,10 @@
 import axios from "axios";
+import { URLAPI } from "../../../config";
 
 export const tomasDeMuestraLoteService = async (idLote) => {
     const tokenJSON = window.localStorage.getItem('loggedAgroUser');
     const token = JSON.parse(tokenJSON);
-    const _urlApi = `http://127.0.0.1:8000/tomaDeMuestraConsulta/${idLote}`;
+    const _urlApi = `${URLAPI}tomaDeMuestraConsulta/${idLote}`;
     const response = await axios.get(_urlApi, {
       headers: {
         Authorization: `Bearer ${token.access_token}`
@@ -16,7 +17,7 @@ export const tomasDeMuestraLoteService = async (idLote) => {
 export const tiposDeMuestreoService = async () => {
   const tokenJSON = window.localStorage.getItem('loggedAgroUser');
   const token = JSON.parse(tokenJSON);
-  const _urlApi = `http://127.0.0.1:8000/tipoMuestreo/`;
+  const _urlApi = `${URLAPI}tipoMuestreo/`;
   const response = await axios.get(_urlApi, {
     headers: {
       Authorization: `Bearer ${token.access_token}`
@@ -29,7 +30,7 @@ export const tiposDeMuestreoService = async () => {
 export const profundidadesService = async () => {
   const tokenJSON = window.localStorage.getItem('loggedAgroUser');
   const token = JSON.parse(tokenJSON);
-  const _urlApi = `http://127.0.0.1:8000/tipoDeProfundidad/`;
+  const _urlApi = `${URLAPI}tipoDeProfundidad/`;
   const response = await axios.get(_urlApi, {
     headers: {
       Authorization: `Bearer ${token.access_token}`
@@ -42,7 +43,7 @@ export const profundidadesService = async () => {
 export const nuevaTomaDeMuestraService = async (tomaDeMuestra) => {
     const tokenJSON = window.localStorage.getItem('loggedAgroUser');
     const token = JSON.parse(tokenJSON);
-    const _urlApi = `http://127.0.0.1:8000/tomaDeMuestraAlta/`;
+    const _urlApi = `${URLAPI}tomaDeMuestraAlta/`;
     const response = await axios.post(_urlApi, tomaDeMuestra, {
       headers: {
         Authorization: `Bearer ${token.access_token}`
@@ -54,7 +55,7 @@ export const nuevaTomaDeMuestraService = async (tomaDeMuestra) => {
 export const darDeBajaTomaDeMuestraService = async (idTomaDeMuestra) => {
   const tokenJSON = window.localStorage.getItem('loggedAgroUser');
   const token = JSON.parse(tokenJSON);
-  const _urlApi = `http://127.0.0.1:8000/tomaDeMuestraBaja?tomaDeMuestra_id=${idTomaDeMuestra}`;
+  const _urlApi = `${URLAPI}tomaDeMuestraBaja?tomaDeMuestra_id=${idTomaDeMuestra}`;
   const response = await axios.delete(_urlApi, {
     headers: {
       Authorization: `Bearer ${token.access_token}`
@@ -66,7 +67,7 @@ export const darDeBajaTomaDeMuestraService = async (idTomaDeMuestra) => {
 export const modificarTomaDeMuestraService = async (idTomaDeMuestra, tomaDeMuestra) => {
   const tokenJSON = window.localStorage.getItem('loggedAgroUser');
   const token = JSON.parse(tokenJSON);
-  const _urlApi = `http://127.0.0.1:8000/tomaDeMuestraModificacion?toma_demuestra_id=${idTomaDeMuestra}`;
+  const _urlApi = `${URLAPI}tomaDeMuestraModificacion?toma_demuestra_id=${idTomaDeMuestra}`;
   const response = await axios.put(_urlApi, tomaDeMuestra, {
     headers: {
       Authorization: `Bearer ${token.access_token}`
@@ -78,7 +79,7 @@ export const modificarTomaDeMuestraService = async (idTomaDeMuestra, tomaDeMuest
 export const puntosSubmuestraService = async (idLote, metodo, cantSubmuestras) => {
   const tokenJSON = window.localStorage.getItem('loggedAgroUser');
   const token = JSON.parse(tokenJSON);
-  const _urlApi = `http://127.0.0.1:8000/submuestras?lote_id=${idLote}&metodo=${metodo}&num_muestras=${cantSubmuestras}`;
+  const _urlApi = `${URLAPI}submuestras?lote_id=${idLote}&metodo=${metodo}&num_muestras=${cantSubmuestras}`;
   const response = await axios.get(_urlApi, {
     headers: {
       Authorization: `Bearer ${token.access_token}`
@@ -90,7 +91,7 @@ export const puntosSubmuestraService = async (idLote, metodo, cantSubmuestras) =
 export const registrarTomaDeMuestraTomadaService = async (idTomaDeMuestra, fecha) => {
   const tokenJSON = window.localStorage.getItem('loggedAgroUser');
   const token = JSON.parse(tokenJSON);
-  const _urlApi = `http://127.0.0.1:8000/tomaDeMuestraTomada?tomaDeMuestra_id=${idTomaDeMuestra}&nueva_fecha=${fecha}`;
+  const _urlApi = `${URLAPI}tomaDeMuestraTomada?tomaDeMuestra_id=${idTomaDeMuestra}&nueva_fecha=${fecha}`;
   const response = await axios.put(_urlApi, null, {
     headers: {
       Authorization: `Bearer ${token.access_token}`

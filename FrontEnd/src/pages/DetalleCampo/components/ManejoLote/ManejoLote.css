@@ -1,52 +1,21 @@
 .lote-section {
     height: 150px;
     width: 100%;
-    background-color: #F2DCC9;
-    border: 2px solid #000000;
-    border-radius: 10px;
+    background-color: #DAC5B3;
     padding: 20px;
     display: flex; 
     align-items: center;
     justify-content: space-between;
   }
 
-  .ingresoNombreLote{
-    background: #F2DCC9;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 10px;
-    height: 35px;
-  }
-  .nuevoNombreLote {
-    display: flex;
-    flex-direction: column;
-    color: #000000;
-  }
-
-  .botonesNuevoLote {
+.botonesNuevoLote {
     display: flex;
     flex-direction: column;
     gap: 15px;
   }
 
-  .btnCancelarLote{    
-    background: #F2DCC9;
-    border: 2px solid #000;
-}
-.btnGuardarLote{    
-    background: #B5BF63;
-    border: 2px solid #859745;
-}
-
-.estiloBotonLote{
-  text-transform: none;
-  border-radius: 10px;
-  padding: 4px 30px;
-  font-size: 16px;
-  width: 130px;
-}
-
 .infoNuevoLote {
-  font-size: 30px;
+  font-size: 25px;
   color: #000;
 }
 
@@ -54,7 +23,7 @@
 @media (max-width: 767px) {
   .lote-section {
     flex-direction: column;
-    height: auto; /* Ajusta la altura automáticamente según el contenido */
+    height: auto; 
   }
 
   .nuevoNombreLote {
@@ -65,13 +34,5 @@
   .botonesNuevoLote {
     flex-direction: row; /* Coloca los botones en una fila */
     justify-content: space-between; /* Distribuye los botones alrededor del espacio disponible */
-  }
-
-  .estiloBotonLote {
-    width: 100%; /* El ancho de los botones ocupa todo el ancho disponible */
-  }
-
-  .infoNuevoLote{
-    font-size: 26px;
   }
 }

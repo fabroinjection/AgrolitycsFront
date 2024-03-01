@@ -1,0 +1,43 @@
+.card {
+    width: 100%;
+    border-top: solid grey 2px;
+    text-align: center;    
+    background-color: transparent;
+    border-bottom: none;
+    border-left: none;
+    border-right: none;  
+}
+
+.nombre-card {
+    font-size: 20px;
+    margin-left: 10px;
+    max-width: 400px; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: black;
+}
+
+.boton-card {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0px 4px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.boton-card:hover {
+    background-color: transparent;
+}
+
+.icono-card {
+    width: 25px;
+}
+
+@media (max-width: 768px) {
+
+    .nombre-card {
+      font-size: 15px;
+    }
+
+  }

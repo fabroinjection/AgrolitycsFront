@@ -1,13 +1,11 @@
 
 //import assets
 import './TomaDeMuestraCard.css';
-import iconoSubmuestras from '../../../../assets/iconoSubmuestras.png';
-import iconoRotulo from '../../../../assets/iconoRotulo2.png';
-import iconoAnalisis from '../../../../assets/iconoAnalisis.png';
-import iconoDiagnostico from '../../../../assets/iconoDiagnostico.png';
-import iconoMenu from '../../../../assets/iconoMenu.png';
-import iconoRegistroTM from '../../../../assets/iconoRegistroTM.png';
-
+import '../../../../components/Estilos/estilosDropdown.css';
+import iconoDropdown from '../../../../assets/iconoDropdown.png';
+import iconoRegistrarTomada from '../../../../assets/iconoRegistrarTomada.png';
+import iconoFertilizante from '../../../../assets/iconoFertilizante.png';
+import iconoAnalisisSuelo from '../../../../assets/iconoAnalisisSuelo.png';
 
 //import components
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -17,6 +15,8 @@ import Confirm from '../../../../components/Modals/Confirm/Confirm';
 import Error from '../../../../components/Modals/Error/Error';
 import SubmuestrasForm from '../SubmuestrasForm/SubmuestrasForm';
 import TomaDeMuestraTomadaForm from '../TomaDeMuestraTomada/TomaDeMuestraTomadaForm';
+import Stack from 'react-bootstrap/Stack';
+import Button from 'react-bootstrap/Button';
 
 //import hooks
 import { useState, useContext } from 'react';
@@ -52,6 +52,7 @@ function TomaDeMuestraCard({ tomaDeMuestra, onEliminar, onModificar, onRegistrar
     const [ mostrarFormTomaMuestraTomada, setMostrarFormTomaMuestraTomada ] = useState(false);
     const [ alertaTMTomadaRegistrada, setAlertaTMTomadaRegistrada ] = useState(false);
     const [ mostrarErrorTMPendienteParaAnalisis, setMostrarErrorTMPendienteParaAnalisis ] = useState(false);
+    const [ mostrarErrorTMSinDiagnosticos, setMostrarErrorTMSinDiagnosticos ] = useState(false);
 
     //variables del contexto modo form toma de muestra
     const [ modoTomaDeMuestra, setModoTomaDeMuestra ] = useContext(ModoTomaDeMuestraAMCContext);
@@ -172,16 +173,23 @@ function TomaDeMuestraCard({ tomaDeMuestra, onEliminar, onModificar, onRegistrar
         
     }
 
+    const handleNavegacionAlTratamiento = () => {
+        if (tomaDeMuestra.estado_toma_de_muestra_id === "Diagnosticada") {
+            navigate(`/tratamientoRealizado/${tomaDeMuestra.id}`)
+        } else {
+            setMostrarErrorTMSinDiagnosticos(true);
+        }
+        
+    }
+
     return (
         <>
-            <article className='tomaMuestraCard'>
-                <header className='cabeceraTomaMuestra'>
-                    {/* Este código y fecha son los que cambian para cada toma de muestra */}
+            <Stack direction="horizontal" gap={1} className='tomaMuestraCard'>
+                <div className="p-2">
                     <strong className='infoTomaMuestra'>{tomaDeMuestra.codigo} - {moment(tomaDeMuestra.fecha).format('DD/MM/YYYY')}</strong>
-                    <aside>
-
-                        {/* Cambia el color del fondo según el estado en que se encuentra */}
-                        <div className="estadoTomaMuestra estadoDiagnosticada"
+                </div>
+                <div className="p-2 ms-auto">
+                    <div className="estadoTomaMuestra"
                         style={{
                             backgroundColor:
                                 tomaDeMuestra.estado_toma_de_muestra_id === "Pendiente"
@@ -192,49 +200,46 @@ function TomaDeMuestraCard({ tomaDeMuestra, onEliminar, onModificar, onRegistrar
                                 ? "#F6E654"
                                 : '#09B81A'
                             }}>
-                                
-                            <span className='nombreEstado'>{tomaDeMuestra.estado_toma_de_muestra_id}</span>
-                        </div>
-                        {/* {tomaDeMuestra.estado_toma_de_muestra_id === "Pendiente" &&
-                            <button className="botonesTomaMuestraCard" onClick={() => setMostrarFormTomaMuestraTomada(true)}>
-                                <img className="iconosTomaMuestraCard" src={iconoRegistroTM} alt="" title='Registrar Toma de Muestra como Tomada'/>
-                            </button>
-                        } */}
-                        <button
-                            className={`botonesTomaMuestraCard ${tomaDeMuestra.estado_toma_de_muestra_id !== 'Pendiente' ? 'button-disabled' : ''}`}
-                            onClick={() => setMostrarFormTomaMuestraTomada(true)}
-                        >
-                            <img className="iconosTomaMuestraCard" src={iconoRegistroTM} alt="" title='Registrar Toma de Muestra como Tomada'/>
-                        </button>
-                        
-                        <button className="botonesTomaMuestraCard" onClick={handleSubmuestrasForm}>
-                            <img className="iconosTomaMuestraCard" src={iconoSubmuestras} alt="" title='Generar indicadores en el mapa'/>
-                        </button>
-                        <button className="botonesTomaMuestraCard" onClick={handleGenerarRotulo}>
-                            <img className="iconosGrandes" src={iconoRotulo} alt="" title='Generar Rotulo'/>
-                        </button>
-                        <button className="botonesTomaMuestraCard" onClick={handleNavegacionAlAnalisis}>
-                            <img className="iconosTomaMuestraCard" src={iconoAnalisis} alt="" title='Análisis'/>
-                        </button>
-                        <button className="botonesTomaMuestraCard" onClick={handleFormularioGeneracionDiagnostico}>
-                            <img className="iconosTomaMuestraCard" src={iconoDiagnostico} alt="" title='Diagnóstico'/>
-                        </button>
+                        <span className='nombreEstado'>{tomaDeMuestra.estado_toma_de_muestra_id}</span>
+                    </div>
+                </div>
+                <div className="p-2">
+                    <Button
+                        className={`botonesTomaMuestraCard ${tomaDeMuestra.estado_toma_de_muestra_id !== 'Pendiente' ? 'button-disabled' : ''}`}
+                        onClick={() => setMostrarFormTomaMuestraTomada(true)}
+                    >
+                        <img className="iconosTomaMuestraCard" src={iconoRegistrarTomada} alt="" title='Marcar Toma de Muestra en estado Tomada'/>
+                    </Button>
+                    <Button className="botonesTomaMuestraCard" onClick={handleNavegacionAlAnalisis}>
+                        <img className="iconosTomaMuestraCard" src={iconoAnalisisSuelo} alt="" title='Análisis'/>
+                    </Button>
+                    <Button className="botonesTomaMuestraCard" onClick={handleFormularioGeneracionDiagnostico}>
+                        <img className="iconosTomaMuestraCard" src={iconoFertilizante} alt="" title='Diagnóstico'/>
+                    </Button>
                         <Dropdown className="botonesLoteCard">
                             <Dropdown.Toggle variant="transparent" id="dropdown-menu" className='custom-toggle'>
-                                <img className="iconosGrandes" src={iconoMenu} alt="" />
+                                <img className="icono-dropdown" src={iconoDropdown} alt="" title='Ver'/>
                             </Dropdown.Toggle>
                             <Dropdown.Menu className="custom-dropdown-menu">
                                 <Dropdown.Item className="custom-modificar-item" onClick={handleConsultarTomaDeMuestra}>
                                     Ver Información
+                                </Dropdown.Item>
+                                <Dropdown.Item className="custom-modificar-item" onClick={handleNavegacionAlTratamiento}>
+                                    Tratamiento
+                                </Dropdown.Item>
+                                <Dropdown.Item className="custom-modificar-item" onClick={handleSubmuestrasForm}>
+                                    Generar mapa de submuestras
+                                </Dropdown.Item>
+                                <Dropdown.Item className="custom-modificar-item" onClick={handleGenerarRotulo}>
+                                    Generar rótulo de identificación
                                 </Dropdown.Item>
                                 <Dropdown.Item className="custom-eliminar-item" onClick={solicitarConfirmacionDarDeBajaTomaDeMuestra}>
                                     Eliminar
                                 </Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
-                    </aside>
-                </header>
-            </article>
+                </div>
+            </Stack>           
 
             {formConsultaTomaDeMuestra && <TomaDeMuestraABMC titulo={tomaDeMuestra.codigo} nombreBoton='Editar'
             accionCancelar={handleCancelarFormulario} accionConfirmar={handleHabilitarEdicionTomaDeMuestra}
@@ -267,6 +272,9 @@ function TomaDeMuestraCard({ tomaDeMuestra, onEliminar, onModificar, onRegistrar
 
             {mostrarErrorTMPendienteParaAnalisis && <Error texto={"No puede registrar un análisis de una toma de muestra en estado Pendiente"}
             onConfirm={() => {setMostrarErrorTMPendienteParaAnalisis(false)}}/>}
+
+            {mostrarErrorTMSinDiagnosticos && <Error texto={"No puede registrar un tratamiento de una toma de muestra sin Diagnósticos asociados."}
+            onConfirm={() => {setMostrarErrorTMSinDiagnosticos(false)}}/>}
         </>
     );
 }

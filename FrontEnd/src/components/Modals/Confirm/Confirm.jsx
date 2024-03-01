@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import './Confirm.css';
+import '../../Estilos/estilosModales.css';
+import '../../Estilos/estilosFormulario.css';
 
 import iconoConfirmar from '../../../assets/iconoConfirmar.png';
 
@@ -25,15 +26,15 @@ function Confirm(props) {
             backdrop="static" 
             keyboard={false}
             centered
-            className="modalConfirm">
+            className="contenedor-modal">
           <Modal.Header>
-            <img className="iconoConfirm" src={iconoConfirmar} alt=""/>
+            <img className="icono-modal" src={iconoConfirmar} alt=""/>
           </Modal.Header>
           <Modal.Body>
             {texto}
           </Modal.Body>
           <Modal.Footer>
-            <Button className='estiloBotonConfirm btnConfirmarAceptar' variant="secondary" onClick={handleClose}>
+            <Button className='botonConfirmacionFormulario' variant="secondary" onClick={handleClose}>
               Aceptar
             </Button>
           </Modal.Footer>

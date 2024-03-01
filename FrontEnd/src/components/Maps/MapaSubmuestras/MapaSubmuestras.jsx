@@ -39,7 +39,7 @@ function MapaSubmuestras() {
                 } catch (error) {
                     if(error.response && error.response.status === 401){
                         try {
-                          renewToken();
+                          await renewToken();
                           const { data } = await consultarLoteService(haySubmuestras.lote_id);
                           setLote(data);
                         } catch (error) {
@@ -62,7 +62,7 @@ function MapaSubmuestras() {
                 } catch (error) {
                     if(error.response && error.response.status === 401){
                         try {
-                          renewToken();
+                          await renewToken();
                           const { data } = await puntosSubmuestraService(haySubmuestras.lote_id, haySubmuestras.tipo_muestreo_nombre, cantSubmuestras);
                           setPuntosSubmuestra(data);
                         } catch (error) {

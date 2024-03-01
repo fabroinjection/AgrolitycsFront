@@ -325,8 +325,37 @@ const PDFDiagnosticoSuelo = ({ interpretacion, diagnostico, datosLote, cultivo }
                                 </View>
                             </View>
                         </View> 
+                    </View>
 
+                    {/* Pie de pagina */}
+                    <View style={styles.footer}>
+                        <Text>
+                            1. La valoración corresponde a diversas fuentes para valores estándares.  2. La demanda nutrimental de cada cultivo es obtenida en base a datos proporcionados por el IPNI.
+                            3. Los resultados se obtienen a través del método simplificado.  4. El contenido de nutrientes puede variar dependiendo del fabricante, la pureza del producto y la mezcla con otros productos.
+                            Considerar que las necesidades de los cultivos pueden variar según la zona geográfica.  Agrolitycs no se responsabiliza por el mal uso de los fertilizantes agropecuarios.
+                        </Text>
+                    </View>
 
+                    {/* Marca de Agua */}
+                    {/* <Image src={logoAgrolitycs} style={[styles.watermark, { width: "500px", height: "500px" }]} /> */}
+            </Page>
+
+            <Page size="A4">
+
+                    {/* Logo y Título*/}
+                    <View style={styles.contenedor}>
+
+                        <Image 
+                            src={marcaApp}
+                            style={styles.imagen}
+                        />
+
+                        <Text style={styles.titulo}>
+                            Diagnóstico del Suelo
+                        </Text>
+                    </View>
+
+                    <View style={styles.margen}>
                         {/* Recomendación de fertilizantes */}
                         <View style={styles.seccion}>
                             {/* Título */}
@@ -407,7 +436,7 @@ const PDFDiagnosticoSuelo = ({ interpretacion, diagnostico, datosLote, cultivo }
                             {/* Fertilizantes */}
                             <View style={styles.page}>
 
-                                <View style={styles.column}>
+                                <View style={[styles.column, { pageBreakInside: 'avoid' }]}>
 
                                         {/* Encabezado */}
                                         <View style={styles.row}>
@@ -440,9 +469,6 @@ const PDFDiagnosticoSuelo = ({ interpretacion, diagnostico, datosLote, cultivo }
                             Considerar que las necesidades de los cultivos pueden variar según la zona geográfica.  Agrolitycs no se responsabiliza por el mal uso de los fertilizantes agropecuarios.
                         </Text>
                     </View>
-
-                    {/* Marca de Agua */}
-                    {/* <Image src={logoAgrolitycs} style={[styles.watermark, { width: "500px", height: "500px" }]} /> */}
             </Page>
         </Document>
         </>

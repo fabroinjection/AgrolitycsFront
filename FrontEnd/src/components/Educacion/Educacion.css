@@ -1,0 +1,107 @@
+.coberturaFondo{ 
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background-color: #DAC5B3;
+    padding-bottom: 20px;
+}
+
+.sidebar {
+    flex: 0 0 250px;
+    background-color: #BEAA98;
+    padding: 20px;
+    box-sizing: border-box;
+    margin-top: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+  }
+
+.contenido {
+    flex-grow: 1;
+    padding: 20px;
+    box-sizing: border-box;
+    margin: 40px;
+    color: black;
+}
+
+.tituloPrincipal {
+    margin-top: 60px;
+}
+
+.bodyCard {
+    background-color: #859745;
+    color: black;
+    border-radius: 20px;
+}
+
+.contendorCard {
+    border-radius: 20px;
+    margin-top: 60px;
+}
+
+.bibliografia,
+.tituloSecundario{
+    margin-top: 30px;
+}
+
+.bibliografia {
+    font-size: 10pt;
+    margin-bottom: 15px;
+}
+
+.imagenEducacion {
+width: 200px;
+height: 200px;
+margin-bottom: 20px;
+}
+
+.centrarImagen {
+    text-align: center;
+}
+
+.imagen-rotulo {
+    width: 500px;
+    margin-bottom: 20px;
+    }
+
+.imagen-fertilizantes {
+    width: 700px;
+    margin-bottom: 20px;  
+}
+.tabla {
+    th {
+        background-color: #859745;
+    }
+}
+
+.sub-encabezado {
+    background-color: #b8c685 !important;
+    font-weight: 600;
+}
+
+.fuente-10pt{
+    font-size: 10pt;
+}
+
+.boton-sidebar {
+    font-size: 10pt;
+    color: black;
+    font-weight: 400;
+}
+
+.boton-sidebar:hover {
+    color: rgb(49, 103, 53);
+}
+
+.seccion-sidebar {
+    margin: 5px auto;
+}
+
+@media screen and (max-width: 500px) { 
+    .imagen-rotulo,
+    .imagen-fertilizantes {
+        width: 95%;
+    }
+}

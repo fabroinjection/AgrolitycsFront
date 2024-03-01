@@ -1,12 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { MapContainer, TileLayer, FeatureGroup, Marker, Tooltip, Polygon } from 'react-leaflet';
-import L from 'leaflet';
+//import assets
 import "leaflet/dist/leaflet.css"
 import 'leaflet-draw/dist/leaflet.draw.css'
-import { EditControl } from 'react-leaflet-draw';
 import './LoteoMapa.css'
+
+//import hooks
+import { useEffect, useRef, useState } from 'react';
+import useWeather from '../../../hooks/useWeather';
+
+//import components
+import { MapContainer, TileLayer, FeatureGroup, Marker, Tooltip, Polygon } from 'react-leaflet';
+import { EditControl } from 'react-leaflet-draw';
+
+//import utilities
+import L from 'leaflet';
 import Cookies from 'js-cookie';
-import iconoHoja from '../../../assets/iconoHoja.png';
 
 //import Context
 import { useContext } from 'react';
@@ -14,12 +21,16 @@ import { MapLayersContext } from '../../../context/MapLayersContext';
 import { PolygonCoordsContext } from '../../../context/PolygonCoordsContext';
 import { HectareasContext } from '../../../context/HectareasContext';
 
+import Pronostico from '../../Pronostico/Pronostico';
+
 function Mapa({ habilitado = false, registro = false, campo, lotes }){
   const [ polygonCoords, setPolygonCoords ] = useContext(PolygonCoordsContext);
   const [ mapLayers, setMapLayers ] = useContext(MapLayersContext);
   const [ , setHectareas ] = useContext(HectareasContext)
   const [ loteSeleccionadoAConsultar ] = useState(Cookies.get("idLoteSeleccionadoAConsultar"));
   const [ idLoteSeleccionadoAModificar ] = useState(Cookies.get("idLoteAModificar"));
+
+  const [ data, loading, error ] = useWeather(campo.localidad_centroide_lat, campo.localidad_centroide_lon);
 
   const mapRef = useRef(null);
 
@@ -29,7 +40,6 @@ function Mapa({ habilitado = false, registro = false, campo, lotes }){
         const polygon = L.polygon(mapLayers);
         const area = L.GeometryUtil.geodesicArea(polygon.getLatLngs()[0][0]);
         const hect = (area*0.0001).toFixed(2);
-        console.log(hect);
         setHectareas(hect);
       }
     }
@@ -43,13 +53,6 @@ function Mapa({ habilitado = false, registro = false, campo, lotes }){
     }
     
   }, [mapLayers]);
-
-  const customIcon = L.icon({
-    iconUrl: iconoHoja,
-    iconSize: [50, 50], // Tamaño del ícono [ancho, alto]
-    iconAnchor: [50, 50], // Punto donde el ícono se conecta al marcador [mitad del ancho, parte inferior]
-    popupAnchor: [1, -34] // Punto donde se abrirá el popup relativo al ícono
-  });
 
   const handleMapClick = (e) => {
     const { latlng } = e;
@@ -70,7 +73,6 @@ function Mapa({ habilitado = false, registro = false, campo, lotes }){
 
   const _onEdited = (e) => {
     const { layers } = e;
-  
     layers.eachLayer((layer) => {
       const { _leaflet_id, editing } = layer;
       setMapLayers((layers) =>
@@ -117,7 +119,6 @@ function Mapa({ habilitado = false, registro = false, campo, lotes }){
         >
 
       <TileLayer
-        //url="https://api.maptiler.com/tiles/satellite-mediumres-2018/tiles.json?key=c91jAoRAjwmTgLAMjHro"
         url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
         attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'       
       />
@@ -131,7 +132,7 @@ function Mapa({ habilitado = false, registro = false, campo, lotes }){
         /> 
       ))}
 
-      <Marker position={[campo.localidad_centroide_lat, campo.localidad_centroide_lon]} icon={customIcon}>
+      <Marker position={[campo.localidad_centroide_lat, campo.localidad_centroide_lon]}>
         <Tooltip direction="top" offset={[-14, -5]} opacity={1} permanent>
           {campo.localidad_nombre + "," + campo.provincia_nombre}
         </Tooltip>
@@ -146,21 +147,29 @@ function Mapa({ habilitado = false, registro = false, campo, lotes }){
       ))}
       
       {idLoteSeleccionadoAModificar === undefined ?
-        <EditControl
-        className='controlesMapa' 
-        position='topright'
-        onCreated={_onCreate}
-        onEdited={_onEdited}
-        onDeleted={_onDeleted}
-        draw={{
-            rectangle: false,
-            polyline:false,
-            circle: false,
-            circlemarker: false,
-            marker:false,
-            polygon: habilitado,
-        }}      
-        />
+        loteSeleccionadoAConsultar ? null
+          : habilitado ? 
+            <EditControl
+            className='controlesMapa' 
+            position='topright'
+            onCreated={_onCreate}
+            onEdited={_onEdited}
+            onDeleted={_onDeleted}
+            draw={{
+                rectangle: false,
+                polyline:false,
+                circle: false,
+                circlemarker: false,
+                marker:false,
+                polygon: habilitado,
+            }}     
+            edit={{
+              poly: {
+                allowIntersection: false,
+              },
+            }} 
+            /> 
+            : null
         :
         <EditControl
         className='controlesMapa' 
@@ -173,6 +182,12 @@ function Mapa({ habilitado = false, registro = false, campo, lotes }){
             circlemarker: false,
             marker:false,
             polygon: false,
+        }}
+        edit={{
+          remove: false,
+          poly: {
+            allowIntersection: false,
+          },
         }}      
         />
       }
@@ -182,6 +197,14 @@ function Mapa({ habilitado = false, registro = false, campo, lotes }){
       </FeatureGroup>
       
     </MapContainer>
+
+    {
+      (!loteSeleccionadoAConsultar && !idLoteSeleccionadoAModificar && !habilitado) &&
+      <div style={{ position: 'absolute', zIndex: 20000 }}>
+        <Pronostico lat={campo.localidad_centroide_lat} lon={campo.localidad_centroide_lon}/>
+      </div> 
+    }
+       
 
     </>
     

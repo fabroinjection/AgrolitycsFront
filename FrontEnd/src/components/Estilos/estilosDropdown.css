@@ -1,0 +1,24 @@
+.icono-dropdown {
+    width: 25px;
+  }
+
+.custom-dropdown-menu {
+    background-color: #d2d0d0; 
+    border: 0px solid #000000;
+    border-radius: 5px;
+    box-shadow: -1px  10px 10px rgb(0 0 0 / 30%);
+  }
+
+.custom-eliminar-item {
+    color: #c71212;
+    font-weight: 500;
+  }
+  
+.custom-modificar-item {
+    color: #000000;
+    font-weight: 500;
+  }
+
+.dropdown-toggle::after {
+    content: none;
+  }

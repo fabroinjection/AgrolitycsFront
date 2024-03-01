@@ -1,9 +1,10 @@
 //Estilos
-import './ProductorCard.css'
+import './ProductorCard.css';
 
 //Imagenes iconos
-import iconoVer from '../../../../assets/iconoVer.png';
-import iconoEliminar from '../../../../assets/iconoEliminar.png';
+import iconoUsuario from '../../../../assets/iconoUsuario.png';
+import iconoBorrar from '../../../../assets/iconoBorrar.png';
+import iconoDropdown from "../../../../assets/iconoDropdown.png"
 
 //import hooks
 import { useState } from 'react';
@@ -13,6 +14,9 @@ import { useNavigate } from 'react-router-dom';
 import ProductorAMC from '../ProductorAMC/ProductorAMC';
 import Alerta from '../../../../components/Modals/Alerta/Alerta';
 import Error from '../../../../components/Modals/Error/Error';
+import Stack from 'react-bootstrap/Stack';
+import { Button } from 'react-bootstrap';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 //import services
 import { eliminarProductorService } from '../../services/productor.service';
@@ -95,21 +99,48 @@ function ProductorCard({ productor, accionActualizarLista }){
             window.localStorage.removeItem('loggedAgroUser');
         }
 
+        const agregarGuiones = (cuil) => {
+            if (cuil.length < 11) {
+                return cuil;
+            }
+        
+            return `${cuil.substring(0, 2)}-${cuil.substring(2, 10)}-${cuil.substring(10)}`;
+        }
+
         return(
             <>
-                <article className="productorCard">
-                    <header className="cabeceraProductor">                    
-                        <strong className="nombreProductor">{productor.nombre} {productor.apellido} {productor.cuit_cuil}</strong>
-                        <aside>
-                            <button className="botonesProductorCard" onClick={() => setMostrarForm(true)}>
-                                <img className="iconosProductorCard" src={iconoVer} alt=""/>
-                            </button>
-                            <button className="botonesProductorCard" onClick={() => setMostrarAlertaEliminacion(true)}>
-                                <img className="iconosProductorCard" src={iconoEliminar} alt=""/>
-                            </button>
-                        </aside>
-                    </header>
-                </article>
+                <Stack direction="horizontal" gap={0} className="productorCard">
+                    <div className="p-2">
+                        <strong className="nombreProductor">{productor.nombre} {productor.apellido} - {agregarGuiones(productor.cuit_cuil)}</strong>
+                    </div>
+
+                    {/* Mostrar botones solo en pantallas grandes */}
+                    <div className="p-2 ms-auto pantalla-grande-productores">
+                        <button className="botonesProductorCard" onClick={() => setMostrarForm(true)}>
+                            <img className="iconosProductorCard" src={iconoUsuario} alt=""/>
+                        </button>
+                        <button className="botonesProductorCard" onClick={() => setMostrarAlertaEliminacion(true)}>
+                            <img className="iconosProductorCard" src={iconoBorrar} alt=""/>
+                        </button>
+                    </div>
+
+                    {/* Mostrar dropdown solo en pantallas chicas */}
+                    <div className='p-2 ms-auto pantalla-chica-productores'>
+                        <Dropdown className="botonesLoteCard">
+                            <Dropdown.Toggle variant="transparent" id="dropdown-menu" className='custom-toggle'>
+                                <img className="icono-dropdown" src={iconoDropdown} alt="" title='ver'/>
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu className="custom-dropdown-menu">
+                                <Dropdown.Item className="custom-modificar-item" onClick={() => setMostrarForm(true)}>
+                                    Ver
+                                </Dropdown.Item>
+                                <Dropdown.Item className="custom-eliminar-item" onClick={() => setMostrarAlertaEliminacion(true)}>
+                                    Eliminar
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>   
+                    </div>
+                </Stack>
 
                 {
                     mostrarForm && <ProductorAMC accionCancelar={() => setMostrarForm(false)}

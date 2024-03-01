@@ -1,12 +1,15 @@
 //import assets y css
-import './infoLotes.css';
-import iconoCerrar from '../../../../assets/iconoCerrar.png'
-import iconoMenu from '../../../../assets/iconoMenu.png'
+import './InfoLotes.css';
+import '../../../../components/Estilos/estilosDropdown.css';
+
+import iconoDropdown from '../../../../assets/iconoDropdown.png'
 
 //import components
 import LoteCard from '../LoteCard/LoteCard';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Cookies from 'js-cookie';
+import CloseButton from 'react-bootstrap/CloseButton';
+import Button from 'react-bootstrap/Button';
 
 //import hooks
 import { useNavigate } from "react-router";
@@ -49,9 +52,7 @@ function InfoLotes({ actualizarRegistrarLote, campo, handleModificarCampo,
     return(
         <>
             <div className='boton-wrapper'>
-                <button className="close-button" onClick={handleCerrarPestaña}>
-                    <img className='iconoCerrar' src={iconoCerrar} alt="" />
-                </button>
+                <CloseButton onClick={handleCerrarPestaña}></CloseButton>
             </div>                    
             <header className="header">
                 <div className="campo-wrapper">
@@ -63,7 +64,7 @@ function InfoLotes({ actualizarRegistrarLote, campo, handleModificarCampo,
                 <aside>
                     <Dropdown>
                         <Dropdown.Toggle variant="transparent" id="dropdown-menu" className='custom-toggle'>
-                            <img className="iconoMenu" src={iconoMenu} alt="" />
+                            <img className="icono-dropdown" src={iconoDropdown} alt="" />
                         </Dropdown.Toggle>
                         <Dropdown.Menu className="custom-dropdown-menu">
                             <Dropdown.Item className="custom-modificar-item" onClick={handleModificarCampo}>Modificar</Dropdown.Item>
@@ -73,18 +74,22 @@ function InfoLotes({ actualizarRegistrarLote, campo, handleModificarCampo,
                 </aside>
             </header>                   
                 
+            { (hayLoteSeleccionadoConsulta || hayLoteAModificar) ? null 
+                :
+                <Button 
+                    variant='Secodary'
+                    className='boton-agregar-lote'
+                    onClick={handleCLickNuevoLote}
+                >
+                    + Agregar lote
+                </Button>
+            }
             <div className="fields-section">
-            
-                <button name="botonNuevoLoteAgregar" className='btn btn-outline-primary btnNuevoLote'
-                onClick={handleCLickNuevoLote} disabled={hayLoteSeleccionadoConsulta || hayLoteAModificar ? true : false} >
-                    <span className="signoMas">+</span>
-                </button>
+                
                 {lotes.map((lote)=>(
                     <LoteCard key={lote.id} lote={lote}/>
-                ))}
-                        
+                ))}                        
             </div>
-
         </>
     );
 }

@@ -1,5 +1,5 @@
 //Estilos
-import './ProductorAMC.css';
+import '../../../../components/Estilos/estilosFormulario.css';
 
 // import componentes
 import { Button } from "react-bootstrap";
@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 // import utilities
 import { cuilValidator } from '../../../../utilities/validarCuil';
 import { verifyCuit } from '../../../../utilities/validarCuit';
+import { toast } from 'react-toastify';
 
 // import services
 import { registrarProductorService, modificarProductorService } from '../../services/productor.service';
@@ -34,6 +35,7 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
     const [ nombres, setNombres ] = useState("");
     const [ apellidos, setApellidos ] = useState("");
     const [ cuil, setCuil ] = useState("");
+    const [ telefono, setTelefono ] = useState("");
     const [ email, setEmail ] = useState("");
     const [ referencias, setReferencias ] = useState("");
 
@@ -41,6 +43,7 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
     const [ nombresModif, setNombresModif ] = useState("");
     const [ apellidosModif, setApellidosModif ] = useState("");
     const [ cuilModif, setCuilModif ] = useState("");
+    const [ telefonoModif, setTelefonoModif ] = useState("");
     const [ emailModif, setEmailModif ] = useState("");
     const [ referenciasModif, setReferenciasModif ] = useState("");
 
@@ -48,44 +51,144 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
     const [ nombreVacio, setNombreVacio ] = useState(false);
     const [ apellidosVacio, setApellidosVacio ] = useState(false);
     const [ cuilVacio, setCuilVacio ] = useState(false);
+    const [ telefonoVacio, setTelefonoVacio ] = useState(false);
+    const [ telefonoNoValido, setTelefonoNoValido ] = useState(false);
     const [ cuilNoValido, setCuilNoValido ] = useState(false);
     const [ emailNoValido, setEmailNoValido ] = useState(false);
 
     //variables para manejar el renderizado de alertas de error
     const [ mostrarErrorVencimientoToken, setMostrarErrorVencimientoToken ] = useState(false);
-    const [ mostrarErrorRegistro, setMostrarErrorRegistro ] = useState(false);
-    const [ mostrarErrorModificacion, setMostrarErrorModificacion ] = useState(false);
     const [ mostrarErrorCuilRepetido, setMostrarErrorCuilRepetido ] = useState(false);
 
     //variables para manejar el renderizado de avisos al usuario
     const [ mostrarAlertaProductorRegistrado, setMostrarAlertaProductorRegistrado ] = useState(false);
     const [ mostrarAlertaProductorModificado, setMostrarAlertaProductorModificado ] = useState(false);
 
+    // funcion toast para alerta nombre vacío
+    const mostrarErrorNombreVacio = () => {
+        toast.error('Se debe ingresar un nombre', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    // funcion toast para alerta apellido vacío
+    const mostrarErrorApellidoVacio = () => {
+        toast.error('Se debe ingresar un apellido', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    // funcion toast para alerta cuil vacío
+    const mostrarErrorCuilVacio = () => {
+        toast.error('Se debe ingresar un cuil', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    // funcion toast para alerta teléfono vacío
+    const mostrarErrorTelefonoVacio = () => {
+        toast.error('Se debe ingresar un teléfono', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    // funcion toast para alerta teléfono no válido
+    const mostrarErrorTelefonoNoValido = () => {
+        toast.error('Se debe ingresar un teléfono de 15 caracteres como máximo', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    // funcion toast para cuil no válido
+    const mostrarErrorCuiloNoValido = () => {
+        toast.error('Se debe ingresar un cuil válido', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    // funcion toast para email no válido
+    const mostrarErrorEmailNoValido = () => {
+        toast.error('Se debe ingresar un mail válido', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    // funcion toast para cuil repetido
+    const mostrarErrorCuilRepetidoToast = () => {
+        toast.error('El CUIL ingresado ya se encuentra asociado a otro productor', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    // funcion toast para error registro
+    const mostrarErrorRegistroToast = () => {
+        toast.error('Ha ocurrido un error registrando su productor, intente de nuevo más tarde', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    // funcion toast para error modificación
+    const mostrarErrorModificacionToast = () => {
+        toast.error('Ha ocurrido un error modificando su productor, intente de nuevo más tarde', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+
     const handleChangeNombre = (e) => {
         const { value } = e.target;
-      
-        // Verificar si el valor no contiene números y no contiene caracteres especiales
-        if (!/\d/.test(value) && /^[A-Za-z\s]+$/.test(value)) {
+
+        // Verificar si el valor contiene solo letras y espacios, incluyendo caracteres acentuados
+        if (/^[A-Za-záéíóúÁÉÍÓÚñÑçÇ\s]+$/.test(value) || value === "") {
           setNombres(value);
-        } else if (value === ""){
-            setNombres(value);
         }
       }
       
       const handleChangeApellidos = (e) => {
         const { value } = e.target;
-      
-        // Verificar si el valor no contiene números y no contiene caracteres especiales
-        if (!/\d/.test(value) && /^[A-Za-z\s]+$/.test(value)) {
+
+        // Verificar si el valor contiene solo letras y espacios, incluyendo caracteres acentuados
+        if (/^[A-Za-záéíóúÁÉÍÓÚñÑçÇ\s]+$/.test(value) || value === "") {
           setApellidos(value);
-        } else if (value === ""){
-            setApellidos(value);
         }
       }
 
     const handleChangeCuil = (e) => {
-        const { value } = e.target;
+        let { value } = e.target;
+
+        value = value.replace(/\D/g, '');
+
+        if (value.length >= 2) {
+            value = `${value.substring(0, 2)}-${value.substring(2)}`;
+        }
+
+        if (value.length >= 11) {
+            value = `${value.substring(0, 11)}-${value.substring(11)}`;
+        }
+
         setCuil(value);
+
+    }
+
+    const handleChangeTelefono = (e) => {
+        const { value } = e.target;
+        
+        // Expresión regular para validar un número de teléfono con signo "+" y otros caracteres
+        const telefonoRegex = /^[\d\s+\-()]*$/;
+        
+        if (telefonoRegex.test(value) || value === "") {
+            setTelefono(value);
+        }
     }
 
     const handleChangeEmail = (e) => {
@@ -102,7 +205,8 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
         if(modoComponente === "Modificar"){
             setNombresModif(productor.nombre);
             setApellidosModif(productor.apellido);
-            setCuilModif(productor.cuit_cuil);
+            setCuilModif(agregarGuiones(productor.cuit_cuil));
+            setTelefonoModif(String(productor.numero_telefono));
             if(productor.email){
                 setEmailModif(productor.email)
             }
@@ -114,29 +218,47 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
     
     const handleChangeNombreModif = (e) => {
         const { value } = e.target;
-      
-        // Verificar si el valor no contiene números y no contiene caracteres especiales
-        if (!/\d/.test(value) && /^[A-Za-z\s]+$/.test(value)) {
+
+        // Verificar si el valor contiene solo letras y espacios, incluyendo caracteres acentuados
+        if (/^[A-Za-záéíóúÁÉÍÓÚñÑçÇ\s]+$/.test(value) || value === "") {
           setNombresModif(value);
-        } else if (value === ""){
-            setNombresModif(value);
         }
       }
       
       const handleChangeApellidosModif = (e) => {
         const { value } = e.target;
-      
-        // Verificar si el valor no contiene números y no contiene caracteres especiales
-        if (!/\d/.test(value) && /^[A-Za-z\s]+$/.test(value)) {
+
+        // Verificar si el valor contiene solo letras y espacios, incluyendo caracteres acentuados
+        if (/^[A-Za-záéíóúÁÉÍÓÚñÑçÇ\s]+$/.test(value) || value === "") {
           setApellidosModif(value);
-        } else if (value === ""){
-            setApellidosModif(value);
         }
       }
 
     const handleChangeCuilModif = (e) => {
-        const { value } = e.target;
+        let { value } = e.target;
+
+        value = value.replace(/\D/g, '');
+
+        if (value.length >= 2) {
+            value = `${value.substring(0, 2)}-${value.substring(2)}`;
+        }
+
+        if (value.length >= 11) {
+            value = `${value.substring(0, 11)}-${value.substring(11)}`;
+        }
+
         setCuilModif(value);
+    }
+
+    const handleChangeTelefonoModif = (e) => {
+        const { value } = e.target;
+        
+        // Expresión regular para validar un número de teléfono con signo "+" y otros caracteres
+        const telefonoRegex = /^[\d\s+\-()]*$/;
+        
+        if (telefonoRegex.test(value) || value === "") {
+            setTelefonoModif(value);
+        }
     }
 
     const handleChangeEmailModif = (e) => {
@@ -163,9 +285,22 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
         setModoComponente("Consultar");
     }
 
+    const quitarGuiones = (cuil) => {
+        return cuil.replace(/-/g, '');
+    }
+
+    const agregarGuiones = (cuil) => {
+        if (cuil.length < 11) {
+            return cuil;
+        }
+    
+        return `${cuil.substring(0, 2)}-${cuil.substring(2, 10)}-${cuil.substring(10)}`;
+    }
+
     const validarForm = () => {
         if (nombres === "") {
             setNombreVacio(true);
+            mostrarErrorNombreVacio();
             return false;
         } else {
             setNombreVacio(false);
@@ -173,6 +308,7 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
 
         if (apellidos === "") {
             setApellidosVacio(true);
+            mostrarErrorApellidoVacio();
             return false
         } else {
             setApellidosVacio(false);
@@ -180,14 +316,29 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
 
         if (cuil === "") {
             setCuilVacio(true);
+            mostrarErrorCuilVacio();
             return false;
-        } else if(cuilValidator(cuil) || verifyCuit(cuil)) {
+        } else if(cuilValidator(quitarGuiones(cuil)) || verifyCuit(quitarGuiones(cuil))) {
             setCuilNoValido(false);
             setCuilVacio(false);
         } else{
             setCuilNoValido(true);
             setCuilVacio(false);
+            mostrarErrorCuiloNoValido();
             return false;
+        }
+
+        if (telefono === "") {
+            setTelefonoVacio(true);
+            mostrarErrorTelefonoVacio();
+            return false;
+        } else if (telefono.length >= 15) {
+            setTelefonoNoValido(true);
+            mostrarErrorTelefonoNoValido();
+            return false;
+        } else {
+            setTelefonoVacio(false);
+            setTelefonoNoValido(false);
         }
 
         if (email !== "") {
@@ -195,6 +346,7 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
                 setEmailNoValido(false);
             } else {
                 setEmailNoValido(true);
+                mostrarErrorEmailNoValido();
                 return false;
             }
         } else {
@@ -211,6 +363,7 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
                 nombre: nombres,
                 apellido: apellidos,
                 cuit_cuil: cuil,
+                numero_telefono: telefono
             }
             
             if(email !== ""){
@@ -239,15 +392,16 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
                         setMostrarErrorVencimientoToken(true);
                       }
                       else{
-                        setMostrarErrorRegistro(true);
+                        mostrarErrorRegistroToast();
                       }
                     }
                   }
                   else if (error.response.status === 302){
                     setMostrarErrorCuilRepetido(true);
+                    mostrarErrorCuilRepetidoToast();
                   }
                   else{
-                    setMostrarErrorRegistro(true);
+                    mostrarErrorRegistroToast();
                   } 
             }
         }
@@ -257,6 +411,7 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
     const validarFormModif = () => {
         if (nombresModif === "") {
             setNombreVacio(true);
+            mostrarErrorNombreVacio();
             return false;
         } else {
             setNombreVacio(false);
@@ -264,6 +419,7 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
 
         if (apellidosModif === "") {
             setApellidosVacio(true);
+            mostrarErrorApellidoVacio();
             return false
         } else {
             setApellidosVacio(false);
@@ -271,14 +427,29 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
 
         if (cuilModif === "") {
             setCuilVacio(true);
+            mostrarErrorCuilVacio();
             return false;
-        } else if(cuilValidator(cuilModif) || verifyCuit(cuilModif)) {
+        } else if(cuilValidator(quitarGuiones(cuilModif)) || verifyCuit(quitarGuiones(cuilModif))) {
             setCuilNoValido(false);
             setCuilVacio(false);
         } else{
             setCuilNoValido(true);
             setCuilVacio(false);
+            mostrarErrorCuiloNoValido();
             return false;
+        }
+
+        if (telefonoModif === "") {
+            setTelefonoVacio(true);
+            mostrarErrorTelefonoVacio();
+            return false;
+        } else if (telefonoModif.length !== 10) {
+            setTelefonoNoValido(true);
+            mostrarErrorTelefonoNoValido();
+            return false;
+        } else {
+            setTelefonoVacio(false);
+            setTelefonoNoValido(false);
         }
 
         if (emailModif !== "") {
@@ -286,6 +457,7 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
                 setEmailNoValido(false);
             } else {
                 setEmailNoValido(true);
+                mostrarErrorEmailNoValido();
                 return false;
             }
         } else {
@@ -301,7 +473,8 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
             const productorModificado = {
                 nombre: nombresModif,
                 apellido: apellidosModif,
-                cuit_cuil: cuilModif,
+                cuit_cuil: quitarGuiones(cuilModif),
+                numero_telefono: telefonoModif
             }
             
             if(emailModif !== ""){
@@ -331,15 +504,16 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
                         setMostrarErrorVencimientoToken(true);
                       }
                       else{
-                        setMostrarErrorModificacion(true);
+                        mostrarErrorModificacionToast();
                       }
                     }
                   }
                   else if (error.response.status === 302){
                     setMostrarErrorCuilRepetido(true);
+                    mostrarErrorCuilRepetidoToast();
                   }
                   else{
-                    setMostrarErrorModificacion(true);
+                    mostrarErrorModificacionToast();
                   } 
             }
         }
@@ -376,12 +550,12 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
     if(modoComponente === "Registrar"){
         return(
             <>
-            {console.log(mostrarAlertaProductorRegistrado)}
+                {/* FORM REGISTRAR FORMULARIO */}
                 <div className="overlay">
-                    <Form className="formProductor formCentrado" onSubmit={handleSubmit(registrarProductor)}>
+                    <Form className="formulario-claro-alargado formCentrado" onSubmit={handleSubmit(registrarProductor)}>
     
-                        <div className="formTituloProductor">
-                            <strong className="tituloFormProductor">Nuevo Productor</strong>
+                        <div className="seccionTitulo">
+                            <strong className="tituloForm">Nuevo Productor</strong>
                         </div>
                                       
                         <div className='columnasProductores'>
@@ -389,62 +563,63 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
                             <div className='columnaUnoProductor'>
     
                                 {/* Input Nombres */}
-                                <Form.Group className="mb-3 seccionNombreProd">
-                                    <Form.Label className={nombreVacio ? 'labelErrorInput' : ''}>Nombres</Form.Label>
-                                    <Form.Control className="inputProductores" type="text" value={nombres}
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
+                                    <Form.Label className={nombreVacio ? 'labelErrorFormulario' : 'labelFormulario'}>Nombres</Form.Label>
+                                    <Form.Control  type="text" value={nombres}
                                     onChange={handleChangeNombre}/>
                                 </Form.Group>
     
                                 {/* Input Apellidos */}
-                                <Form.Group className="mb-3 seccionApellidos">
-                                    <Form.Label className={apellidosVacio ? 'labelErrorInput' : ''}>Apellidos</Form.Label>
-                                    <Form.Control className="inputProductores" type="text" value={apellidos}
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
+                                    <Form.Label className={apellidosVacio ? 'labelErrorFormulario' : 'labelFormulario'}>Apellidos</Form.Label>
+                                    <Form.Control  type="text" value={apellidos}
                                     onChange={handleChangeApellidos}/>
                                 </Form.Group>
     
                                 {/* Input Cuit o Cuil */}
-                                <Form.Group className="mb-3 seccionCuitCuil">
-                                    <Form.Label className={cuilVacio ? 'labelErrorInput' : ''}>Cuit/Cuil</Form.Label>
-                                    <Form.Control className="inputProductores" type="text" value={cuil}
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
+                                    <Form.Label className={(cuilVacio || cuilNoValido || mostrarErrorCuilRepetido) ? 'labelErrorFormulario' : 'labelFormulario'}>CUIT/CUIL</Form.Label>
+                                    <Form.Control  type="text" value={cuil}
                                     onChange={handleChangeCuil}/>
                                 </Form.Group>  
+
+                                {/* Input Teléfono */}
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
+                                    <Form.Label className={(telefonoVacio || telefonoNoValido) ? 'labelErrorFormulario' : 'labelFormulario'}>Teléfono</Form.Label>
+                                    <Form.Control  type="text" value={telefono}
+                                    onChange={handleChangeTelefono}/>
+                                </Form.Group>
      
                             </div>
     
                             <div className="columanDosProductor">
     
                                 {/* Input Email */}
-                                <Form.Group className="mb-3 seccionEmail">
-                                    <Form.Label>Email</Form.Label>
-                                    <Form.Control className="inputProductores" type="email" value={email}
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
+                                    <Form.Label className={emailNoValido ? 'labelErrorFormulario' : 'labelFormulario'}>Email</Form.Label>
+                                    <Form.Control  type="email" value={email}
                                     onChange={handleChangeEmail}/>
                                 </Form.Group>
     
     
                                 {/* Input Referencias */}
-                                <Form.Group className="mb-3 seccionReferencia">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label>Referencia</Form.Label>
-                                    <Form.Control className="inputProductoresRef" as="textarea" value={referencias}
+                                    <Form.Control className="inputReferencia" as="textarea" value={referencias} maxLength={98}
                                     onChange={handleChangeReferencias}/>
                                 </Form.Group>
     
-                                {/* Mensaje de Faltan Campos */}
-                                <Form.Group className="mb-3">
-                                    {(nombreVacio || apellidosVacio || cuilVacio) && <Form.Label className='labelErrorInput'>*Se debe ingresar los campos en rojo</Form.Label>}
-                                    {cuilNoValido && <Form.Label className='labelErrorInput'>*Se debe ingresar un cuil o cuit válido</Form.Label>}
-                                    {emailNoValido && <Form.Label className='labelErrorInput'>*Email en formato no válido</Form.Label>}
-                                </Form.Group>
                             </div>
                         </div>
                                         
                         
                         {/* Botones */}
-                        <Form.Group className="mb-3 seccionBotones" controlId="formBotones">
-                            <Button className="estiloBotonesProductor botonCancelarProductor" variant="secondary"
+                        <Form.Group className="seccionBotonesFormulario margenTop20" controlId="formBotones">
+                            <Button className="botonCancelarFormulario" variant="secondary"
                             onClick={handleCancelar}>
                                 Cancelar
                             </Button>
-                            <Button className="estiloBotonesProductor botonConfirmarProductor" variant="secondary"
+                            <Button className="botonConfirmacionFormulario" variant="secondary"
                                     type="submit">
                                 Registrar
                             </Button>
@@ -463,19 +638,6 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
                     <Error texto={"Su sesión ha expirado"} 
                     onConfirm={handleSesionExpirada}/>
                 }
-
-                {
-                    mostrarErrorRegistro &&
-                    <Error texto={"Ha ocurrido un error registrando su productor, intente de nuevo más tarde"} 
-                    onConfirm={() => setMostrarErrorRegistro(false)}/>
-                }
-
-                {
-                    mostrarErrorCuilRepetido &&
-                    <Error texto={"El CUIL ingresado ya se encuentra asociado a otro productor."} 
-                    onConfirm={() => setMostrarErrorCuilRepetido(false)}/>
-                }
-
                 
 
             </>
@@ -484,11 +646,12 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
     else if (modoComponente === "Consultar") {
         return(
             <>
+            {/* FORM CONSULTAR PRODUCTOR */}
                 <div className="overlay">
-                    <Form className="formProductor formCentrado" onSubmit={handleSubmit(habilitarEdicionProductor)}>
+                    <Form className="formulario-claro-alargado formCentrado" onSubmit={handleSubmit(habilitarEdicionProductor)}>
     
-                        <div className="formTituloProductor">
-                            <strong className="tituloFormProductor">Productor</strong>
+                        <div className="seccionTitulo">
+                            <strong className="tituloForm">Productor</strong>
                         </div>
                                       
                         <div className='columnasProductores'>
@@ -496,42 +659,49 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
                             <div className='columnaUnoProductor'>
     
                                 {/* Input Nombres */}
-                                <Form.Group className="mb-3 seccionNombreProd">
-                                    <Form.Label className={nombreVacio ? 'labelErrorInput' : ''}>Nombres</Form.Label>
-                                    <Form.Control className="inputProductores" type="text" value={productor.nombre}
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
+                                    <Form.Label className={nombreVacio ? 'labelErrorFormulario' : 'labelFormulario'}>Nombres</Form.Label>
+                                    <Form.Control  type="text" value={productor.nombre}
                                     disabled={true}/>
                                 </Form.Group>
     
                                 {/* Input Apellidos */}
-                                <Form.Group className="mb-3 seccionApellidos">
-                                    <Form.Label className={apellidosVacio ? 'labelErrorInput' : ''}>Apellidos</Form.Label>
-                                    <Form.Control className="inputProductores" type="text" value={productor.apellido}
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
+                                    <Form.Label className={apellidosVacio ? 'labelErrorFormulario' : 'labelFormulario'}>Apellidos</Form.Label>
+                                    <Form.Control  type="text" value={productor.apellido}
                                     disabled={true}/>
                                 </Form.Group>
     
                                 {/* Input Cuit o Cuil */}
-                                <Form.Group className="mb-3 seccionCuitCuil">
-                                    <Form.Label className={cuilVacio ? 'labelErrorInput' : ''}>Cuit/Cuil</Form.Label>
-                                    <Form.Control className="inputProductores" type="text" value={productor.cuit_cuil}
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
+                                    <Form.Label className={cuilVacio ? 'labelErrorFormulario' : 'labelFormulario'}>CUIT/CUIL</Form.Label>
+                                    <Form.Control  type="text" value={agregarGuiones(productor.cuit_cuil)}
                                     disabled={true}/>
                                 </Form.Group>  
+
+                                {/* Input Teléfono */}
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
+                                    <Form.Label>Teléfono</Form.Label>
+                                    <Form.Control  type="text" value={productor.numero_telefono == null ? "" : productor.numero_telefono}
+                                    disabled={true}/>
+                                </Form.Group>
      
                             </div>
     
                             <div className="columanDosProductor">
     
                                 {/* Input Email */}
-                                <Form.Group className="mb-3 seccionEmail">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label>Email</Form.Label>
-                                    <Form.Control className="inputProductores" type="email" value={productor.email == null ? "" : productor.email}
+                                    <Form.Control  type="email" value={productor.email == null ? "" : productor.email}
                                     disabled={true}/>
                                 </Form.Group>
     
-    
+
                                 {/* Input Referencias */}
-                                <Form.Group className="mb-3 seccionReferencia">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label>Referencia</Form.Label>
-                                    <Form.Control className="inputProductoresRef" as="textarea" value={productor.referencia == null ? "" : productor.referencia}
+                                    <Form.Control className="inputReferencia" as="textarea" value={productor.referencia == null ? "" : productor.referencia} maxLength={98}
                                     disabled={true}/>
                                 </Form.Group>
     
@@ -540,12 +710,12 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
                                         
                         
                         {/* Botones */}
-                        <Form.Group className="mb-3 seccionBotones" controlId="formBotones">
-                            <Button className="estiloBotonesProductor botonCancelarProductor" variant="secondary"
+                        <Form.Group className="seccionBotonesFormulario margenTop20" controlId="formBotones">
+                            <Button className="botonCancelarFormulario" variant="secondary"
                             onClick={handleCancelar}>
                                 Cancelar
                             </Button>
-                            <Button className="estiloBotonesProductor botonConfirmarProductor" variant="secondary"
+                            <Button className="botonConfirmacionFormulario" variant="secondary"
                                     type="submit">
                                 Editar
                             </Button>
@@ -558,11 +728,12 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
     else if (modoComponente === "Modificar"){
         return(
             <>
+                {/* FORM MODIFICAR PRODUCTOR */}
                 <div className="overlay">
-                    <Form className="formProductor formCentrado" onSubmit={handleSubmit(modificarProductor)}>
+                    <Form className="formulario-claro-alargado formCentrado" onSubmit={handleSubmit(modificarProductor)}>
     
-                        <div className="formTituloProductor">
-                            <strong className="tituloFormProductor">Productor</strong>
+                        <div className="seccionTitulo">
+                            <strong className="tituloForm">Productor</strong>
                         </div>
                                       
                         <div className='columnasProductores'>
@@ -570,62 +741,65 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
                             <div className='columnaUnoProductor'>
     
                                 {/* Input Nombres */}
-                                <Form.Group className="mb-3 seccionNombreProd">
-                                    <Form.Label className={nombreVacio ? 'labelErrorInput' : ''}>Nombres</Form.Label>
-                                    <Form.Control className="inputProductores" type="text" value={nombresModif}
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
+                                    <Form.Label className={nombreVacio ? 'labelErrorFormulario' : 'labelFormulario'}>Nombres</Form.Label>
+                                    <Form.Control  type="text" value={nombresModif}
                                     onChange={handleChangeNombreModif}/>
                                 </Form.Group>
     
                                 {/* Input Apellidos */}
-                                <Form.Group className="mb-3 seccionApellidos">
-                                    <Form.Label className={apellidosVacio ? 'labelErrorInput' : ''}>Apellidos</Form.Label>
-                                    <Form.Control className="inputProductores" type="text" value={apellidosModif}
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
+                                    <Form.Label className={apellidosVacio ? 'labelErrorFormulario' : 'labelFormulario'}>Apellidos</Form.Label>
+                                    <Form.Control  type="text" value={apellidosModif}
                                     onChange={handleChangeApellidosModif}/>
                                 </Form.Group>
     
                                 {/* Input Cuit o Cuil */}
-                                <Form.Group className="mb-3 seccionCuitCuil">
-                                    <Form.Label className={cuilVacio ? 'labelErrorInput' : ''}>Cuit/Cuil</Form.Label>
-                                    <Form.Control className="inputProductores" type="text" value={cuilModif}
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
+                                    <Form.Label className={(cuilVacio || cuilNoValido || mostrarErrorCuilRepetido) ? 'labelErrorFormulario' : 'labelFormulario'}>CUIT/CUIL</Form.Label>
+                                    <Form.Control  type="text" value={cuilModif}
                                     onChange={handleChangeCuilModif}/>
                                 </Form.Group>  
+
+
+                                {/* Input Teléfono */}
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
+                                    <Form.Label className={(telefonoVacio || telefonoNoValido) ? 'labelErrorFormulario' : 'labelFormulario'}>Teléfono</Form.Label>
+                                    <Form.Control  type="text" value={telefonoModif}
+                                    onChange={handleChangeTelefonoModif}/>
+                                </Form.Group>
      
                             </div>
     
                             <div className="columanDosProductor">
     
+                            
                                 {/* Input Email */}
-                                <Form.Group className="mb-3 seccionEmail">
-                                    <Form.Label>Email</Form.Label>
-                                    <Form.Control className="inputProductores" type="email" value={emailModif}
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
+                                    <Form.Label className={emailNoValido ? 'labelErrorFormulario' : 'labelFormulario'}>Email</Form.Label>
+                                    <Form.Control  type="email" value={emailModif}
                                     onChange={handleChangeEmailModif}/>
                                 </Form.Group>
     
     
                                 {/* Input Referencias */}
-                                <Form.Group className="mb-3 seccionReferencia">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label>Referencia</Form.Label>
-                                    <Form.Control className="inputProductoresRef" as="textarea" value={referenciasModif}
+                                    <Form.Control className="inputReferencia" as="textarea" value={referenciasModif} maxLength={98}
                                     onChange={handleChangeReferenciasModif}/>
                                 </Form.Group>
     
-                                {/* Mensaje de Faltan Campos */}
-                                <Form.Group className="mb-3">
-                                    {(nombreVacio || apellidosVacio || cuilVacio) && <Form.Label className='labelErrorInput'>*Se debe ingresar los campos en rojo</Form.Label>}
-                                    {cuilNoValido && <Form.Label className='labelErrorInput'>*Se debe ingresar un cuil o cuit válido</Form.Label>}
-                                    {emailNoValido && <Form.Label className='labelErrorInput'>*Email en formato no válido</Form.Label>}
-                                </Form.Group>
                             </div>
                         </div>
                                         
                         
                         {/* Botones */}
-                        <Form.Group className="mb-3 seccionBotones" controlId="formBotones">
-                            <Button className="estiloBotonesProductor botonCancelarProductor" variant="secondary"
+                        <Form.Group className="seccionBotonesFormulario margenTop20" controlId="formBotones">
+                            <Button className="botonCancelarFormulario" variant="secondary"
                             onClick={handleCancelarEdicion}>
                                 Cancelar
                             </Button>
-                            <Button className="estiloBotonesProductor botonConfirmarProductor" variant="secondary"
+                            <Button className="botonConfirmacionFormulario" variant="secondary"
                                     type="submit">
                                 Aceptar
                             </Button>
@@ -637,18 +811,6 @@ function ProductorAMC({ accionCancelar, accionConfirmar, modo, productor = undef
                     mostrarErrorVencimientoToken &&
                     <Error texto={"Su sesión ha expirado"} 
                     onConfirm={handleSesionExpirada}/>
-                }
-
-                {
-                    mostrarErrorModificacion &&
-                    <Error texto={"Ha ocurrido un error modificando su productor, intente de nuevo más tarde"} 
-                    onConfirm={() => setMostrarErrorModificacion(false)}/>
-                }
-
-                {
-                    mostrarErrorCuilRepetido &&
-                    <Error texto={"El CUIL ingresado ya se encuentra asociado a otro productor."} 
-                    onConfirm={() => setMostrarErrorCuilRepetido(false)}/>
                 }
 
                 {   

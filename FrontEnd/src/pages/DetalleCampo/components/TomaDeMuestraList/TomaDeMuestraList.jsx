@@ -4,6 +4,7 @@ import './TomaDeMuestraList.css';
 import TomaDeMuestraCard from '../TomaDeMuestraCard/TomaDeMuestraCard';
 import TomaDeMuestraABMC from '../TomaDeMuestraAMC/TomaDeMuestraAMC';
 import Error from '../../../../components/Modals/Error/Error';
+import Button from 'react-bootstrap/Button';
 
 //import hooks
 import { useEffect, useState, useContext } from 'react';
@@ -108,14 +109,18 @@ function TomaDeMuestraList({ idLote }){
             <strong className='tituloTomaDeMuestra'>Mis Tomas de Muestra</strong>
         </header>
         <footer className='mostrarTomasMuestra'>
-            <button name="botonNuevaToma" className='btn btn-outline-primary btnNuevaToma' title="Nueva Toma De Muestra"
-              onClick={handleMostrarRegistrarTomaDeMuestra}>
-                <span className="signoMas">+</span>
-            </button>
-            {tomasDeMuestra.map((tm) => (
-              <TomaDeMuestraCard key={tm.id} tomaDeMuestra={tm} onEliminar={handleEstadoBajaTomaMuestra} 
-              onModificar={handleEstadoModificacionTomaMuestra} onRegistrarTomada={handleEstadoRegistrarTMTomada}/>
-            ))}
+          <Button 
+            variant='Secondary'
+            className='boton-agregar-toma-muestra'
+            onClick={handleMostrarRegistrarTomaDeMuestra}
+          > 
+            + Agregar toma de muestra
+          </Button>
+          
+          {tomasDeMuestra.map((tm) => (
+            <TomaDeMuestraCard key={tm.id} tomaDeMuestra={tm} onEliminar={handleEstadoBajaTomaMuestra} 
+            onModificar={handleEstadoModificacionTomaMuestra} onRegistrarTomada={handleEstadoRegistrarTMTomada}/>
+          ))}
         </footer>
 
             

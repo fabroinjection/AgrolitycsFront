@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import './VerLote.css';
+import '../../../../components/Estilos/estilosFormulario.css';
 import { Button } from 'react-bootstrap';
 import Cookies from 'js-cookie';
 
@@ -24,12 +25,12 @@ function VerLote(){
                                 <strong className='infoVerLote'> 
                                     {nombreLote}
                                 </strong>
-                                <span>
+                                <span className='info-hectarea'>
                                     {haLote + " " + "ha."}
                                 </span>
                             </div>                            
                             <div className='botonesVerLote'>
-                                <Button className='estiloBotonVerLote btnCerrarLote' variant="secondary" onClick={handleCerrarConsulta}>
+                                <Button className='botonCancelarFormulario' variant="secondary" onClick={handleCerrarConsulta}>
                                     Cerrar
                                 </Button>
                             </div>

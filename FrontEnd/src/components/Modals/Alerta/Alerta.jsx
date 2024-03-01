@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import './Alerta.css';
+import '../../Estilos/estilosModales.css';
+import '../../Estilos/estilosFormulario.css';
 
 import iconoAdvertencia from '../../../assets/iconoAdvertencia.png';
 
@@ -28,18 +29,18 @@ function Alerta(props) {
             backdrop="static" 
             keyboard={false}
             centered
-            className="modalAlerta">
+            className="contenedor-modal">
           <Modal.Header>
-            <img className="iconoAdvertencia" src={iconoAdvertencia} alt="" />
+            <img className="icono-modal" src={iconoAdvertencia} alt="" />
           </Modal.Header>
           <Modal.Body>
             {texto}
           </Modal.Body>
-          <Modal.Footer>
-            <Button className='estiloBoton btnAlertaCancelar' variant="secondary" onClick={handleClose}>
+          <Modal.Footer className='seccionBotonesFormulario'>
+            <Button className='botonCancelarFormulario' variant="secondary" onClick={handleClose}>
               Cancelar
             </Button>
-            <Button className='estiloBoton btnAlertaCerrarSesion' variant="secondary" onClick={handleConfirm}>
+            <Button className='botonConfirmacionFormulario' variant="secondary" onClick={handleConfirm}>
               {nombreBoton}
             </Button>
           </Modal.Footer>

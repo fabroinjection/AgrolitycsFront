@@ -1,0 +1,46 @@
+.fondoTerm{
+    background-image: url(../../assets/concepto-jardineria-hombre-plantando.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+
+.contenedorTerm {
+    position: fixed;
+    top: 50%; /* Centra verticalmente */
+    left: 50%; /* Centra horizontalmente */
+    transform: translate(-50%, -50%); /* Ajusta el centrado */
+    max-width: 80%; /* Ancho máximo del contenedor */
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8); 
+    border-radius: 5px; 
+    overflow-y: auto; /* Habilita el desplazamiento vertical dentro del contenedor */
+    max-height: 90vh; 
+
+    scrollbar-width: thin; 
+    scrollbar-color: transparent transparent;
+    color: black;
+  }
+
+  /* Oculta la barra de desplazamiento en navegadores WebKit (como Chrome y Safari) */
+.contenedorTerm::-webkit-scrollbar {
+    width: 0px;
+}
+
+.contenedorTerm::-webkit-scrollbar-thumb {
+    background-color: transparent; /* Color transparente para el pulgar de la barra de desplazamiento */
+    border-radius: 3px;
+}
+
+
+.contenedorTerm::-webkit-scrollbar-track {
+    background-color: transparent; /* Color transparente para el pulgar de la barra de desplazamiento */
+    
+}
+
+.margenTitulo{
+    margin-top: 30px;
+}

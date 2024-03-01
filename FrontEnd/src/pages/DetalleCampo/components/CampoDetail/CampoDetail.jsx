@@ -13,6 +13,8 @@ import Alerta from '../../../../components/Modals/Alerta/Alerta';
 import Confirm from '../../../../components/Modals/Confirm/Confirm';
 import Error from '../../../../components/Modals/Error/Error';
 import LotesDetail from '../LotesDetail/LotesDetail';
+import SpinnerAgrolitycs from '../../../../components/Spinner/SpinnerAgrolitycs';
+import HelpButton from '../../../../components/Ayuda/HelpButton';
 
 //import services
 import { eliminarCampoService } from '../../services/detalleCampo.service';
@@ -116,7 +118,9 @@ function CampoDetail() {
   if(window.localStorage.getItem('loggedAgroUser') && Cookies.get()){
     if(!estaEnEdicion){
       if(!campoDetalle){
-        return <div>Cargando...</div>
+        return (
+          <SpinnerAgrolitycs/>
+        );
       }
       else{
         return (
@@ -134,8 +138,9 @@ function CampoDetail() {
                 </ModoTomaDeMuestraAMCProvider>
               </IdLoteTomaMuestrasProvider>
             </MostrarMuestrasProvider>
+            <HelpButton/>
             
-      
+
             {mostrarDarDeBaja && (
               <Alerta
                 texto="Si elimina el campo, se borrará toda la información asociada al mismo."
@@ -162,7 +167,13 @@ function CampoDetail() {
       }
     }
     else{
-      return <CampoDetailEdit campo={campoDetalle}/>
+      return (
+        <>
+          <CampoDetailEdit campo={campoDetalle}/>
+          <HelpButton/>
+        </>
+
+      )
     }
   }
   else{

@@ -1,0 +1,119 @@
+.weather {
+    width: 300px;
+    border-radius: 0px 0px 5px 0px;
+    box-shadow: 10px -2px 20px 2px rgb(0 0 0 / 30%);
+    color: #fff;
+    background-color: #858383;
+    padding: 0 10px 10px 10px;
+    z-index: 2;
+}
+
+.extended-weather {
+    border-radius: 0px 5px 5px 0px;
+    color: #fff;
+    background-color: #858383;
+    padding: 10px 10px 10px 10px;    
+    box-shadow: 10px -2px 20px 2px rgb(0 0 0 / 30%);
+    text-align: center;
+    z-index: 2;
+}
+
+
+.top,
+.bottom,
+.seccionBotonClima {
+   display: flex;
+   justify-content: space-between;
+   align-items: center; 
+}
+
+.city {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 1;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+.weather-description,
+.dia-semana {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1;
+    margin: 0;
+}
+
+.weather-icon {
+    width: 80px;
+}
+
+.temperatura {
+    font-weight: 600;
+    font-size: 60px;
+    width: auto;
+    letter-spacing: -5px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+
+.details {
+    width: 100%;
+    padding-left: 20px;
+}
+
+.parameter-row,
+.temperaturas-extremo {
+    display: flex;
+    justify-content: space-between;
+}
+
+.parameter-label {
+    text-align: left;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+.parameter-value {
+    text-align: right;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.dia{
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.botonPronostico {
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+    background-color: transparent;
+}
+.botonPronostico:hover {
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+    background-color: rgb(0 0 0 / 20%)
+    ;
+}
+
+.flexCollapse,
+.extended-weather {
+ display: flex;
+}
+
+.parametro-semana {
+    font-weight: 600;
+    font-size: 12px;
+    margin: 0;
+}
+.weather-por-dia {
+    margin-top: 20px;
+}
+
+.icono-siguiente {
+    height: 20px;
+}
+

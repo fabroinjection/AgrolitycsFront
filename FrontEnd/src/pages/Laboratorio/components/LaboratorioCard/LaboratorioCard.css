@@ -9,6 +9,11 @@
     align-items: center;
     /* padding: 2px; */
   }
+  .laboratorio-card {
+    width: 100%;
+    border-top: solid grey 2px;
+    text-align: center;
+  }
 
   .cabeceraLaboratorio{
     display: flex;
@@ -28,8 +33,7 @@
   }
 
   .iconosLaboratorioCard{
-    height: 28px;
-    width: 28px;
+    width: 20px;
   }
 
   .nombreLaboratorio{

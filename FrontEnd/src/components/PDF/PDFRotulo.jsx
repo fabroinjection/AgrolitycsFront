@@ -29,8 +29,7 @@ const styles = StyleSheet.create({
         margin:"50px",
     },
 
-    imagen: {
-        height:"80px", 
+    imagen: { 
         width:"200px",
     },
 
@@ -70,13 +69,6 @@ const PDFRotulo = ({ datos }) => {
                 style={styles.rotulo}>
                     {/* Logo y nombre App*/}
                     <View style={styles.contenedor}>
-                        {/* <Image 
-                            src={logoApp}
-                            style={styles.imagen}
-                        />
-                        <Text style={styles.nombre}>
-                            Agrolitycs
-                        </Text> */}
                         <Image 
                             src={marcaApp}
                             style={styles.imagen}

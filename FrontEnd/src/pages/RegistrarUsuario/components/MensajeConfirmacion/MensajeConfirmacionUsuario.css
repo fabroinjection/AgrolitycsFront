@@ -1,0 +1,12 @@
+.tituloMensajeUsuario{
+    font-size: 20pt;
+}
+
+.mensajeCentrado,
+.botonCentrado{
+    text-align: center;    
+}
+
+.botonCentrado{
+    margin-top: 20px;    
+}

@@ -1,10 +1,10 @@
 // imports Componentes
 import Navbar from "../../../../components/Navbar/Navbar.components"
-import { Form } from "react-bootstrap";
 import Select from "react-select";
 import Confirm from "../../../../components/Modals/Confirm/Confirm";
 import Error from "../../../../components/Modals/Error/Error";
-
+import Form from 'react-bootstrap/Form';
+import { Button } from "react-bootstrap";
 
 // Hooks
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form';
 
 // CSS
 import './CampoDetailEdit.css'
+import '../../../../components/Estilos/estilosFormulario.css';
 
 //Servicios
 import { provinciasService } from "../../../../services/provincias.service";
@@ -22,7 +23,8 @@ import { productoresService } from "../../../../services/productores.service";
 import { modificarCampoService } from "../../services/detalleCampo.service";
 import { renewToken } from "../../../../services/token.service";
 
-
+//import utilities
+import { toast } from 'react-toastify';
 
 
 function CampoDetailEdit({campo}) {
@@ -34,6 +36,7 @@ function CampoDetailEdit({campo}) {
 
   //states para Nombre Campo
   const [inputNombreValue, setInputNombreValue] = useState(campo.nombre);
+  const [ nombreNoValido, setNombreNoValido ] = useState(false);
 
   //states para Provincia
   const [ provincias, setProvincias ] = useState([]);
@@ -60,21 +63,78 @@ function CampoDetailEdit({campo}) {
     data: campo.productor_cuit_cuil});
   const [ prodValido, setProdValido ] = useState(true);
 
+  // funcion toast para alerta nombre vacío
+  const mostrarErrorNombre = () => {
+    toast.error('Ingrese un nombre de campo', {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 5000,
+      }); 
+  }
+
+  // funcion toast para alerta nombre menor a 4 car
+  const mostrarErrorNombre4Carac = () => {
+    toast.error('Ingrese un nombre que tenga como mínimo 4 caracteres', {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 5000,
+      }); 
+  }
+
+  // funcion toast para alerta nombre mayor a 20 car
+  const mostrarErrorNombre20Carac = () => {
+    toast.error('Ingrese un nombre que tenga como máximo 20 caracteres', {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 5000,
+      }); 
+  }
+
+  // funcion toast para alerta provincia vacía
+  const mostrarErrorProvinciaVacia = () => {
+    toast.error('Ingrese una provincia', {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 5000,
+      }); 
+  }
+
+  // funcion toast para alerta localidad vacía
+  const mostrarErrorLocalidadVacia = () => {
+    toast.error('Ingrese una localidad', {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 5000,
+      }); 
+  }
+
+  // funcion toast para alerta localidad no valida
+  const mostrarErrorLocalidadNoValida = () => {
+    toast.error('Ingrese una localidad válida para la provincia ingresada', {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 5000,
+      }); 
+  }
+
+  // funcion toast para alerta productor vacío
+  const mostrarErrorProductorVacio = () => {
+    toast.error('Ingrese un productor', {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 5000,
+      }); 
+  }
+
   let navigate = useNavigate();
 
   const cancelarModificacion = () =>{
     navigate("/home");
   }
 
-  const modificarCampo = async (data) =>{
+  const modificarCampo = async () => {
+    const esNombreValido = validarNombre();
     const esProvinciaValida = validarProvincia();
     const esLocalidadValida = validarLocalidad();
     const esProductorValido = validarProductor();
 
-    if(esProvinciaValida && esLocalidadValida && esProductorValido){
+    if(esNombreValido && esProvinciaValida && esLocalidadValida && esProductorValido){
       const campoActualizar = {
         id: campo.id,
-        nombre: data.nombre,
+        nombre: inputNombreValue,
         localidad_id: locSeleccionada.value,
         productor_id: prodSeleccionado.value
       };
@@ -100,6 +160,24 @@ function CampoDetailEdit({campo}) {
     }
   }
 
+  const validarNombre = () => {
+    if (inputNombreValue === '') {
+      setNombreNoValido(true);
+      mostrarErrorNombre();
+      return false;
+    } else if (inputNombreValue.length < 4) {
+      setNombreNoValido(true);
+      mostrarErrorNombre4Carac();
+      return false;
+    } else if (inputNombreValue.length > 20) {
+      setNombreNoValido(true);
+      mostrarErrorNombre20Carac();
+      return false;
+    }
+    setNombreNoValido(false);
+    return true;
+  }
+
   const handleSelectChangeProvincia = (opcion) => {
     setProvSeleccionada(opcion);
   }
@@ -110,7 +188,8 @@ function CampoDetailEdit({campo}) {
       return true;
     }
     else{
-      setProvValida(false)
+      setProvValida(false);
+      mostrarErrorProvinciaVacia();
       return false;
     }
   }
@@ -121,22 +200,25 @@ function CampoDetailEdit({campo}) {
   };
 
   useEffect(() => {
-    try{
-      fetchProvincias();
-    }
-    catch(error)
-    {
-      if(error.response && error.response.status === 401){
-        try {
-          renewToken();
-          fetchProvincias();
-        } catch (error) {
-          if(error.response && error.response.status === 401){
-            setMostrarErrorVencimientoToken(true);
+    const fetchData = async () => {
+      try {
+        await fetchProvincias();
+      }
+      catch(error)
+      {
+        if(error.response && error.response.status === 401){
+          try {
+            await renewToken();
+            await fetchProvincias();
+          } catch (error) {
+            if(error.response && error.response.status === 401){
+              setMostrarErrorVencimientoToken(true);
+            }
           }
         }
       }
-    }
+    };
+    fetchData();
   }, [setProvincias]);
 
   const handleSelectChangeLocalidad = (opcion) =>{
@@ -146,6 +228,7 @@ function CampoDetailEdit({campo}) {
   const validarLocalidad = () =>{
     if(locSeleccionada.data !== provSeleccionada.value){
       setLocValida(false);
+      mostrarErrorLocalidadNoValida();
       return false;
     }
     setLocValida(true);
@@ -157,13 +240,28 @@ function CampoDetailEdit({campo}) {
     setLocalidades(data);
   };
 
-  useEffect( () =>{
-    try {
-      fetchLocalidades(provSeleccionada.value);
-    } catch (error) {
-      //console.log(error)
-    }
-  },[provSeleccionada])
+  useEffect(() => {
+    const fetchData = async () => {
+      if (provSeleccionada.value !== "Provincia") {
+        try {
+          await fetchLocalidades(provSeleccionada.value);
+        } catch (error) {
+          if (error.response && error.response.status === 401) {
+            try {
+              await renewToken();
+              await fetchLocalidades(provSeleccionada.value);
+            } catch (error) {
+              if (error.response && error.response.status === 401) {
+                setMostrarErrorVencimientoToken(true);
+              }
+            }
+          }
+        }
+      }
+    };
+  
+    fetchData();
+  }, [provSeleccionada]);
 
   const handleSelectChangeProductor = (opcion) =>{
     setProdSeleccionado(opcion);
@@ -177,6 +275,7 @@ function CampoDetailEdit({campo}) {
     }
     else{
       setProdValido(false);
+      mostrarErrorProductorVacio();
       return false;
     }
   }
@@ -187,22 +286,25 @@ function CampoDetailEdit({campo}) {
   };
 
   useEffect(() => {
-    try{
-      fetchProductores();
-    }
-    catch(error)
-    {
-      if(error.response && error.response.status === 401){
-        try {
-          renewToken();
-          fetchProductores();
-        } catch (error) {
-          if(error.response && error.response.status === 401){
-            setMostrarErrorVencimientoToken(true);
+    const fetchData = async () => {
+      try {
+        await fetchProductores();
+      }
+      catch(error)
+      {
+        if(error.response && error.response.status === 401){
+          try {
+            await renewToken();
+            await fetchProductores();
+          } catch (error) {
+            if(error.response && error.response.status === 401){
+              setMostrarErrorVencimientoToken(true);
+            }
           }
         }
       }
-    }
+    };
+    fetchData();
   }, [setProductores]);
 
   const handleInputNombreChange = (event) =>{
@@ -223,118 +325,80 @@ function CampoDetailEdit({campo}) {
   }
 
 
-
   return (
     <>
         <Navbar />
 
-        {/* Form para la modificación de campo */}
-        <form className="container mb-3 formEditCampo" onSubmit={handleSubmit(modificarCampo)}>
+        <div className="overlay">
+          <Form className="formularioClaro formCentrado" onSubmit={handleSubmit(modificarCampo)}>
+              {/* Título */}
+              <div className="seccionTitulo">
+                <span className='tituloForm'>Modificar campo</span>
+              </div>
 
-          {/* Input Nombre Campo */}
-          {/* <label className="className='letraInterEditCampo etiquetaDetEditCampo">Nombre Campo</label> */}
-          <Form.Control type="text" className="inputEditCampo" 
-          {...register("nombre", {
-            required: true, minLength: 4, maxLength:30
-          })}
-          value={inputNombreValue}
-          onChange={handleInputNombreChange}
-          />
-          <div className='alertaEditCampo'>
-            {
-              errors.nombre?.type === "required" && (
-              <span className="campoVacioEditCampo letraInterEditCampo">
-                * Ingrese un nombre de campo.
-              </span>
-              )
-            }
-            {
-              errors.nombre?.type === "minLength" && (
-              <span className="campoVacio letraInter">
-                * El nombre de campo debe tener como mínimo 4 caracteres.
-              </span>
-              )
-            }
-            {
-              errors.nombre?.type === "maxLength" && (
-              <span className="campoVacio letraInter">
-                * El nombre de campo debe tener como máximo 30 caracteres.
-              </span>
-              )
-            }
-          </div>     
+              {/* Input nombre campo */}
+              <Form.Group className="mb-3 seccionFormulario">
+                <Form.Label className={nombreNoValido ? 'labelErrorFormulario' : "labelFormulario"}>Nombre</Form.Label>
+                <Form.Control type="text" className="inputFolrmularioOscuro" 
+                value={inputNombreValue}
+                onChange={handleInputNombreChange}
+                />
+              </Form.Group>
 
-          {/* Select de Provincia */}
-          <div className="mb-3">
-            <label className='letraInterEditCampo etiquetaDetEditCampo'>Provincia</label>
-            <Select
-              className='seleccionablesEditCampo'
-              value={provSeleccionada}
-              onChange={handleSelectChangeProvincia} 
-              defaultValue={{label: campo.provincia_nombre, value: campo.provincia_id}}
-              options={
-                provincias.map( prov => ({label: prov.nombre, value: prov.id}))
-              }
-            />
-            <div className='alertaEditCampo'>
-              {
-                !provValida &&
-                <span className="campoVacioEditCampo letraInterEditCampo">
-                  * Seleccione una Provincia.
-                </span>
-              }
-            </div>
-                
-          </div>
-  
-          {/* Select de Localidad */}
-          <div className="mb-3 campoDetDet">
-            <label className='letraInter etiquetaDet'>Localidad</label>
-            <Select
-              value={locSeleccionada}
-              onChange={handleSelectChangeLocalidad}
-              className='seleccionablesEditCampo' 
-              defaultValue={{label: campo.localidad_nombre, value: campo.localidad_id, data: campo.provincia_id}}
-              options={
-                localidades.map( loc => ({label: loc.nombre, value: loc.id, data: loc.provincia_id})
-              )}
-            />
-            <div className='alertaEditCampo'>
-                {
-                  !locValida &&
-                  <span className="campoVacioEditCampo letraInterEditCampo">
-                    * Seleccione una Localidad Válida.
-                  </span>
+              {/* Select Provincia */}
+              <Form.Group className="mb-3 seccionFormulario">
+                <Form.Label className={!provValida ? 'labelErrorFormulario' : "labelFormulario"}>Provincia</Form.Label>
+                <Select
+                value={provSeleccionada}
+                onChange={handleSelectChangeProvincia} 
+                defaultValue={{label: campo.provincia_nombre, value: campo.provincia_id}}
+                options={
+                  provincias.map( prov => ({label: prov.nombre, value: prov.id}))
                 }
-                </div>
+              />
+              </Form.Group>
 
-          </div>
-  
-          {/* Select de Productor */}
-          <div className="mb-3 campoDetDet">
-            <label className='letraInter etiquetaDet'>Productor</label>
-            <Select
-              className='seleccionablesEditCampo' 
-              value={prodSeleccionado}
-              onChange={handleSelectChangeProductor}
-              options={
-                productores.map( prod => ({label: prod.nombre + " " + prod.apellido
-                + " " + prod.cuit_cuil , value: prod.id})
-                  )
-              }
-              defaultValue={{label: campo.productor_nombre + " " + campo.productor_cuit_cuil, value: campo.productor_id}}
-            />
+              {/* Select Localidad */}
+              <Form.Group className="mb-3 seccionFormulario">
+                <Form.Label className={!locValida ? 'labelErrorFormulario' : "labelFormulario"}>Localidad</Form.Label>
+                <Select
+                value={locSeleccionada}
+                onChange={handleSelectChangeLocalidad}
+                defaultValue={{label: campo.localidad_nombre, value: campo.localidad_id, data: campo.provincia_id}}
+                options={
+                  localidades.map( loc => ({label: loc.nombre, value: loc.id, data: loc.provincia_id})
+                )}
+                />
+              </Form.Group>
 
-          </div>
-            
-  
-            <div className='mb-3 contenedorBotonesEditCampo'>
-              <button className="botonesFormEditCampo letraInterEditCampo" onClick={cancelarModificacion}>Cancelar</button>
-              <button type="submit" className="botonesFormEditCampo letraInterEditCampo">Modificar</button>
-            </div>
+              {/* Select Productor */}
+              <Form.Group className="mb-3 seccionFormulario">
+                <Form.Label className={!prodValido ? 'labelErrorFormulario' : "labelFormulario"}>Productor</Form.Label>
+                <Select
+                  value={prodSeleccionado}
+                  onChange={handleSelectChangeProductor}
+                  options={
+                    productores.map( prod => ({label: prod.nombre + " " + prod.apellido
+                    + " " + prod.cuit_cuil , value: prod.id})
+                      )
+                  }
+                  defaultValue={{label: campo.productor_nombre + " " + campo.productor_cuit_cuil, value: campo.productor_id}}
+                />
+              </Form.Group>
 
-  
-        </form>
+              {/* Botones */}
+              <Form.Group className="seccionFormulario seccionBotonesFormulario margenTop30" controlId="formBotones">
+                <Button className="botonCancelarFormulario" variant="secondary"
+                  onClick={cancelarModificacion}>
+                    Cancelar
+                </Button>
+                <Button className="botonConfirmacionFormulario" variant="secondary"
+                  type="submit">
+                    Modificar
+                </Button>
+              </Form.Group> 
+          </Form>
+        </div>
 
       {
         mostrarConfirmacion &&
@@ -347,8 +411,6 @@ function CampoDetailEdit({campo}) {
         <Error texto={"Su sesión ha expirado"} 
         onConfirm={handleSesionExpirada}/>
       }  
-
-        
     </>
   )
 }

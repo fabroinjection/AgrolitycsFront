@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 import iconoUsuario from '../../../assets/iconoUsuario.png';
+import iconoGestionarCuenta from '../../../assets/iconoGestionarCuenta.png';
+import iconoCerrarSesion from '../../../assets/iconoCerrarSesion.png';
 
 function CerrarSesion(props) {
     
@@ -25,28 +27,27 @@ function CerrarSesion(props) {
 
     const handleConfirmarCierreSession = (confirm) =>{
         if(confirm){
-            try {
-                window.localStorage.removeItem('loggedAgroUser');
-                Cookies.remove('email');
-                Cookies.remove('username');
-                Cookies.remove("idLoteSeleccionadoAConsultar");
-                Cookies.remove("nombreLoteSeleccionadoAConsultar");
-                Cookies.remove("haLoteSeleccionadoAConsultar");
-                Cookies.remove("idLoteAModificar");
-                Cookies.remove("nombreLoteAModificar");
-                navigate("/");
-            } catch (error) {
-                //
-            }            
-            
+            window.localStorage.removeItem('loggedAgroUser');
+            Cookies.remove('email');
+            Cookies.remove('username');
+            Cookies.remove("idLoteSeleccionadoAConsultar");
+            Cookies.remove("nombreLoteSeleccionadoAConsultar");
+            Cookies.remove("haLoteSeleccionadoAConsultar");
+            Cookies.remove("idLoteAModificar");
+            Cookies.remove("nombreLoteAModificar");
+            navigate("/");      
         }
         else{
             setMostrarAlerta(!mostrarAlerta);
         }
     }
 
+    const navegarGestionCuenta = () => {
+        navigate("/gestionarcuenta");
+    }
+
     return (
-        <article className='container fondo letraInter'>
+        <article className='container fondo '>
             <header className='cabecera'>
                 <img className="iconoUsuarioCS" src={iconoUsuario} alt="" />
                 <div className='informacion'>
@@ -55,15 +56,17 @@ function CerrarSesion(props) {
                 </div>
             </header>
 
-            <Link className='linkEditarCerrarSesion' to={"/login"}>
-            <Button className='btnEditar' variant="link">
-                Editar
-            </Button>
-            </Link>
-            
-            <button className='btnCerrarSesion' onClick={handleClick}>
-                Cerrar Sesión
-            </button>
+            <div className='contenedorBotonesGestionCuentas'>
+                <Button variant='outline-primary' className='botonGestionCuentas' onClick={navegarGestionCuenta}>
+                    <img src={iconoGestionarCuenta} alt="" className='iconoBoton'/>{}
+                    Gestionar Cuenta
+                </Button>
+
+                <Button variant='outline-primary' className='botonGestionCuentas' onClick={handleClick}>
+                    <img src={iconoCerrarSesion} alt="" className='iconoBotonCerrarSesion' />{}
+                    Cerrar Sesión
+                </Button>
+            </div>
             {mostrarAlerta && <Alerta texto="¿Desea cerrar la sesión?" nombreBoton="Cerrar" 
             onConfirm={handleConfirmarCierreSession}/>}
 

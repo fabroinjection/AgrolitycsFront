@@ -1,0 +1,166 @@
+/*
+.formSuperpuesto{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: #F2DCC9;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+*/
+.formSuperpuesto{
+    box-sizing: border-box;
+
+    /*position: absolute;*/
+    width: 400px;
+    height: 550px;
+    /*left: 588px;
+    top: 221px;*/
+    max-width: 600px;
+    justify-content:  center;
+    align-items: center;
+    margin: 0 auto;
+    padding: 10px 10px;
+
+    background: #F2DCC9;
+    border: 2px solid #000000;
+    border-radius: 15px;
+
+    margin-top: 10px;
+}
+
+.botonesForm{
+    background: #B5BF63;
+    border: 3px solid #859745;
+    border-radius: 10px;
+    margin: 0px 15px 0px;
+    padding: 4px 30px;
+    
+}
+
+.titulo{
+    text-align: center;
+    /* margin-top: 30px;
+    margin-bottom: 30px; */
+    display: flex;
+    justify-content: center;
+
+}
+
+.titulo{
+    font-size: 29px;
+    font-weight: bold;
+    /* text-align: center;
+    margin: 30px auto;
+    margin-left: 10px !important; */
+    align-items: center;
+}
+
+.contenedorBotones{
+    display: flex;
+    justify-content: center;
+    /* margin-top: 20px !important; */
+
+    /* position:relative;
+    top:35px;
+    left: 0px;     */
+}
+
+
+
+/* .form-control{
+    
+    max-width: 300px;
+    box-sizing: border-box;
+
+    justify-content:  center;
+    align-items: center;
+   
+
+    padding: 7px 10px !important;
+    margin: 0px 36px !important;
+
+    background: #F2DCC9;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+} */
+
+.seleccionables{
+    
+        /* margin-top: 30px; */
+        max-width: 300px;
+        box-sizing: border-box;
+    
+        justify-content:  center;
+        align-items: center;
+        /* margin: 30px auto !important; */
+    
+        padding: 3px 10px !important;
+        margin: 0px 36px !important;
+    
+        background: #F2DCC9;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+    
+}
+
+
+div.css-13cymwt-control{
+    background: #F2DCC9;
+    border-color: #F2DCC9;
+    text-align: left;
+    align-items: left;
+}
+
+
+
+div.css-w9q2zk-Input2{
+    text-align: left !important;
+    align-items: left !important;
+}
+
+path{
+    color: #000000;
+}
+
+
+div.campo{
+    /* text-align: left; */
+    
+    margin: 35px 0px !important;
+    max-height: 60px;    
+}
+
+.alerta{
+    text-align: center !important;
+}
+.span{
+    padding-right: 30px !important;
+}
+
+.campoVacio{
+    color: #e82f2f;
+}
+
+.botonCancelar{
+    text-align: right;
+}
+
+.btnCancelar{
+    background: #F2DCC9;
+    border: #F2DCC9;
+    padding-top: 10px;
+}
+
+
+
+/* .btnCancelar{
+    float: right;
+} */
+
+/* .campoLocalidad{
+    position: relative;
+    top: 30px;
+} */
+
+
+

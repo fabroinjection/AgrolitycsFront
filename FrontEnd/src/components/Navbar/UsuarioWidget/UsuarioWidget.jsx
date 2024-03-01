@@ -6,14 +6,17 @@
 // } from '@fortawesome/fontawesome-svg-core'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './UsuarioWidget.css'
+import iconoUsuario from '../../../assets/iconoUsuario.png';
+
+//import hooks
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+//import components
 import CerrarSesion from '../CerrarSesión/CerrarSesion';
 
-// import Context
-// import { UserContext } from '../../../contexts/UserContext';
+// import utilities
 import Cookies from 'js-cookie';
-
-import iconoUsuario from '../../../assets/iconoUsuario.png';
 
 function UsuarioWidget() {
   // const userLookup= { prefix: 'fas', iconName: 'user' };
@@ -37,8 +40,7 @@ function UsuarioWidget() {
           <img className="iconoUsuario" src={iconoUsuario} alt="" />
         </button>
         {mostrarCerrarSesion && <CerrarSesion name={nombreUsuario} email={emailUsuario} />}
-      
-        
+
     </>
   )
 }

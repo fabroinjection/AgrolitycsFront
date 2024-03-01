@@ -1,0 +1,81 @@
+.contenedorTratamiento{
+    width: 100vw;
+    height: 100vh;
+    background-color: #DAC5B3; 
+    z-index: 1; 
+    padding-left: 25%;
+    padding-right: 25%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.contenedorTituloTratamiento {
+    text-align: center;
+    text-transform: none;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.inputFertilizanteCard {
+    margin: 0px 0px;
+    width: 100px;
+    padding: 0px;
+}
+
+.agregarFertilizante,
+.contenedorFertilizanteCard {
+    border-top: solid grey 1px;
+    color: black;
+}
+
+.selectFertilizanteCard {
+    width: 250px;
+}
+
+.botonAgregarFertilizante {
+    padding: 12px 0px;
+    text-transform: none;
+}
+
+.inputObservaciones {
+    height: 100px;
+    max-height: 100px;
+}
+
+.seccionBotonesTratamiento {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;  
+    gap: 60px;  
+    text-align: center;
+}
+
+.seccionBotonesConsultarTratamiento {
+    margin-top: 30px;
+}
+
+.estiloBotonesTratamiento{
+    text-transform: none;
+    border-radius: 5px;
+    padding: 4px 0px;
+    font-size: 16px;
+    width: 120px;
+    }
+    
+.botonCancelarTratamiento{    
+    background: transparent;
+    border: 2px solid #000;
+}
+.botonConfirmarTratamiento{    
+    background: #B5BF63;
+    border: 2px solid #859745;
+}
+
+
+
+@media only screen and (max-width: 768px){
+    .contenedorTratamiento{
+        padding-left: 5%;
+        padding-right: 5%;     
+    }       
+}

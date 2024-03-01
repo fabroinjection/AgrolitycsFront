@@ -14,10 +14,11 @@ import { useNavigate } from "react-router-dom";
 import { registerLocale, setDefaultLocale } from "react-datepicker";
 import es from "date-fns/locale/es";
 import moment from "moment/moment";
+import { toast } from "react-toastify";
 
 // import estilos
 import 'react-datepicker/dist/react-datepicker.css';
-import './TomaDeMuestraAMC.css';
+import '../../../../components/Estilos/estilosFormulario.css';
 
 //import services
 import { tiposAnalisisService } from "../../../../services/tipoanalisis.service";
@@ -26,6 +27,8 @@ import { renewToken } from "../../../../services/token.service";
 
 //import Context
 import { ModoTomaDeMuestraAMCContext } from "../../../../context/ModoTomaDeMuestraAMCContext";
+
+
 
 registerLocale('es', es);
 setDefaultLocale('es');
@@ -61,8 +64,45 @@ function TomaDeMuestraABMC({titulo, nombreBoton, accionCancelar, accionConfirmar
     //variable para el context modo componente
     const [ modoTomaDeMuestra ] = useContext(ModoTomaDeMuestraAMCContext);
 
-    //variable para mostrar que ya tiene un análisis asociado y no se puede modificar por ese motivo.
-    const [ tieneAnalisisAsociado, setTieneAnalisisAsociado ] = useState(false);
+    // funcion toast para alerta fecha vacia
+    const mostrarErrorFechaVacia = () => {
+      toast.error('Se debe ingresar una fecha', {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 5000,
+          }); 
+    }
+
+    // funcion toast para alerta tipo analisis vacio
+    const mostrarErrorTipoAnalisisVacio = () => {
+      toast.error('Se debe ingresar un tipo de análisis', {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 5000,
+          }); 
+    }
+
+    // funcion toast para alerta profundidad vacio
+    const mostrarErrorProfundidadVacio = () => {
+      toast.error('Se debe ingresar una profundidad', {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 5000,
+          }); 
+    }
+
+    // funcion toast para alerta tipo muestreo vacio
+    const mostrarErrorTipoMuestreoVacio = () => {
+      toast.error('Se debe ingresar un tipo de muestreo', {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 5000,
+          }); 
+    }
+
+    // funcion toast para alerta analisis asociado
+    const mostrarErrorAnalisisAsociado = () => {
+      toast.error('No puede editarse una toma de muestra tomada o que tiene un análisis asociado', {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 5000,
+          }); 
+    }
 
     const handleSelectChangeTipoMuestreo = (opcion) => {
         setTipoMuestreoSeleccionado(opcion);
@@ -79,6 +119,7 @@ function TomaDeMuestraABMC({titulo, nombreBoton, accionCancelar, accionConfirmar
     const validarTipoMuestreo = () => {
       if(tipoMuestreoSeleccionado.value === 0){
         setEsTipoMuestreoValido(false);
+        mostrarErrorTipoMuestreoVacio();
         return false;
       }
       else{
@@ -90,6 +131,7 @@ function TomaDeMuestraABMC({titulo, nombreBoton, accionCancelar, accionConfirmar
     const validarProfundidad = () => {
       if(profundidadSeleccionada.value === 0){
         setEsProfundidadValida(false);
+        mostrarErrorProfundidadVacio();
         return false;
       }
       else{
@@ -101,6 +143,7 @@ function TomaDeMuestraABMC({titulo, nombreBoton, accionCancelar, accionConfirmar
     const validarTipoAnalisis = () => {
       if(tipoAnalisisSeleccionado.value === 0){
         setEsTipoAnalisisValido(false);
+        mostrarErrorTipoAnalisisVacio();
         return false;
       }
       else{
@@ -110,8 +153,9 @@ function TomaDeMuestraABMC({titulo, nombreBoton, accionCancelar, accionConfirmar
     }
 
     const validarFecha = () => {
-      if (startDate === null) {
+      if (startDate == null) {
         setEsFechaValida(false);
+        mostrarErrorFechaVacia();
         return false;
       }
       else{
@@ -122,7 +166,6 @@ function TomaDeMuestraABMC({titulo, nombreBoton, accionCancelar, accionConfirmar
     }
 
     const handleCancelar = () => {
-        setTieneAnalisisAsociado(false);
         accionCancelar();
       }
       
@@ -162,7 +205,7 @@ function TomaDeMuestraABMC({titulo, nombreBoton, accionCancelar, accionConfirmar
         }
         else if (modoTomaDeMuestra === 'consulta') {
           if(tomaDeMuestra.estado_toma_de_muestra_id !== "Pendiente"){
-            setTieneAnalisisAsociado(true);
+            mostrarErrorAnalisisAsociado();
           }
           else{
             accionConfirmar();
@@ -320,52 +363,46 @@ function TomaDeMuestraABMC({titulo, nombreBoton, accionCancelar, accionConfirmar
     return (
         <>
         <div className="overlay">
-            <Form className="formTomaMuestra formCentrado" onSubmit={handleSubmit(handleConfirm)}>
+            <Form className="formularioClaro formCentrado" onSubmit={handleSubmit(handleConfirm)}>
 
-                <div className="formTitulo">
-                    <strong className="tituloFormTomaMuestra">{titulo}</strong>
+                <div className="seccionTitulo">
+                    <strong className="tituloForm">{titulo}</strong>
                 </div>
                 
 
                 {/* DatePicker de Fecha */}
                 {!tomaDeMuestra ?
-                    <Form.Group className="mb-3 seccionFecha" controlId="formFecha">
-                      <Form.Label className="d-block ">Fecha Toma de Muestra</Form.Label>
+                    <Form.Group className="mb-3 seccionFormulario" controlId="formFecha">
+                      <Form.Label className={!esFechaValida ? "labelErrorFormulario d-block" : "labelFormulario d-block"}>Fecha Toma de Muestra</Form.Label>
                       <DatePicker
-                      className="fechaTomaMuestra"
+                      placeholderText="dd/mm/aaaa"
+                      className="estilos-datepikcer"
                       dateFormat="dd/MM/yyyy"
                       selected={startDate}
                       onChange={(date) => setStartDate(date)}
-                      minDate={new Date()} // Establece la fecha mínima como la fecha actual
+                      minDate={new Date()}
                       />    
-                      <div className='alerta'>
-                        {
-                          !esFechaValida &&
-                          <Form.Text className="campoVacio">
-                            * Ingrese una fecha.
-                          </Form.Text>
-                        }
-                      </div>
                     </Form.Group>
           
                   : modoTomaDeMuestra === 'consulta' ?
-                    <Form.Group className="mb-3 seccionFecha" controlId="formFecha">
-                      <Form.Label className="d-block ">Fecha</Form.Label>
+                    <Form.Group className="mb-3 seccionFormulario" controlId="formFecha">
+                      <Form.Label className="labelFormulario d-block">Fecha</Form.Label>
                       <DatePicker
-                      className="fechaTomaMuestra"
+                      placeholderText=""
+                      className="estilos-datepikcer"
                       value={moment(tomaDeMuestra.fecha).format("DD/MM/YYYY")}
                       isDisabled={true}
                       />    
                     </Form.Group>
                   : 
-                    <Form.Group className="mb-3 seccionFecha" controlId="formFecha">
-                      <Form.Label className="d-block ">Fecha</Form.Label>
+                    <Form.Group className="mb-3 seccionFormulario" controlId="formFecha">
+                      <Form.Label className="labelFormulario d-block">Fecha</Form.Label>
                       <DatePicker
-                      className="fechaTomaMuestra"
+                      className="estilos-datepikcer"
                       dateFormat="dd/MM/yyyy"
                       selected={startDate ? startDate : moment(tomaDeMuestra.fecha, "YYYY-MM-DD").toDate()}
                       onChange={(date) => setStartDate(date)}
-                      minDate={new Date()} // Establece la fecha mínima como la fecha actual
+                      minDate={new Date()}
                       />    
                     </Form.Group>
                 }
@@ -373,10 +410,9 @@ function TomaDeMuestraABMC({titulo, nombreBoton, accionCancelar, accionConfirmar
 
                 {/* Select de Tipo de Muestreo */}
                 {!tomaDeMuestra ?
-                  <Form.Group className="mb-3 seccionTipoMuestreo" controlId="formTipoMuestreo">
-                    <Form.Label>Tipo de Muestreo</Form.Label>
+                  <Form.Group className="mb-3 seccionFormulario" controlId="formTipoMuestreo">
+                    <Form.Label className={!esTipoMuestreoValido ? "labelErrorFormulario" : "labelFormulario"}>Tipo de Muestreo</Form.Label>
                     <Select
-                      className="selectTomaDeMuestra"
                       value={tipoMuestreoSeleccionado}
                       defaultValue={{label: 'Seleccione una opcion', value: 0}}
                       onChange={handleSelectChangeTipoMuestreo}
@@ -384,31 +420,20 @@ function TomaDeMuestraABMC({titulo, nombreBoton, accionCancelar, accionConfirmar
                         tipoMuestreos.map( tipoMuestreo => ({label: tipoMuestreo.descripcion, value: tipoMuestreo.id}))
                       }
                     />  
-                    <div className='alerta'>
-                      {
-                        !esTipoMuestreoValido &&
-                        <Form.Text className="campoVacio">
-                          * Seleccione un Tipo Muestreo.
-                        </Form.Text>
-                      }
-                    </div>
                   </Form.Group> 
                 : modoTomaDeMuestra === 'consulta' ?
-                  <Form.Group className="mb-3 seccionTipoMuestreo" controlId="formTipoMuestreo">
-                  <Form.Label>Tipo de Muestreo</Form.Label>
-                    <Select
-                      unstyled
-                      className="selectTomaDeMuestra"
+                  <Form.Group className="mb-3 seccionFormulario" controlId="formTipoMuestreo">
+                  <Form.Label className="labelFormulario">Tipo de Muestreo</Form.Label>
+                    <Select                      
                       defaultValue={{label: tomaDeMuestra.tipo_muestreo_nombre,
                          value: tomaDeMuestra.tipo_muestreo_id}}
                       isDisabled={true}
                     />  
                   </Form.Group> 
                 :
-                <Form.Group className="mb-3 seccionTipoMuestreo" controlId="formTipoMuestreo">
-                  <Form.Label>Tipo de Muestreo</Form.Label>
+                <Form.Group className="mb-3 seccionFormulario" controlId="formTipoMuestreo">
+                  <Form.Label className="labelFormulario">Tipo de Muestreo</Form.Label>
                   <Select
-                    className="selectTomaDeMuestra"
                     defaultValue={{label: tomaDeMuestra.tipo_muestreo_nombre,
                       value: tomaDeMuestra.tipo_muestreo_id}}
                     onChange={handleSelectChangeTipoMuestreo}
@@ -417,15 +442,14 @@ function TomaDeMuestraABMC({titulo, nombreBoton, accionCancelar, accionConfirmar
                     }
                   />  
                 </Form.Group> 
-                }
-                
+                }            
+                    
 
                 {/* Select de Profundidad de toma de muestra */}
                 {!tomaDeMuestra ?
-                  <Form.Group className="mb-3 seccionProfundidad" controlId="formProfundidad">
-                    <Form.Label>Profundidad</Form.Label>
+                  <Form.Group className="mb-3 seccionFormulario" controlId="formProfundidad">
+                    <Form.Label className={!esProfundidadValida ? "labelErrorFormulario" : "labelFormulario"}>Profundidad</Form.Label>
                     <Select 
-                      className="selectTomaDeMuestra"
                       value={profundidadSeleccionada}
                       defaultValue={{label: 'Seleccione una opcion', value: 0}}
                       onChange={handleSelectChangeProfundidad}
@@ -433,31 +457,20 @@ function TomaDeMuestraABMC({titulo, nombreBoton, accionCancelar, accionConfirmar
                         profundidades.map( prof => ({label: prof.descripcion, value: prof.id}))
                       }
                     />
-                    <div className='alerta'>
-                      {
-                        !esProfundidadValida &&
-                        <Form.Text className="campoVacio">
-                          * Seleccione una Profundidad.
-                        </Form.Text>
-                      }
-                    </div>
                   </Form.Group> 
                 : modoTomaDeMuestra === 'consulta' ?
-                  <Form.Group className="mb-3 seccionProfundidad" controlId="formProfundidad">
-                    <Form.Label>Profundidad</Form.Label>
-                    <Select 
-                      unstyled
-                      className="selectTomaDeMuestra"
+                  <Form.Group className="mb-3 seccionFormulario" controlId="formProfundidad">
+                    <Form.Label className="labelFormulario">Profundidad</Form.Label>
+                    <Select
                       defaultValue={{label: tomaDeMuestra.profundidad_suelo_nombre, 
                         value: tomaDeMuestra.profundidad_suelo_id}}
                       isDisabled={true}
                     />
                   </Form.Group> 
                 :
-                  <Form.Group className="mb-3 seccionProfundidad" controlId="formProfundidad">
-                    <Form.Label>Profundidad</Form.Label>
+                  <Form.Group className="mb-3 seccionFormulario" controlId="formProfundidad">
+                    <Form.Label className="labelFormulario">Profundidad</Form.Label>
                     <Select 
-                      className="selectTomaDeMuestra"
                       defaultValue={{label: tomaDeMuestra.profundidad_suelo_nombre, 
                         value: tomaDeMuestra.profundidad_suelo_id}}
                       onChange={handleSelectChangeProfundidad}
@@ -471,10 +484,9 @@ function TomaDeMuestraABMC({titulo, nombreBoton, accionCancelar, accionConfirmar
 
                 {/* Select de Tipo de Analisis */}
                 {!tomaDeMuestra ?
-                  <Form.Group className="mb-3 seccionTipoAnalisis" controlId="formTipoAnalisis">
-                    <Form.Label>Tipo de Análisis</Form.Label>
+                  <Form.Group className="mb-3 seccionFormulario" controlId="formTipoAnalisis">
+                    <Form.Label className={!esTipoAnalisisValido ? "labelErrorFormulario" : "labelFormulario"}>Tipo de Análisis</Form.Label>
                     <Select 
-                      className="selectTomaDeMuestra"
                       value={tipoAnalisisSeleccionado}
                       defaultValue={{label: 'Seleccione una opcion', value: 0}}
                       onChange={handleSelectChangeTipoAnalisis}
@@ -482,31 +494,20 @@ function TomaDeMuestraABMC({titulo, nombreBoton, accionCancelar, accionConfirmar
                         tipoAnalisis.map( tipoAn => ({label: tipoAn.descripcion, value: tipoAn.id}))
                       }
                     />
-                    <div className='alerta'>
-                      {
-                        !esTipoAnalisisValido &&
-                        <Form.Text className="campoVacio">
-                          * Seleccione un Tipo de Analisis.
-                        </Form.Text>
-                      }
-                    </div>
                   </Form.Group>          
                   : modoTomaDeMuestra === 'consulta' ?
-                    <Form.Group className="mb-3 seccionTipoAnalisis" controlId="formTipoAnalisis">
-                      <Form.Label>Tipo de Análisis</Form.Label>
-                      <Select 
-                        unstyled
-                        className="selectTomaDeMuestra"
+                    <Form.Group className="mb-3 seccionFormulario" controlId="formTipoAnalisis">
+                      <Form.Label className="labelFormulario">Tipo de Análisis</Form.Label>
+                      <Select
                         defaultValue={{label: tomaDeMuestra.tipo_analisis_suelo_a_realizar_nombre, 
                           value: tomaDeMuestra.tipo_analisis_suelo_a_realizar_id}}
                         isDisabled={true}
                       />
                     </Form.Group> 
                   : 
-                  <Form.Group className="mb-3 seccionTipoAnalisis" controlId="formTipoAnalisis">
-                    <Form.Label>Tipo de Análisis</Form.Label>
+                  <Form.Group className="mb-3 seccionFormulario" controlId="formTipoAnalisis">
+                    <Form.Label className="labelFormulario">Tipo de Análisis</Form.Label>
                     <Select 
-                      className="selectTomaDeMuestra"
                       defaultValue={{label: tomaDeMuestra.tipo_analisis_suelo_a_realizar_nombre, 
                         value: tomaDeMuestra.tipo_analisis_suelo_a_realizar_id}}
                       onChange={handleSelectChangeTipoAnalisis}
@@ -516,23 +517,16 @@ function TomaDeMuestraABMC({titulo, nombreBoton, accionCancelar, accionConfirmar
                     />
                   </Form.Group> 
                 }
-
-                {
-                  tieneAnalisisAsociado &&
-                  <Form.Group className="mb-3 seccionTipoAnalisis" controlId="formTipoAnalisis">
-                    <Form.Label className="campoVacio">*No puede editarse una toma de muestra tomada o que tiene un análisis asociado.</Form.Label>
-                  </Form.Group> 
-                }
                    
 
                 {/* Botones */}
-                <Form.Group className="mb-3 seccionBotones" controlId="formBotones">
-                    <Button className="estiloBotonesTomaMuestra botonCancelarTomaMuestra" variant="secondary"
+                <Form.Group className="seccionBotonesFormulario margenTop20" controlId="formBotones">
+                    <Button className="botonCancelarFormulario" variant="secondary"
                             onClick={handleCancelar}>
                         Cancelar
                     </Button>
 
-                    <Button className="estiloBotonesTomaMuestra botonConfirmarTomaMuestra" variant="secondary"
+                    <Button className="botonConfirmacionFormulario" variant="secondary"
                             type="submit">
                         {nombreBoton}
                     </Button>

@@ -20,8 +20,21 @@
     font-size: 17px; /* Adjust font size as needed */
     cursor: pointer;
     text-transform: none;
+    
+    border-radius: 30px;
   }
   
   .nav-button:focus {
     outline: none; /* Remove focus outline if desired */
+  }
+
+  .nav-button:hover {
+    background-color: rgb(72, 156, 54);
+  }
+
+  .nav-info-button {
+    background-color: #007989;
+    border-radius: 30px;
+    text-transform: none;
+    font-size: 17px;
   }

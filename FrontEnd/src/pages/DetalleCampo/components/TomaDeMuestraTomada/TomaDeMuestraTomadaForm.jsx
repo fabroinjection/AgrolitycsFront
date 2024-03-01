@@ -1,5 +1,5 @@
 // importar estilos
-import './TomaDeMuestraTomadaForm.css';
+import '../../../../components/Estilos/estilosFormulario.css';
 
 // import componentes
 import { Button } from "react-bootstrap";
@@ -13,6 +13,7 @@ import { useState } from 'react';
 
 // import utilities
 import moment from 'moment';
+import { toast } from 'react-toastify';
 
 // import services
 import { registrarTomaDeMuestraTomadaService } from '../../services/tomaDeMuestra.service';
@@ -30,6 +31,14 @@ function TomaDeMuestraTomadaForm({ accionCancelar, accionConfirmar, fechaEstimad
     const handleCancelar = () => {
         reset();
         accionCancelar();
+    }
+
+    // funcion toast para alerta fecha vacia
+    const mostrarErrorFechaVacia = () => {
+        toast.error('Se debe ingresar una fecha', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
     }
 
     const registrarTomaMuestraTomada = async () => {
@@ -57,22 +66,24 @@ function TomaDeMuestraTomadaForm({ accionCancelar, accionConfirmar, fechaEstimad
         }
         else{
             setFechaVacio(true);
+            mostrarErrorFechaVacia();
         }
     }
 
     return (
         <>
         <div className="overlay">
-            <Form className='formTMTomada formTMTomadaCentrado' onSubmit={handleSubmit(registrarTomaMuestraTomada)}>
+            <Form className='formularioClaro formCentrado' onSubmit={handleSubmit(registrarTomaMuestraTomada)}>
                 {/* Titulo del formulario */}
-                <div className="formTituloTMTomada">
-                    <strong className="tituloFormTMTomada">Ingrese la fecha en la que tomó la muestra</strong>
+                <div className="seccionTitulo">
+                    <strong className={fechaVacio ? "tituloForm-pequeño labelErrorFormulario" : "tituloForm-pequeño"}>Ingrese la fecha en la que tomó la muestra</strong>
                 </div>
 
                 {/* Fecha Toma de Muestra */}
                 <Form.Group className="mb-3 seccionFechaTM" controlId="formFechaTM">
                 <DatePicker
-                      className="fechaTomaMuestraTomada"
+                placeholderText='dd/mm/aaaa'
+                      className="estilos-datepikcer"
                       dateFormat="dd/MM/yyyy"
                       selected={fechaARegistrar}
                       onChange={(date) => setFechaARegistrar(date)}
@@ -81,21 +92,16 @@ function TomaDeMuestraTomadaForm({ accionCancelar, accionConfirmar, fechaEstimad
                       /> 
                     
                 </Form.Group>
-                {fechaVacio && 
-                    <div className='campoVacio'>
-                        *Debe ingresar una fecha.
-                    </div>}
-                
                 
 
                 {/* Botones */}
-                <Form.Group className="mb-3 seccionBotonesTMTomada" controlId="formBotones">
-                    <Button className="estiloBotonesTMTomada botonCancelarTMTomada" variant="secondary"
+                <Form.Group className="seccionBotonesFormulario margenTop20" controlId="formBotones">
+                    <Button className="botonCancelarFormulario" variant="secondary"
                     onClick={handleCancelar}>
                         Cancelar
                     </Button>
 
-                    <Button className="estiloBotonesTMTomada botonRegistrarTMTomada" variant="secondary"
+                    <Button className="botonConfirmacionFormulario" variant="secondary"
                     type='submit'>
                         Registrar
                     </Button>

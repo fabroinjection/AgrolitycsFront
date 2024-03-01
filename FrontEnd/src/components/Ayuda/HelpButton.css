@@ -1,0 +1,22 @@
+.help-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999999;
+
+    background-color: white;
+    border-radius: 30px;
+    border: 0px solid rgb(72, 156, 54);
+
+
+    font-weight: 600;
+    font-size: 17px;
+    color: rgb(72, 156, 54);
+    text-transform: none;
+}
+
+.help-button:hover {
+    background-color: rgb(72, 156, 54);
+    color: white;
+    border: 0px solid white;
+}

@@ -2,8 +2,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;   
-    
+    margin-bottom: 20px;      
   }
   
   .fields-section {
@@ -12,6 +11,7 @@
     scrollbar-width: thin;
     scrollbar-color: transparent transparent;
     border-top: 2px solid #636262;
+    min-height: 200px;
   }
 
   .fields-section::-webkit-scrollbar {
@@ -43,26 +43,8 @@
     border: none;
     background: transparent;
     cursor: pointer;
-    margin-right: 7px;
-    
+    margin-right: 7px;    
   }
-
-  .menu-button{
-    border: none;
-    background: transparent;
-    cursor: pointer;
-  }
-
-  .iconoCerrar{
-    height: 15px;
-    width: 15px;
-  }
-
-  .iconoMenu{
-    height: 35px;
-    width: 35px;
-  }
-  
 
   .nombreCampoConsulta{
     font-size: 30px;
@@ -70,32 +52,26 @@
   }
 
   .infoCampo{
+    font-weight: 500;
     font-size: 15px;
     color: #000000;
   }
-  /* .campo-wrapper strong {
-    display: block;
-    margin-bottom: 10px;
-  } */
 
   .btnNuevoLote{
-    border-radius: 10px;
+    border-radius: 5px;
     margin: 10px auto;
     margin-bottom: 0px;
     width: 100%;
-    height: 55px;
-    border: 4px solid #716767;
+    height: 40px;
+    border: 0px solid #716767;
     font-size: 60px;
-    background-color: #cdb49f;
+    /* background-color: #cdb49f; */
     align-items: center;
   }
 
-
-
   .btnNuevoLote:hover{
     background-color: #716767bb;
-    border-color: #716767bb;
-  
+    border-color: #716767bb;  
   }
   
 
@@ -103,31 +79,25 @@
     color: #716767;
   }
 
+.boton-agregar-lote {
+  width: 100%;
+  text-transform: none;
+  font-size: 20px;
+  font-weight: 400;
+  color: #000000;
+}
+
+.boton-agregar-lote:hover {
+  background-color:#c2b09f;
+}
+
 .linkBtnLote{
   display: flex;
   text-decoration: none;
 }
 
-.custom-dropdown-menu {
-  background-color: #dec6bb; /* Color de fondo personalizado */
-  border: 2px solid #000000;
-  border-radius: 10px;
-}
-
 .custom-toggle {
   background-image: none;
-  padding: 0px;
-  
-}
+  padding: 0px;  
+}  
 
-.custom-eliminar-item{
-  color: #ea0c0c;
-}
-
-.custom-modificar-item{
-  color: #000000;
-}
-
-.dropdown-toggle::after {
-  content: none;
-}

@@ -1,18 +1,16 @@
-/* body {
-    overflow: hidden;
-  } */
 
-body{
-    /* overflow-x: hidden; */
-}
-
-.contenedorAnalisisCompleto{
-    background-color: #F2DCC9;
+.contenedor-analisis{
+    background-color: #DAC5B3;
     height: 100vh;
-    /* width: 100%; */
+    color: black;
 } 
 
 .contenedorTituloAnalisisCompleto{
+    text-align: center;
+    padding: 15px 0px;
+}
+
+.seccion-titulo-analisis{
     text-align: center;
     padding: 15px 0px;
 }
@@ -22,185 +20,101 @@ body{
     color: black;
 }
 
-
-
-.grupoForm{
-    display: flex; /* Hace que los elementos dentro se alineen en una sola línea */
-    /*justify-content: space-between;  Alinea los elementos con espacio entre ellos */
-    flex-wrap: wrap; /* Permite que los elementos se envuelvan si no caben en una sola línea */
-    align-items: flex-start; /* Alinea los elementos a la izquierda verticalmente */
-    margin-top: 15px;
+.formulario-analisis{
+    width: 100%;
+    padding-left: 80px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+    "columna-uno columna-dos";
+    padding-top: 30px;
+    background-color: #DAC5B3;
 }
 
-.labelFormIzquierdo{
+@media (max-width: 768px) {
+    .formulario-analisis {
+        padding-left: 10px;
+        display: block;
+        margin-top: 10px;
+    }
+}
+
+.seccion-form-analisis{
+    display: flex;
+    flex-wrap: wrap; 
+    align-items: flex-start; 
+    margin: 3% auto;
+}
+
+.label-izquierdo{
     display: inline-block;
-    width: 195px;
+    width: 250px;
     padding-top: 8px;
     color: black;
 }
 
-.labelFormEncabezado{
+.label-izquierdo-error{
     display: inline-block;
-    width: 100px;
-    padding-top: 8px;
-    color: black;
-}
-
-.labelFormIzquierdoError{
-    display: inline-block;
-    width: 195px;
+    width: 250px;
     padding-top: 8px;
     color: red;
 }
 
-.labelForm{
+.label-derecho{
     padding-top: 8px;
     color: black;
 }
 
-.labelFormError{
+.label-derecho-error{
     padding-top: 8px;
     color: red; 
 }
 
-.inputForm{
-    width: 70px;
-    margin: 0px 10px !important;
+.input-analisis{
+    width: 80px;
+    margin-right: 15px !important;
     color: black;
 }
-
-.selectForm{
-    /* width: 100%; */
-    box-sizing: border-box;
-    background: #F2DCC9;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 10px;
-    color: black;
-}
-
-.selectLaboratorio{
-    width: 300px;
-    box-sizing: border-box;
-    background: #F2DCC9;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 10px;
-    color: black;
-}
-
-.react-datepicker-ignore-onclickoutside{
-    box-sizing: border-box;
-    background: #F2DCC9;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 10px;
-    color: black;
-}
-
-/* .contenedorCationesIntercambio{
-    text-align: center;
-} */
 
 .tituloCationesIntercambio{
     font-size: 20px;
     color: black;
+    font-weight: 500;
 }
 
-.botonesFormAnalisis{
-    grid-column: span 3; /* Ocupa las tres columnas disponibles */
-    padding-bottom: 10px;
-    padding-top: 60px;
+.seccion-botones-analisis {
+    grid-column: span 3;
     display: flex;
-
-    justify-content: center; /* Centra los botones horizontalmente */
-    gap: 45px;
+    justify-content: center;
+    gap: 60px;
+    margin-bottom: 30px;
 }
 
-
-.estiloBotonesFormAnalisis{
-    text-transform: none;
-    border-radius: 10px;
-    padding: 4px 0px;
-    font-size: 16px;
-    width: 120px;
-  }
-
-.btnCancelarAnalisis{    
-    background: #F2DCC9;
-    border: 2px solid #000;
-}
-.btnConfirmarAnalisis{    
-    background: #B5BF63;
-    border: 2px solid #859745;
-}
-
-.columnaTres{
-    padding-left: 20px;
-}
-
-.fechaAnalisis{
-    max-width: 300px;
-    width: 120px;
-    box-sizing: border-box;
-    background: #F2DCC9;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 10px;  
-    padding: 4px 6px;
-}
-
-
-.encabezado{
-    grid-column: span 3; /* Ocupa las tres columnas disponibles */
-    padding-bottom: 30px;
-    padding-top: 10px;
-    display: flex;
-
-    justify-content: center; /* Centra los botones horizontalmente */
-    gap: 150px;
-}
 
 /* Responsive */
 @media (max-width: 768px) {
 
-    .contenedorAnalisisCompleto{
-        height: 100%;
-    }
-
-    .labelFormIzquierdo,
-    .labelFormIzquierdoError,
-    .labelFormError {
-        width: 100%; /* Ancho completo en una columna */
+    .label-izquierdo,
+    .label-izquierdo-error
+    .label-derecho {
+        width: 100%; 
         text-align: left;
         padding-left: 10px;
     }
 
-    .inputForm,
-    .selectForm,
-    .selectLaboratorio,
-    .fechaAnalisis,
-    .react-datepicker-ignore-onclickoutside {
-        margin-left: 0px;
+    .seccion-form-analisis{
+        flex-direction: row;
+        align-items: center;
     }
 
-    .grupoForm{
-        flex-direction: row; /* Cambia la dirección a fila */
-        /* justify-content: space-between; */
-        align-items: center; /* Alinea verticalmente al centro */
-    }
-
-    .columnaUno,
-    .columnaDos,
-    .columnaTres{
+    .columna-uno,
+    .columna-dos{
         padding-left: 20px;
     }
 
 
     .contenedorCationesIntercambio{
         margin-top: 20px;
-    }
-
-    .encabezado{
-        flex-direction: column;
-        gap: 10px;
-        padding-left: 25px;
     }
 
 }

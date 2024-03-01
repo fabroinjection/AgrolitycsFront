@@ -1,14 +1,16 @@
 // import componentes
-import {Link, useNavigate} from 'react-router-dom';
+import CampoNew from '../CampoNew/CampoNew';
 import BotonCampo from '../BotonCampo/BotonCampo';
 import NavbarBootstrap from '../../../../components/Navbar/Navbar.components';
 import Cookies from 'js-cookie';
 import NoLogueado from '../../../../components/Modals/NoLogueado/NoLogueado';
 import Error from '../../../../components/Modals/Error/Error';
+import HelpButton from '../../../../components/Ayuda/HelpButton';
 
 
 // import hooks
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // import services
 import { camposService } from '../../../../services/campo.service';
@@ -22,6 +24,9 @@ function CamposCard() {
 
   const [ campos, setCampos ] = useState([]);
   const [mostrarErrorVencimientoToken, setMostrarErrorVencimientoToken] = useState(false);
+
+  const [ formNuevoCampo, setFormNuevoCampo ] = useState(false);
+  const [ actualizarListadoCampos, setActualizarListadoCampos ] = useState(false);
 
   let navigate = useNavigate('/');
   
@@ -48,12 +53,17 @@ function CamposCard() {
     }
 
     fetchCampos();
-  }, [])
+  }, [actualizarListadoCampos])
 
   const handleSesionExpirada = () =>{
     setMostrarErrorVencimientoToken(false);
     navigate("/");
     window.localStorage.removeItem('loggedAgroUser');
+  }
+
+  const registrarNuevoCampo = () => {
+    setActualizarListadoCampos(!actualizarListadoCampos);
+    setFormNuevoCampo(false);
   }
   
 
@@ -63,12 +73,14 @@ function CamposCard() {
       <>
         <NavbarBootstrap/>
   
+        <div className='centrarTitulo'>
+          <h1 className='tituloCampos'>Mis Campos</h1>
+        </div>        
         <div className='container'>
-          <Link className='linkBtn' to={'/nuevocampo'}>
-              <button className='btn btn-outline-primary btnNuevo'>
-                <span className="signoMas">+</span>
-              </button>
-          </Link>
+          <button className='btn btn-outline-primary btnNuevo' onClick={() => {setFormNuevoCampo(true)}}>
+            <span className="signoMas">+</span>
+          </button>
+
           
           {
             campos.map(campo => (
@@ -78,12 +90,19 @@ function CamposCard() {
             ))
           } 
 
-          {mostrarErrorVencimientoToken &&
+          { 
+            mostrarErrorVencimientoToken &&
             <Error texto={"Su sesión ha expirado"} 
             onConfirm={handleSesionExpirada}/>
-          }  
+          }
+
+          {
+            formNuevoCampo &&
+            <CampoNew onRegistrar={registrarNuevoCampo} onCancelar={() => {setFormNuevoCampo(false)}}/>
+          }
         
         </div>
+        <HelpButton/>
       </>
   
     )

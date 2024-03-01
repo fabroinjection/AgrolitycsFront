@@ -9,6 +9,7 @@ import TomaDeMuestraList from "../TomaDeMuestraList/TomaDeMuestraList";
 import MapaSubmuestras from "../../../../components/Maps/MapaSubmuestras/MapaSubmuestras"
 import InfoSubmuestra from "../InfoSubmuestra/InfoSubmuestra";
 import Error from "../../../../components/Modals/Error/Error";
+import SpinnerAgrolitycs from '../../../../components/Spinner/SpinnerAgrolitycs';
 
 //import hooks
 import { useState, useEffect, useContext } from 'react';
@@ -30,6 +31,7 @@ import { EstadoSubMuestrasContext } from "../../../../context/EstadoSubMuestrasC
 function LotesDetail({ campo, handleModificarCampo, handleDarDeBajaCampo }) {
   const [estaEnRegistro, setEstaEnRegistro] = useState(false);
   const [mostrarConfirmRegistroLote, setMostrarConfirmRegistroLote] = useState(false);
+  const [mostrarConfirmModifLote, setMostrarConfirmModifLote] = useState(false);
   const [mostrarErrorVencimientoToken, setMostrarErrorVencimientoToken] = useState(false);
   const [hayLoteSeleccionadoConsulta, setHayLoteSeleccionadoConsulta] = useState(Cookies.get("idLoteSeleccionadoAConsultar"));
   const [hayLoteAModificar, setHayLoteAModificar] = useState(Cookies.get("idLoteAModificar"));
@@ -52,6 +54,12 @@ function LotesDetail({ campo, handleModificarCampo, handleDarDeBajaCampo }) {
     Cookies.remove("nombreLoteAModificar");
     setMostrarConfirmRegistroLote(true);
   };
+
+  const seModificaLote = () => {
+    setEstaEnRegistro(false);
+    Cookies.remove("nombreLoteAModificar");
+    setMostrarConfirmModifLote(true);
+  }
 
   const handleRegistrarLote = (confirm) => {
     if (confirm) {
@@ -155,7 +163,7 @@ function LotesDetail({ campo, handleModificarCampo, handleDarDeBajaCampo }) {
                   ? <ManejoLote 
                       cancelarRegistro={seCancelaRegistroLote}
                       campo={campo}
-                      registrar={seRegistraLote}
+                      registrar={seModificaLote}
                       idLoteAModificar={hayLoteAModificar}
                     />
                   : null
@@ -178,21 +186,28 @@ function LotesDetail({ campo, handleModificarCampo, handleDarDeBajaCampo }) {
                         lotes={lotes}
                       />
                     :
-                    <div>
-                      Cargando...
-                    </div>
+                    <SpinnerAgrolitycs/>
                   }
 
-                </div>
+                </div>         
+
               </div>
             </HectareasProvider>
           </MapLayersProvider>
         </PolygonCoordsProvider>
 
+        
 
         {mostrarConfirmRegistroLote && (
           <Confirm
-            texto={hayLoteAModificar ? "El lote se ha modificado correctamente" : "El lote ha sido registrado correctamente"}
+            texto={"El lote ha sido registrado correctamente"}
+            onConfirm={handleRegistrarLote}
+          />
+        )}
+
+        {mostrarConfirmModifLote && (
+          <Confirm
+            texto={"El lote se ha modificado correctamente"}
             onConfirm={handleRegistrarLote}
           />
         )}
@@ -228,10 +243,14 @@ function LotesDetail({ campo, handleModificarCampo, handleDarDeBajaCampo }) {
 
         </div>
 
+
+
         {mostrarErrorVencimientoToken &&
           <Error texto={"Su sesión ha expirado"} 
           onConfirm={handleSesionExpirada}/>
         }  
+
+        
 
       </div>
 

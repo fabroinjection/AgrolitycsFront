@@ -1,5 +1,6 @@
 //Estilos
 import './LaboratorioAMC.css';
+import '../../../../components/Estilos/estilosFormulario.css';
 
 // import componentes
 import { Button } from "react-bootstrap";
@@ -18,6 +19,9 @@ import { provinciasService } from '../../../../services/provincias.service';
 import { localidadesService } from '../../../../services/localidades.service';
 import { renewToken } from '../../../../services/token.service';
 import { registrarLaboratorioService, consultarLaboratorioService, modificarLaboratorioService } from '../../services/laboratorio.service';
+
+// import utilities
+import { toast } from 'react-toastify';
 
 function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = undefined }){
 
@@ -44,6 +48,7 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
     const [ localidadVacio, setLocalidadVacio ] = useState(false);
     const [ localidadIncorrecta, setLocalidadIncorrecta ] = useState(false);
     const [ emailNoValido, setEmailNoValido ] = useState(false);
+    const [ telefonoNoValido, setTelefonoNoValido ] = useState(false);
 
     const [ provincias, setProvincias ] = useState([]);
     const [ localidades, setLocalidades ] = useState([]);
@@ -58,12 +63,110 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
     const [ mostrarAlertaRegistroCorrecto, setMostrarAlertaRegistroCorrecto ] = useState(false);
     const [ mostrarAlertaModificacionCorrecta, setMostrarAlertaModificacionCorrecta ] = useState(false);
 
-    // manejo de alertas de aviso de error transacciones
-    const [ errorRegistroLaboratorio, setErrorRegistroLaboratorio ] = useState(false);
-    const [ errorModificacionLaboratorio, setErrorModificacionLaboratorio ] = useState(false);
-    const [ errorLaboratorioExistente, setErrorLaboratorioExistente ] = useState(false);
-    const [ errorUsuarioNoEncontrado, setErrorUsuarioNoEncontrado ] = useState(false);
-    const [ errorLaboratorioNoEncontrado, setErrorLaboratorioNoEncontrado ] = useState(false);
+
+    // funcion toast para alerta nombre vacío
+    const mostrarErrorNombreVacio = () => {
+        toast.error('Se debe ingresar un nombre', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    // funcion toast para alerta calle vacío
+    const mostrarErrorCalleVacio = () => {
+        toast.error('Se debe ingresar una calle', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    // funcion toast para alerta altura vacío
+    const mostrarErrorAlturaVacio = () => {
+        toast.error('Se debe ingresar una altura', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    // funcion toast para alerta provincia vacío
+    const mostrarErrorProvinciaVacio = () => {
+        toast.error('Se debe ingresar una provincia', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    // funcion toast para alerta localidad vacío
+    const mostrarErrorLocalidadVacio = () => {
+        toast.error('Se debe ingresar una localidad', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    // funcion toast para alerta localidad incorrecta
+    const mostrarErrorLocalidadIncorrecta = () => {
+        toast.error('Se debe ingresar una localidad válida para la provincia seleccionada', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    // funcion toast para alerta email no válido
+    const mostrarErrorEmailNoValido = () => {
+        toast.error('Se debe ingresar un email válido', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    // funcion toast para alerta teléfono no válido
+    const mostrarErrorTelefonoNoValido = () => {
+        toast.error('Si ingresa un teléfono, el mismo debe contener 10 caracteres', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    // funcion toast para alerta error inesperado registro
+    const mostrarErrorRegistroToast = () => {
+        toast.error('Ha ocurrido un error registrando su laboratorio, intente nuevamente más tarde', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    // funcion toast para alerta error inesperado modificación
+    const mostrarErrorModificacionToast = () => {
+        toast.error('Ha ocurrido un error modificando su laboratorio, intente nuevamente más tarde', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    // funcion toast para alerta error usuario no encontrado
+    const mostrarErrorUsuarioNoEncontrado = () => {
+        toast.error('El usuario no se ha encontrado', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    // funcion toast para alerta error usuario no encontrado
+    const mostrarErrorLaboratorioNoEncontrado = () => {
+        toast.error('El laboratorio no se ha encontrado', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
+
+    // funcion toast para alerta error laboratorio existente
+    const mostrarErrorLaboratorioExistente = () => {
+        toast.error('El laboratorio que está ingresando ya existe entre sus laboratorios registrados', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            }); 
+    }
 
     const handleCancelar = () => {
         reset();
@@ -82,36 +185,42 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
     const validarForm = () => {
         if (nombre === ""){
             setNombreVacio(true);
+            mostrarErrorNombreVacio();
             return false;
         } else{
             setNombreVacio(false);
         }
         if (calle === "") {
             setCalleVacio(true);
+            mostrarErrorCalleVacio();
             return false;
         } else {
             setCalleVacio(false);
         }
         if (altura === "") {
             setAlturaVacio(true);
+            mostrarErrorAlturaVacio();
             return false;
         } else {
             setAlturaVacio(false);
         }
-        if (provincia.length === 0) {
+        if (!provincia) {
             setProvinciaVacio(true);
+            mostrarErrorProvinciaVacio();
             return false;
         } else {
             setProvinciaVacio(false);
         }
 
-        if (localidad.length === 0){
+        if (!localidad){
             setLocalidadVacio(true);
+            mostrarErrorLocalidadVacio();
             return false;
         } else {
             if (localidad.data !== provincia.value) {
                 setLocalidadVacio(false);
                 setLocalidadIncorrecta(true);
+                mostrarErrorLocalidadIncorrecta();
                 return false;
             } else {
                 setLocalidadIncorrecta(false);
@@ -124,10 +233,23 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
                 setEmailNoValido(false);
             } else {
                 setEmailNoValido(true);
+                mostrarErrorEmailNoValido();
                 return false;
             }
         } else {
             setEmailNoValido(false);
+        }
+
+        if (telefono !== "") {
+            if (telefono.length !== 10) {
+                setTelefonoNoValido(true);
+                mostrarErrorTelefonoNoValido();
+                return false;
+            } else {
+                setTelefonoNoValido(false);
+            }
+        } else {
+            setTelefonoNoValido(false);
         }
 
         return true;
@@ -164,25 +286,25 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
                         setMostrarErrorVencimientoToken(true);
                       }
                       else if(error.response.status === 403){
-                        setErrorLaboratorioExistente(true);
+                        mostrarErrorLaboratorioExistente();
                       }
                       else if(error.response.status === 404){
-                        setErrorUsuarioNoEncontrado(true);
+                        mostrarErrorUsuarioNoEncontrado();
                       }
                       else{
-                        setErrorRegistroLaboratorio(true);
+                        mostrarErrorRegistroToast();
                       }
                     }
                 }
                 else if(error.response.status === 403){
-                    setErrorLaboratorioExistente(true);
+                    mostrarErrorLaboratorioExistente();
                 }
                 else if(error.response.status === 404){
-                    setErrorUsuarioNoEncontrado(true);
+                    mostrarErrorUsuarioNoEncontrado();
                 }
                 else{
-                    setErrorRegistroLaboratorio(true);
-                  }
+                    mostrarErrorRegistroToast();
+                }
             }
 
             
@@ -328,12 +450,12 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
                             setMostrarErrorVencimientoToken(true);
                           }
                           else if (error.response.status === 404){
-                            setErrorLaboratorioNoEncontrado(true);
+                            mostrarErrorLaboratorioNoEncontrado();
                           }
                         }
                     }
                     else if (error.response.status === 404){
-                        setErrorLaboratorioNoEncontrado(true);
+                        mostrarErrorLaboratorioNoEncontrado();
                     }
                 }   
             }
@@ -390,27 +512,27 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
                         setMostrarErrorVencimientoToken(true);
                       }
                       else if(error.response.status === 404) {
-                        setErrorUsuarioNoEncontrado(true);
+                        mostrarErrorUsuarioNoEncontrado();
                       }
                       else if(error.response.status === 406) {
-                        setErrorLaboratorioNoEncontrado(true);
+                        mostrarErrorLaboratorioNoEncontrado();
                       }
                       else{
-                        setErrorModificacionLaboratorio(true);
+                        mostrarErrorModificacionToast();
                       }
                     }
                 }
                 else if(error.response.status === 403){
-                    setErrorLaboratorioExistente(true);
+                    mostrarErrorLaboratorioExistente();
                 }
                 else if(error.response.status === 404) {
-                    setErrorUsuarioNoEncontrado(true);
+                    mostrarErrorUsuarioNoEncontrado();
                 }
                 else if(error.response.status === 406) {
-                    setErrorLaboratorioNoEncontrado(true);
+                    mostrarErrorLaboratorioNoEncontrado();
                 }
                 else{
-                    setErrorModificacionLaboratorio(true);
+                    mostrarErrorModificacionToast();
                 }
             }
 
@@ -425,10 +547,10 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
             <>
                 {/* REGISTRAR LABORATORIO */}
                 <div className="overlay">
-                    <Form className="formLaboratorio formCentrado" onSubmit={handleSubmit(registrarLaboratorio)}>
+                    <Form className="formulario-claro-alargado formCentrado" onSubmit={handleSubmit(registrarLaboratorio)}>
     
-                        <div className="formTituloLaboratorio">
-                            <strong className="tituloFormLaboratorio">Nuevo Laboratorio</strong>
+                        <div className="seccionTitulo">
+                            <strong className="tituloForm">Nuevo Laboratorio</strong>
                         </div>
                                       
                         <div className='columnasLaboratorios'>
@@ -436,30 +558,30 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
                             <div className='columnaUnoLaboratorio'>
     
                                 {/* Input Nombre */}
-                                <Form.Group className="mb-3 seccionNombreLab">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label className={nombreVacio && 'labelErrorCampo'}>Nombre</Form.Label>
-                                    <Form.Control className="inputLaboratorios" type="text" value={nombre}
+                                    <Form.Control type="text" value={nombre}
                                     onChange={handleChangeNombre}/>
                                 </Form.Group>
     
                                 {/* Input Calle */}
-                                <Form.Group className="mb-3 seccionCalle">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label className={calleVacio && 'labelErrorCampo'}>Calle</Form.Label>
-                                    <Form.Control className="inputLaboratorios" type="text" value={calle}
+                                    <Form.Control type="text" value={calle}
                                     onChange={handleChangeCalle}/>
                                 </Form.Group>
     
                                 {/* Input Altura */}
-                                <Form.Group className="mb-3 seccionAltura">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label className={alturaVacio && 'labelErrorCampo'}>Altura</Form.Label>
-                                    <Form.Control className="inputLaboratorios" type="number" value={altura}
+                                    <Form.Control type="number" value={altura}
                                     onChange={handleChangeAltura}/>
                                 </Form.Group>  
     
                                 {/* Input Email */}
-                                <Form.Group className="mb-3 seccionEmail">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label className={emailNoValido && 'labelErrorCampo'}>Email</Form.Label>
-                                    <Form.Control className="inputLaboratorios" type="email" value={email}
+                                    <Form.Control type="email" value={email}
                                     onChange={handleChangeEmail}/>
                                 </Form.Group> 
                             </div>
@@ -467,10 +589,9 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
                             <div className="columanDosLaboratorio">
     
                                 {/* Select Provincia */}
-                                <Form.Group className="mb-3 seccionProvLaboratorio">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label className={(provinciaVacio || localidadIncorrecta) && 'labelErrorCampo'}>Provincia</Form.Label>
                                     <Select
-                                    className="selectLaboratorio"
                                     value={provincia}
                                     onChange={handleChangeProvincia}
                                     options={
@@ -480,10 +601,9 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
                                 </Form.Group> 
     
                                 {/* Select Localidad */}
-                                <Form.Group className="mb-3 seccionLocLaboratorio">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label className={(localidadVacio || localidadIncorrecta) && 'labelErrorCampo'}>Localidad</Form.Label>
                                     <Select
-                                    className="selectLaboratorio"
                                     value={localidad}
                                     onChange={handleChangeLocalidad}
                                     options={
@@ -494,29 +614,23 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
     
     
                                 {/* Input Telefono */}
-                                <Form.Group className="mb-3 seccionTelefono">
-                                    <Form.Label>Telefono</Form.Label>
-                                    <Form.Control className="inputLaboratorios" type="text" value={telefono}
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
+                                    <Form.Label className={telefonoNoValido && 'labelErrorCampo'}>Teléfono</Form.Label>
+                                    <Form.Control type="text" value={telefono}
                                     onChange={handleChangeTelefono}/>
                                 </Form.Group>   
 
-                                {/* Mensaje de Faltan Campos */}
-                                <Form.Group className="mb-3">
-                                    {(nombreVacio || calleVacio || alturaVacio || provinciaVacio || localidadVacio) && <Form.Label className='labelErrorCampo'>*Se debe ingresar los campos en rojo</Form.Label>}
-                                    {localidadIncorrecta && <Form.Label className='labelErrorCampo'>*Se debe ingresar una Localidad válida para la Provincia</Form.Label>}
-                                    {emailNoValido && <Form.Label className='labelErrorCampo'>*Email en formato no válido</Form.Label>}
-                                </Form.Group>
                             </div>
                         </div>
                                         
                         
                         {/* Botones */}
-                        <Form.Group className="mb-3 seccionBotones" controlId="formBotones">
-                            <Button className="estiloBotonesLaboratorio botonCancelarLaboratorio" variant="secondary"
+                        <Form.Group className="seccionBotonesFormulario margenTop20" controlId="formBotones">
+                            <Button className="botonCancelarFormulario" variant="secondary"
                             onClick={handleCancelar}>
                                 Cancelar
                             </Button>
-                            <Button className="estiloBotonesLaboratorio botonConfirmarLaboratorio" variant="secondary"
+                            <Button className="botonConfirmacionFormulario" variant="secondary"
                                     type="submit">
                                 Registrar
                             </Button>
@@ -536,23 +650,6 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
                     onConfirm={handleConfirmarRegistroLaboratorio}/>
                 }
 
-                {
-                    errorRegistroLaboratorio &&
-                    <Error texto={"Ha ocurrido un error registrando su laboratorio, intente nuevamente más tarde"} 
-                    onConfirm={() => setErrorRegistroLaboratorio(false)}/>
-                }
-
-                {
-                    errorLaboratorioExistente &&
-                    <Error texto={"El laboratorio que está ingresando ya existe entre sus laboratorios registrados."} 
-                    onConfirm={() => setErrorLaboratorioExistente(false)}/>
-                }
-
-                {
-                    errorUsuarioNoEncontrado &&
-                    <Error texto={"El usuario no se ha encontrado."} 
-                    onConfirm={() => setErrorUsuarioNoEncontrado(false)}/>
-                }
             </>            
         );
     }
@@ -561,10 +658,10 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
             <>
                 {/* CONSULTAR LABORATORIO */}
                 <div className="overlay">
-                    <Form className="formLaboratorio formCentrado" onSubmit={handleSubmit(habilitarEdicionLaboratorio)}>
+                    <Form className="formulario-claro-alargado formCentrado" onSubmit={handleSubmit(habilitarEdicionLaboratorio)}>
     
-                        <div className="formTituloLaboratorio">
-                            <strong className="tituloFormLaboratorio">Laboratorio</strong>
+                        <div className="seccionTitulo">
+                            <strong className="tituloForm">Laboratorio</strong>
                         </div>
                                       
                         <div className='columnasLaboratorios'>
@@ -572,30 +669,30 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
                             <div className='columnaUnoLaboratorio'>
     
                                 {/* Input Nombre */}
-                                <Form.Group className="mb-3 seccionNombreLab">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label>Nombre</Form.Label>
-                                    <Form.Control className="inputLaboratorios" type="text" value={laboratorioConsulta.nombre}
+                                    <Form.Control type="text" value={laboratorioConsulta.nombre}
                                     disabled={true}/>
                                 </Form.Group>
     
                                 {/* Input Calle */}
-                                <Form.Group className="mb-3 seccionCalle">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label>Calle</Form.Label>
-                                    <Form.Control className="inputLaboratorios" type="text" value={laboratorioConsulta.calle}
+                                    <Form.Control type="text" value={laboratorioConsulta.calle}
                                     disabled={true}/>
                                 </Form.Group>
     
                                 {/* Input Altura */}
-                                <Form.Group className="mb-3 seccionAltura">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label>Altura</Form.Label>
-                                    <Form.Control className="inputLaboratorios" type="number" value={String(laboratorioConsulta.numero)}
+                                    <Form.Control type="number" value={String(laboratorioConsulta.numero)}
                                     disabled={true}/>
                                 </Form.Group>  
     
                                 {/* Input Email */}
-                                <Form.Group className="mb-3 seccionEmail">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label>Email</Form.Label>
-                                    <Form.Control className="inputLaboratorios" type="email" value={laboratorioConsulta.email == null ? "" : laboratorioConsulta.email }
+                                    <Form.Control type="email" value={laboratorioConsulta.email == null ? "" : laboratorioConsulta.email }
                                     disabled={true}/>
                                 </Form.Group> 
                             </div>
@@ -603,30 +700,28 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
                             <div className="columanDosLaboratorio">
     
                                 {/* Select Provincia */}
-                                <Form.Group className="mb-3 seccionProvLaboratorio">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label>Provincia</Form.Label>
                                     <Select
-                                    className="selectLaboratorio"
                                     value={{label: laboratorioConsulta.provincia_nombre, value: laboratorioConsulta.provincia_id}}
                                     isDisabled={true}
                                     />
                                 </Form.Group> 
     
                                 {/* Select Localidad */}
-                                <Form.Group className="mb-3 seccionLocLaboratorio">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label>Localidad</Form.Label>
                                     <Select
-                                    className="selectLaboratorio"
                                     defaultValue={{label: laboratorioConsulta.localidad_nombre, value: laboratorioConsulta.localidad_id, data: laboratorioConsulta.provincia_id}}
                                     isDisabled={true}
                                     />
                                 </Form.Group> 
     
     
-                                {/* Input Telefono */}
-                                <Form.Group className="mb-3 seccionTelefono">
-                                    <Form.Label>Telefono</Form.Label>
-                                    <Form.Control className="inputLaboratorios" type="text" value={laboratorioConsulta.numero_telefono ? String(laboratorioConsulta.numero_telefono) : ""}
+                                {/* Input Teléfono */}
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
+                                    <Form.Label>Teléfono</Form.Label>
+                                    <Form.Control type="text" value={laboratorioConsulta.numero_telefono ? String(laboratorioConsulta.numero_telefono) : ""}
                                     disabled={true}/>
                                 </Form.Group>   
                             </div>
@@ -634,12 +729,12 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
                                         
                         
                         {/* Botones */}
-                        <Form.Group className="mb-3 seccionBotones" controlId="formBotones">
-                            <Button className="estiloBotonesLaboratorio botonCancelarLaboratorio" variant="secondary"
+                        <Form.Group className="seccionBotonesFormulario margenTop20" controlId="formBotones">
+                            <Button className="botonCancelarFormulario" variant="secondary"
                             onClick={handleCancelar}>
                                 Cancelar
                             </Button>
-                            <Button className="estiloBotonesLaboratorio botonConfirmarLaboratorio" variant="secondary"
+                            <Button className="botonConfirmacionFormulario" variant="secondary"
                                     type="submit">
                                 Editar
                             </Button>
@@ -653,11 +748,6 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
                     onConfirm={handleSesionExpirada}/>
                 }
 
-                {
-                    errorLaboratorioNoEncontrado &&
-                    <Error texto={"El laboratorio que está consultado no ha sido encontrado."} 
-                    onConfirm={() => setErrorLaboratorioNoEncontrado(false)}/>
-                }
 
             </>
         )
@@ -667,41 +757,40 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
             <>
                 {/* MODIFICAR LABORATORIO */}
                 <div className="overlay">
-                    <Form className="formLaboratorio formCentrado" onSubmit={handleSubmit(modificarLaboratorio)}>
+                    <Form className="formulario-claro-alargado formCentrado" onSubmit={handleSubmit(modificarLaboratorio)}>
     
-                        <div className="formTituloLaboratorio">
-                            <strong className="tituloFormLaboratorio">Laboratorio</strong>
+                        <div className="seccionTitulo">
+                            <strong className="tituloForm">Laboratorio</strong>
                         </div>
                                       
                         <div className='columnasLaboratorios'>
-    
                             <div className='columnaUnoLaboratorio'>
     
                                 {/* Input Nombre */}
-                                <Form.Group className="mb-3 seccionNombreLab">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label className={nombreVacio && 'labelErrorCampo'}>Nombre</Form.Label>
-                                    <Form.Control className="inputLaboratorios" type="text" value={nombre}
+                                    <Form.Control type="text" value={nombre}
                                     onChange={handleChangeNombre}/>
                                 </Form.Group>
     
                                 {/* Input Calle */}
-                                <Form.Group className="mb-3 seccionCalle">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label className={calleVacio && 'labelErrorCampo'}>Calle</Form.Label>
-                                    <Form.Control className="inputLaboratorios" type="text" value={calle}
+                                    <Form.Control type="text" value={calle}
                                     onChange={handleChangeCalle}/>
                                 </Form.Group>
     
                                 {/* Input Altura */}
-                                <Form.Group className="mb-3 seccionAltura">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label className={alturaVacio && 'labelErrorCampo'}>Altura</Form.Label>
-                                    <Form.Control className="inputLaboratorios" type="number" value={altura}
+                                    <Form.Control type="number" value={altura}
                                     onChange={handleChangeAltura}/>
                                 </Form.Group>  
     
                                 {/* Input Email */}
-                                <Form.Group className="mb-3 seccionEmail">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label className={emailNoValido && 'labelErrorCampo'}>Email</Form.Label>
-                                    <Form.Control className="inputLaboratorios" type="email" value={email}
+                                    <Form.Control type="email" value={email}
                                     onChange={handleChangeEmail}/>
                                 </Form.Group> 
                             </div>
@@ -709,10 +798,9 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
                             <div className="columanDosLaboratorio">
     
                                 {/* Select Provincia */}
-                                <Form.Group className="mb-3 seccionProvLaboratorio">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label className={(provinciaVacio || localidadIncorrecta) && 'labelErrorCampo'}>Provincia</Form.Label>
                                     <Select
-                                    className="selectLaboratorio"
                                     value={provincia}
                                     onChange={handleChangeProvincia}
                                     options={
@@ -722,10 +810,9 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
                                 </Form.Group> 
     
                                 {/* Select Localidad */}
-                                <Form.Group className="mb-3 seccionLocLaboratorio">
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
                                     <Form.Label className={(localidadVacio || localidadIncorrecta) && 'labelErrorCampo'}>Localidad</Form.Label>
                                     <Select
-                                    className="selectLaboratorio"
                                     value={localidad}
                                     onChange={handleChangeLocalidad}
                                     options={
@@ -736,30 +823,24 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
     
     
                                 {/* Input Telefono */}
-                                <Form.Group className="mb-3 seccionTelefono">
-                                    <Form.Label>Telefono</Form.Label>
-                                    <Form.Control className="inputLaboratorios" type="text" value={telefono}
+                                <Form.Group className="mb-3 seccionFormulario seccion-ancho-300">
+                                    <Form.Label className={telefonoNoValido && 'labelErrorCampo'}>Teléfono</Form.Label>
+                                    <Form.Control type="text" value={telefono}
                                     onChange={handleChangeTelefono}/>
                                 </Form.Group>
 
-                                {/* Mensaje de Faltan Campos */}
-                                <Form.Group className="mb-3">
-                                    {(nombreVacio || calleVacio || alturaVacio || provinciaVacio || localidadVacio) && <Form.Label className='labelErrorCampo'>*Se debe ingresar los campos en rojo</Form.Label>}
-                                    {localidadIncorrecta && <Form.Label className='labelErrorCampo'>*Se debe ingresar una Localidad válida para la Provincia</Form.Label>}
-                                    {emailNoValido && <Form.Label className='labelErrorCampo'>*Email en formato no válido</Form.Label>}
-                                </Form.Group>
 
                             </div>
                         </div>
                                         
                         
                         {/* Botones */}
-                        <Form.Group className="mb-3 seccionBotones" controlId="formBotones">
-                            <Button className="estiloBotonesLaboratorio botonCancelarLaboratorio" variant="secondary"
+                        <Form.Group className="seccionBotonesFormulario margenTop20" controlId="formBotones">
+                            <Button className="botonCancelarFormulario" variant="secondary"
                             onClick={handleCancelarModificacion}>
                                 Cancelar
                             </Button>
-                            <Button className="estiloBotonesLaboratorio botonConfirmarLaboratorio" variant="secondary"
+                            <Button className="botonConfirmacionFormulario" variant="secondary"
                                     type="submit">
                                 Aceptar
                             </Button>
@@ -779,29 +860,6 @@ function LaboratorioAMC({ accionCancelar, accionConfirmar, modo, laboratorio = u
                     onConfirm={handleConfirmarModificacionLaboratorio}/>
                 }
 
-                {
-                    errorModificacionLaboratorio &&
-                    <Error texto={"Ha ocurrido un error modificando su laboratorio, intente nuevamente más tarde"} 
-                    onConfirm={() => setErrorModificacionLaboratorio(false)}/>
-                }
-
-                {
-                    errorLaboratorioExistente &&
-                    <Error texto={"El laboratorio que está ingresando ya existe entre sus laboratorios registrados."} 
-                    onConfirm={() => setErrorLaboratorioExistente(false)}/>
-                }
-
-                {
-                    errorLaboratorioNoEncontrado &&
-                    <Error texto={"El laboratorio que está consultado no ha sido encontrado."} 
-                    onConfirm={() => setErrorLaboratorioNoEncontrado(false)}/>
-                }
-
-                {
-                    errorUsuarioNoEncontrado &&
-                    <Error texto={"El usuario no se ha encontrado."} 
-                    onConfirm={() => setErrorUsuarioNoEncontrado(false)}/>
-                }
             </>
         )
     }

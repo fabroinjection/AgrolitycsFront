@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import './Error.css';
+import '../../Estilos/estilosModales.css';
+import '../../Estilos/estilosFormulario.css';
 
 import iconoError from '../../../assets/iconoError.png';
 
@@ -23,15 +24,15 @@ function Error({texto, onConfirm = undefined}) {
             backdrop="static" 
             keyboard={false}
             centered
-            className="modalError">
+            className="contenedor-modal">
           <Modal.Header>
-            <img className="iconoError" src={iconoError} alt="" href="https://www.flaticon.es/iconos-gratis/error"/>
+            <img className="icono-modal" src={iconoError} alt="" href="https://www.flaticon.es/iconos-gratis/error"/>
           </Modal.Header>
           <Modal.Body>
             {texto}
           </Modal.Body>
           <Modal.Footer>
-            <Button className='estiloBotonError btnErrorAceptar' variant="secondary" onClick={handleClose}>
+            <Button className='botonConfirmacionFormulario' variant="secondary" onClick={handleClose}>
               Aceptar
             </Button>
           </Modal.Footer>

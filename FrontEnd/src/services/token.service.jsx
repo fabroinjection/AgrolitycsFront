@@ -1,10 +1,11 @@
 import axios from "axios";
+import { URLAPI } from "../config";
 
 export const renewToken = async () => {
     const tokenJSON = window.localStorage.getItem('loggedAgroUser');
     const token = JSON.parse(tokenJSON);
     const refreshToken = token.refresh_token;
-    const response = await axios.post('http://127.0.0.1:8000/refresh_token', null, {
+    const response = await axios.post(`${URLAPI}refresh_token`, null, {
       headers: {
         Authorization: `Bearer ${refreshToken}`,
       },
