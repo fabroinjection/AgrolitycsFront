@@ -2,6 +2,8 @@
 import "leaflet/dist/leaflet.css"
 import 'leaflet-draw/dist/leaflet.draw.css'
 import './LoteoMapa.css'
+import markerIconUrl from 'leaflet/dist/images/marker-icon.png';
+import markerShadowUrl from 'leaflet/dist/images/marker-shadow.png';
 
 //import hooks
 import { useEffect, useRef, useState } from 'react';
@@ -10,6 +12,7 @@ import useWeather from '../../../hooks/useWeather';
 //import components
 import { MapContainer, TileLayer, FeatureGroup, Marker, Tooltip, Polygon } from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
+import { Icon } from 'leaflet';
 
 //import utilities
 import L from 'leaflet';
@@ -30,10 +33,38 @@ function Mapa({ habilitado = false, registro = false, campo, lotes }){
   const [ loteSeleccionadoAConsultar ] = useState(Cookies.get("idLoteSeleccionadoAConsultar"));
   const [ idLoteSeleccionadoAModificar ] = useState(Cookies.get("idLoteAModificar"));
 
+  const marquerIcon = new L.Icon({
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
   const [ data, loading, error ] = useWeather(campo.localidad_centroide_lat, campo.localidad_centroide_lon);
 
   const mapRef = useRef(null);
 
+  const [mapIcon, setMapIcon] = useState(null);
+
+  useEffect(() => {
+    import('leaflet/dist/images/marker-icon.png').then((icon) => {
+      setMapIcon(
+        new Icon({
+          iconUrl: icon.default,
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41],
+        })
+      );
+    });
+
+    return () => {
+      setMapIcon(null);
+    };
+  }, []); 
+  
   useEffect(() => {
     if(idLoteSeleccionadoAModificar){
       if(mapLayers.length > 0){
@@ -132,7 +163,7 @@ function Mapa({ habilitado = false, registro = false, campo, lotes }){
         /> 
       ))}
 
-      <Marker position={[campo.localidad_centroide_lat, campo.localidad_centroide_lon]}>
+      <Marker position={[campo.localidad_centroide_lat, campo.localidad_centroide_lon]} icon={mapIcon}>
         <Tooltip direction="top" offset={[-14, -5]} opacity={1} permanent>
           {campo.localidad_nombre + "," + campo.provincia_nombre}
         </Tooltip>
