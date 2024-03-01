@@ -123,6 +123,7 @@ function Mapa({ habilitado = false, registro = false, campo, lotes }){
 
   return (
     <>
+    {console.log(mapIcon)}
     <MapContainer
         className='contenedorMapa'
         center={lotes.length !== 0 
