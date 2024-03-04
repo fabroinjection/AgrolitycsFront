@@ -8,13 +8,13 @@ function InformacionFooter(){
                 &copy; 2023 - 2024 Agrolitycs. Todos los derechos reservados.
             </strong>
             <strong className='seccion-footer'>
-                <a href="/terminosycondiciones" className='link-footer'>Términos y condiciones</a>  
+                <a href="#/terminosycondiciones" className='link-footer'>Términos y condiciones</a>  
             </strong>
             <strong className='seccion-footer'>
-                <a href="/info" className='link-footer'>Información</a>
+                <a href="#/info" className='link-footer'>Información</a>
             </strong>    
             <strong className='seccion-footer'>
-                <a href="/help" className='link-footer'>Ayuda</a>   
+                <a href="#/help" className='link-footer'>Ayuda</a>   
             </strong> 
             <strong className='seccion-footer'>
                 <a href="mailto:agrolitycs@gmail.com" className='link-footer'>Contacto</a>
