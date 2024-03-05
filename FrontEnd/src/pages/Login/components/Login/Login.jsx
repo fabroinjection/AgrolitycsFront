@@ -222,7 +222,7 @@ function Login() {
                                 
                             
                                 <Form.Group className='seccionFormulario seccionBotonesFormulario margenTop30'>
-                                    <Button variant="primary" className='botonConfirmacionFormulario' onClick={navegarARegistroUsuario}>
+                                    <Button variant="primary" className='botonConfirmacionFormulario' onClick={navegarARegistroUsuario} disabled>
                                         Crear cuenta
                                     </Button>
                                     <Button variant="primary" className='botonConfirmacionFormulario' type="submit">
